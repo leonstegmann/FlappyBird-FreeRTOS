@@ -127,7 +127,7 @@ unsigned char states_run(void) {
 unsigned char states_add(void (*probe)(void), void (*enter)(void),
                          void (*run)(void), void (*exit)(void), int ID,
                          char *name) {
-  unsigned char error = 0;
+  //unsigned char error = 0;
   state_t *ret = calloc(1, sizeof(state_t));
   if (!ret)
     return -ENOMEM;
