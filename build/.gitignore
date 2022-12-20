@@ -2,3 +2,4 @@ bin
 external
 share
 DartConfiguration.tcl
+!compileWholeProject.sh
