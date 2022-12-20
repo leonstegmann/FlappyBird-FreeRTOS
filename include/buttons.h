@@ -34,8 +34,8 @@
 #ifndef __BUTTONS_H__
 #define __BUTTONS_H__
 
-/* FreeRTOS includes  */
-
+/* necesarry Includes  */
+#include "TUM_Draw.h" // for coord_t
 
 /* Defines variables  */
 #define KEYCODE(CHAR) SDL_SCANCODE_##CHAR   // needed for the KEYCODE(X) calls
