@@ -1,20 +1,26 @@
+/* Standard library includes */
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> // for atexit
 
-#include <SDL2/SDL_scancode.h>
 
+/* FreeRTOS includes  */
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "semphr.h"
 #include "task.h"
 
-#include "AsyncIO.h"
+/* other library includes*/
+#include "AsyncIO.h" // for aIODeinit
+#include <SDL2/SDL_scancode.h> // for KEYCODE() : Defines keyboard scancodes
+
+/* TUM_Library includes  */
 #include "TUM_FreeRTOS_Utils.h"
 #include "TUM_Draw.h"
 #include "TUM_Utils.h"
 #include "TUM_Event.h"
 
+/* Project includes */
 #include "main.h"
 #include "swapBuffers.h"
 #include"buttons.h"
