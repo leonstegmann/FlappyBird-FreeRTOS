@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "swapBuffers.h"
+#include "draw.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -34,6 +35,7 @@ void vTestScreen() {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
                 tumDrawClear(Silver);
+                drawBackround();
                 
                 vTaskDelay((TickType_t) 1000);
             }
