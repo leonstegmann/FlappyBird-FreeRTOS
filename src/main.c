@@ -83,6 +83,8 @@ int main(int argc, char *argv[])
 
 	vTaskStartScheduler();
 
+	atexit(aIODeinit); // standart C library: passed function pointer gets called when function exits -> ensures to clean sockets, Queues etc 
+
 	return EXIT_SUCCESS;
 }
 
