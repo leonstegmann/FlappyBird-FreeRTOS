@@ -6,7 +6,7 @@
  * The Implementation is as follows:
  * 
  * first use the following function. It creates the xSemaphoreCreateMutex()
- * for the button.lock and checks for errors in this step. Returns 0 on success.
+ * for the button.lock and checks for errors in this step. Returns 1 if the Button has been pressed and 0 if not.
  * @code
  * if( buttonsInit(void))
  * @endcode
@@ -60,6 +60,7 @@ void buttonsExit(void);
 /**
  * @brief ensures the debounce of the buttons 
  * @param keyvalue intakes the "#define KEYCODE(CHAR)" from the "SDL_SCANCODE_##CHAR" as "int"
+ * @return  Returns 1 if the Button has been pressed and 0 if not.
  */
 int checkButton(int );
 
