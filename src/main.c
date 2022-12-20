@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "swapBuffers.h"
+#include"buttons.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -34,8 +35,13 @@ void vTestScreen() {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
                 tumDrawClear(Silver);
+
+                /*Testing buttons*/
+                xGetButtonInput();                
+                if(checkButton(KEYCODE(X)))
+                    tumDrawClear(White);
                 
-                vTaskDelay((TickType_t) 1000);
+                vTaskDelay((TickType_t) 100);
             }
         }
     }
@@ -62,6 +68,8 @@ int main(int argc, char *argv[])
         printf("Failed to create draw signal");
         return EXIT_FAILURE;
     }
+    
+    if( buttonsInit());
 
 	xTaskCreate(vTestScreen, "TestScreen", 
             mainGENERIC_STACK_SIZE , NULL,
