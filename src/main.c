@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "swapBuffers.h"
+#include "draw.h"
 #include"buttons.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
@@ -35,6 +36,7 @@ void vTestScreen() {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
                 tumDrawClear(Silver);
+                drawBackround();
 
                 /*Testing buttons*/
                 xGetButtonInput();                
