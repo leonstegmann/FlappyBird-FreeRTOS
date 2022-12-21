@@ -6,7 +6,7 @@
  * The Implementation is as follows:
  * 
  * first use the following function. It creates the xSemaphoreCreateMutex()
- * for the button.lock and checks for errors in this step. Returns 0 on success.
+ * for the button.lock and checks for errors in this step. Returns 1 if the Button has been pressed and 0 if not.
  * @code
  * if( buttonsInit(void))
  * @endcode
@@ -34,8 +34,8 @@
 #ifndef __BUTTONS_H__
 #define __BUTTONS_H__
 
-/* FreeRTOS includes  */
-
+/* necesarry Includes  */
+#include "TUM_Draw.h" // for coord_t
 
 /* Defines variables  */
 #define KEYCODE(CHAR) SDL_SCANCODE_##CHAR   // needed for the KEYCODE(X) calls
@@ -60,14 +60,9 @@ void buttonsExit(void);
 /**
  * @brief ensures the debounce of the buttons 
  * @param keyvalue intakes the "#define KEYCODE(CHAR)" from the "SDL_SCANCODE_##CHAR" as "int"
+ * @return  Returns 1 if the Button has been pressed and 0 if not.
  */
 int checkButton(int );
-
-/**
- * @brief draws the button with the corresponding keyvalue 
- * @param keyvalue intakes the "#define KEYCODE(CHAR)" from the "SDL_SCANCODE_##CHAR" as "int"
- */
-void drawButton(int keyvalue);
 
 /**
  * @brief Setter for the Button Name displayed on the GUI 

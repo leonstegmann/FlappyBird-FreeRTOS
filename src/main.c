@@ -1,20 +1,26 @@
+/* Standard library includes */
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> // for atexit
 
-#include <SDL2/SDL_scancode.h>
 
+/* FreeRTOS includes  */
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "semphr.h"
 #include "task.h"
 
-#include "AsyncIO.h"
+/* other library includes*/
+#include "AsyncIO.h" // for aIODeinit
+#include <SDL2/SDL_scancode.h> // for KEYCODE() : Defines keyboard scancodes
+
+/* TUM_Library includes  */
 #include "TUM_FreeRTOS_Utils.h"
 #include "TUM_Draw.h"
 #include "TUM_Utils.h"
 #include "TUM_Event.h"
 
+/* Project includes */
 #include "main.h"
 #include "swapBuffers.h"
 #include "draw.h"
@@ -53,27 +59,35 @@ int main(int argc, char *argv[])
 {
     char *bin_folder_path = tumUtilGetBinFolderPath(argv[0]);
 
-	printf("Initializing: ");
+	printf("Initializing: \n");
 
 	if (tumDrawInit(bin_folder_path)) {
-		printf("Failed to initialize drawing");
-        return EXIT_FAILURE;
+		printf("Failed to initialize drawing\n");
+        goto err_tumDrawInit;
 	}
 
     if (tumEventInit()) {
-		printf("Failed to initialize Events");
-        return EXIT_FAILURE;
+		printf("Failed to initialize Events\n");
+        goto err_tumEventInit;
 	}
-
+    
     DrawSignal = xSemaphoreCreateBinary(); // Screen buffer locking
     if (!DrawSignal) {
-        printf("Failed to create draw signal");
-        return EXIT_FAILURE;
+        printf("Failed to create draw signal\n");
+        goto err_draw_signal;
     }
     
-    if( buttonsInit());
+    if (buttonsInit()) {
+        printf("Failed to create buttons lock\n");
+        goto err_buttonsInit;
+    }
 
-	xTaskCreate(vTestScreen, "TestScreen", 
+    printf("\nInitialization SUCCESS!! \nMoving on to create tasks... \n");    
+
+    /*-----------------------------------------------------------------------------------------------*/	
+    /* FreeRTOS Task creation*/
+    
+    xTaskCreate(vTestScreen, "TestScreen", 
             mainGENERIC_STACK_SIZE , NULL,
 			mainGENERIC_PRIORITY, &TestScreen);
     
@@ -81,11 +95,30 @@ int main(int argc, char *argv[])
             mainGENERIC_STACK_SIZE , NULL,
 			mainGENERIC_PRIORITY, &BufferSwap); 
 
+    /*-----------------------------------------------------------------------------------------------*/	
+	/* start FreeRTOS Sceduler: Should never get passed the function vTaskStartScheduler() */
+
     tumFUtilPrintTaskStateList();
 
-	vTaskStartScheduler();
+	vTaskStartScheduler(); // FreeRTOS Task Sceduler
+
+	atexit(aIODeinit); // standart C library: passed function pointer gets called when function exits -> ensures to clean sockets, Queues etc 
 
 	return EXIT_SUCCESS;
+
+    /*-----------------------------------------------------------------------------------------------*/	
+    /* Error handling -> delete everything that has been initialized so far (Backwards the Init Order) */
+
+        buttonsExit();
+    err_buttonsInit:
+	    vSemaphoreDelete(DrawSignal);
+    err_draw_signal:
+	    tumEventExit();
+    err_tumEventInit:
+    	tumDrawExit();
+    err_tumDrawInit:
+
+	return EXIT_FAILURE; // Return State Main
 }
 
 // cppcheck-suppress unusedFunction
