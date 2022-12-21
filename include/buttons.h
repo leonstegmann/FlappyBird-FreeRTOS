@@ -78,8 +78,6 @@ void setDisplayedButtonName(char , int );
  */ 
 void setButtonPosition(coord_t , int );
 
-coord_t getButtonPosition(int);
-
 /**
  * @brief Setter for the Button Colour displayed on the GUI 
  * @param colour Button Colour
