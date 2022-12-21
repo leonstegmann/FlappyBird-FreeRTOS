@@ -18,37 +18,15 @@
 #include "main.h"
 #include "swapBuffers.h"
 #include "draw.h"
-#include"buttons.h"
-#include"menuScreen.h"
+#include "buttons.h"
+#include "menuScreen.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
 
-TaskHandle_t TestScreen = NULL;
 TaskHandle_t BufferSwap = NULL;
 
 SemaphoreHandle_t DrawSignal;
-
-void vTestScreen() {
-
-    while(1) {
-
-        if(DrawSignal) {
-            if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
-                
-                tumDrawClear(Silver);
-                drawBackround();
-
-                /*Testing buttons*/
-                xGetButtonInput();                
-                if(checkButton(KEYCODE(X)))
-                    tumDrawClear(White);
-                
-                vTaskDelay((TickType_t) 100);
-            }
-        }
-    }
-}
 
 int main(int argc, char *argv[])
 {
@@ -72,11 +50,9 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
     
-    if( buttonsInit());
+    if(buttonsInit());
 
-	xTaskCreate(vTestScreen, "TestScreen", 
-            mainGENERIC_STACK_SIZE , NULL,
-			mainGENERIC_PRIORITY, &TestScreen);
+    createMenuTask();
     
     xTaskCreate(vSwapBuffers, "BufferSwap", 
             mainGENERIC_STACK_SIZE , NULL,
