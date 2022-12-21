@@ -65,12 +65,6 @@ void buttonsExit(void);
 int checkButton(int );
 
 /**
- * @brief draws the button with the corresponding keyvalue 
- * @param keyvalue intakes the "#define KEYCODE(CHAR)" from the "SDL_SCANCODE_##CHAR" as "int"
- */
-void drawButton(int keyvalue);
-
-/**
  * @brief Setter for the Button Name displayed on the GUI 
  * @param id Button Name
  * @param keyvalue intakes the "#define KEYCODE(CHAR)" from the "SDL_SCANCODE_##CHAR" as "int"
@@ -83,6 +77,8 @@ void setDisplayedButtonName(char , int );
  * @param keyvalue intakes the "#define KEYCODE(CHAR)" from the "SDL_SCANCODE_##CHAR" as "int"
  */ 
 void setButtonPosition(coord_t , int );
+
+coord_t getButtonPosition(int);
 
 /**
  * @brief Setter for the Button Colour displayed on the GUI 
