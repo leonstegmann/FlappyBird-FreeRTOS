@@ -4,6 +4,10 @@
 #include "draw.h"
 
 #define LOGO_FILENAME "flappybird.png"
+#define BOX_WIDTH 100
+#define BOX_HEIGHT 50
+#define BOX_COLOUR Red
+#define BOX_FRAME_COLOUR Black
 
 image_handle_t logo_image = NULL;
 
@@ -23,4 +27,12 @@ int drawBackround() {
                 LOGO_FILENAME);
         return 0;
     }
+}
+
+int drawButton(coord_t pos, char *text) {
+
+    tumDrawFilledBox(pos.x, pos.y, BOX_WIDTH, BOX_HEIGHT, BOX_COLOUR);
+    tumDrawBox(pos.x, pos.y, BOX_WIDTH, BOX_HEIGHT, BOX_FRAME_COLOUR);
+
+    return 0;
 }

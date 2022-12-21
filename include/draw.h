@@ -12,4 +12,6 @@
  */
 int drawBackround();
 
+int drawButton(coord_t pos, char *name);
+
 #endif //__DRAW_H__
