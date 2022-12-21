@@ -9,7 +9,7 @@
 #include "TUM_Event.h"  // for xQueueReceive()
 #include "TUM_Print.h" // for PRINT_ERROR()
  
- /* Project includes  */
+/* Project includes  */
 #include "buttons.h"
 
 /**

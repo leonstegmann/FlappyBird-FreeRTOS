@@ -20,7 +20,7 @@
  * @copyright GNU GPL v3
  * */
 
-#include "error.h"
+#include "errno.h"
 #include "states.h"
 
 #include <stdlib.h>
