@@ -3,7 +3,7 @@
 
 #define WINDOW_TITLE "My FreeRTOS Emulator"
 #define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_HEIGHT 504
 // Relative to bin directory
 #define RESOURCES_DIRECTORY "../resources"
 // Relative to resources directory
