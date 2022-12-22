@@ -19,6 +19,7 @@
 #include "TUM_Draw.h"
 #include "TUM_Utils.h"
 #include "TUM_Event.h"
+#include "TUM_Font.h"
 
 /* Project includes */
 #include "main.h"
@@ -56,7 +57,8 @@ int main(int argc, char *argv[])
         goto err_draw_signal;
     }
     
-
+    // Load Font
+    tumFontLoadFont("SF Automaton.ttf", 18);
     
     if (buttonsInit()) {
         printf("Failed to create buttons lock\n");
