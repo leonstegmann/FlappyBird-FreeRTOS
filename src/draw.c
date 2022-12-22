@@ -64,5 +64,5 @@ int drawButton(coord_t pos, char *str) {
     tumFontSelectFontFromHandle(cur_font);
     tumFontPutFontHandle(cur_font);
 
-    return 0;
+    return 1;
 }
