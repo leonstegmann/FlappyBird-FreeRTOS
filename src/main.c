@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
     
     // Load Font
     tumFontLoadFont(BUTTON_FONT, BUTTON_FONT_SIZE);
+    tumFontLoadFont(FPS_FONT, DEFAULT_FONT_SIZE);
     
     if (buttonsInit()) {
         printf("Failed to create buttons lock\n");
