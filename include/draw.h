@@ -8,6 +8,9 @@
 
 #include "TUM_Draw.h"
 
+/* FPS Font */
+#define FPS_FONT "scifieb.ttf"
+
 /* Defines for drawButton */
 #define BUTTON_FONT "Minecraft.ttf"
 #define BUTTON_FONT_SIZE 22
@@ -34,5 +37,10 @@ int drawButton(coord_t pos, char *name);
  * @return 1 on success and 0 when failed
  */
 int drawLogo(coord_t pos);
+
+/**
+ * @brief Prints the numper of FPS on the screen  
+ */
+void drawFPS(void);
 
 #endif //__DRAW_H__

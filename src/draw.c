@@ -1,9 +1,17 @@
 #include <stdio.h>
 
+/* FreeRTOS includes  */
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "TUM_Draw.h" 
 #include "TUM_Font.h"
 
 #include "draw.h"
+
+/* Aimed FPS */
+#define FPS_AVERAGE_COUNT 50
+#define FPS_FONT_COLOUR White
 
 /* Filenames */
 #define BACKGROUND_FILENAME "background.png"
@@ -15,10 +23,10 @@
 #define BOX_OUTLINE_COLOUR Black
 #define BUTTON_TEXT_COLOUR White
 
-
 image_handle_t backroundImage = NULL;
 image_handle_t logoImage = NULL;
 
+/* Function to set the backround immage */
 int drawBackround() {
     static int image_height;
 
@@ -37,6 +45,7 @@ int drawBackround() {
     }
 }
 
+/* Function to draw the FlappyBird baner on the screen */
 int drawLogo(coord_t pos) {
     static int image_height;
     static int image_width;
@@ -57,6 +66,7 @@ int drawLogo(coord_t pos) {
     }
 }
 
+/* Function to draw buttons on the screen */
 int drawButton(coord_t pos, char *str) {
 
     static int text_width;
@@ -84,4 +94,60 @@ int drawButton(coord_t pos, char *str) {
     tumFontPutFontHandle(cur_font);
 
     return 1;
+}
+
+/* Function to draw FPS on the screen */
+void drawFPS(void)
+{
+    static unsigned int periods[FPS_AVERAGE_COUNT] = { 0 };
+    static unsigned int periods_total = 0;
+    static unsigned int index = 0;
+    static unsigned int average_count = 0;
+    static TickType_t xLastWakeTime = 0, prevWakeTime = 0;
+    static char str[10] = { 0 };
+    static int text_width;
+    int fps = 0;
+    font_handle_t cur_font = tumFontGetCurFontHandle();
+
+    if (average_count < FPS_AVERAGE_COUNT) {
+        average_count++;
+    }
+    else {
+        periods_total -= periods[index];
+    }
+
+    xLastWakeTime = xTaskGetTickCount();
+
+    if (prevWakeTime != xLastWakeTime) {
+        periods[index] =
+            configTICK_RATE_HZ / (xLastWakeTime - prevWakeTime);
+        prevWakeTime = xLastWakeTime;
+    }
+    else {
+        periods[index] = 0;
+    }
+
+    periods_total += periods[index];
+
+    if (index == (FPS_AVERAGE_COUNT - 1)) {
+        index = 0;
+    }
+    else {
+        index++;
+    }
+
+    fps = periods_total / average_count;
+
+    tumFontSelectFontFromName(FPS_FONT);
+
+    sprintf(str, "FPS: %2d", fps);
+
+    if (!tumGetTextSize((char *)str, &text_width, NULL)) {
+        tumDrawText(str, SCREEN_WIDTH - text_width - 10,
+                         SCREEN_HEIGHT - DEFAULT_FONT_SIZE * 1.5,
+                         FPS_FONT_COLOUR);
+    }
+
+    tumFontSelectFontFromHandle(cur_font);
+    tumFontPutFontHandle(cur_font);
 }
