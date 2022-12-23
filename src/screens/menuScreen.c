@@ -8,6 +8,7 @@
 #include "menuScreen.h"
 #include "main.h"
 #include "buttons.h"
+#include "draw.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -16,6 +17,10 @@ TaskHandle_t MenuScreen = NULL;
 
 void vMenuScreen() {
 
+    coord_t playButtonPosition = {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2};
+    coord_t scoreButtonPosition = {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2};
+    coord_t logoPosition = {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150};
+
     while(1) {
 
         if(DrawSignal) {
@@ -23,7 +28,9 @@ void vMenuScreen() {
                 
                 tumDrawClear(Silver);
                 drawBackround();
-                //drawButton();
+                drawButton(playButtonPosition, "Play");
+                drawButton(scoreButtonPosition, "Score");
+                drawLogo(logoPosition);
 
                 /*Testing buttons*/
                 xGetButtonInput();                
