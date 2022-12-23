@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     }
     
     // Load Font
-    tumFontLoadFont("SF Automaton.ttf", 18);
+    tumFontLoadFont(BUTTON_FONT, BUTTON_FONT_SIZE);
     
     if (buttonsInit()) {
         printf("Failed to create buttons lock\n");
