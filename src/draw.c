@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 /* FreeRTOS includes  */
 #include "FreeRTOS.h"
@@ -174,7 +175,7 @@ void drawFPS(void)
 /* Function to initialize the Animations */
 void drawInitAnnimations(void)
 {   
-/* Init floor Animations */
+    /* Init floor Animations */
     // Set filenames to the spritesheets
     char *floor_spritesheet_path = tumUtilFindResourcePath("floor_spritesheet.png");  
 
@@ -194,7 +195,7 @@ void drawInitAnnimations(void)
     // Set sequence handle with time in ms between the frames
     forwardSequence = tumDrawAnimationSequenceInstantiate(floorAnimation, "FORWARDS",
                                             40);
-/* Init bird animations */
+    /* Init bird animations */
     char *yellowbird_spritesheet_path = tumUtilFindResourcePath("yellowbird_spritesheet.png");
     
     image_handle_t yellowBirdSpritesheetImage = tumDrawLoadImage(yellowbird_spritesheet_path);
@@ -218,10 +219,10 @@ void drawFloorAnnimations(TickType_t xLastFrameTime)
         0, SCREEN_HEIGHT - 70);
 }
 
-/* Function to draw floor animation */
+/* Function to draw bird animation */
 void drawBirdAnnimations(TickType_t xLastFrameTime)
 {
     tumDrawAnimationDrawFrame(flappingBird,
         xTaskGetTickCount() - xLastFrameTime,
-        SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300);
+        SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
 }
