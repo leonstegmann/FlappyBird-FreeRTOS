@@ -43,4 +43,21 @@ int drawLogo(coord_t pos);
  */
 void drawFPS(void);
 
+/**
+ * @brief Initializes the animations  
+ */
+void drawInitAnnimations(void);
+
+/**
+ * @brief Draws the the moving floor
+ * @param xLastFrameTime time of the last drawn frame   
+ */
+void drawFloorAnnimations(TickType_t xLastFrameTime);
+
+/**
+ * @brief Draws the the flapping bird
+ * @param xLastFrameTime time of the last drawn frame   
+ */
+void drawBirdAnnimations(TickType_t xLastFrameTime);
+
 #endif //__DRAW_H__

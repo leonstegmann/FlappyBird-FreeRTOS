@@ -6,6 +6,8 @@
 
 #include "TUM_Draw.h" 
 #include "TUM_Font.h"
+#include "TUM_Utils.h"
+#include "TUM_Event.h"
 
 #include "draw.h"
 
@@ -23,8 +25,15 @@
 #define BOX_OUTLINE_COLOUR Black
 #define BUTTON_TEXT_COLOUR White
 
+/* Image handles */
 image_handle_t backroundImage = NULL;
 image_handle_t logoImage = NULL;
+spritesheet_handle_t floorSpritesheet = NULL;
+spritesheet_handle_t yellowBirdSpritesheet = NULL;
+
+/* Animation Handle */
+sequence_handle_t forwardSequence = NULL;
+sequence_handle_t flappingBird = NULL;
 
 /* Function to set the backround immage */
 int drawBackround() {
@@ -69,6 +78,9 @@ int drawLogo(coord_t pos) {
 /* Function to draw buttons on the screen */
 int drawButton(coord_t pos, char *str) {
 
+    int mouse_x = tumEventGetMouseX();
+    int mouse_y = tumEventGetMouseY();
+
     static int text_width;
     font_handle_t cur_font = tumFontGetCurFontHandle();
 
@@ -77,7 +89,14 @@ int drawButton(coord_t pos, char *str) {
     
     // Draw Box with Frame
     tumDrawFilledBox(pos.x + 2, pos.y + 2, BOX_WIDTH - 4, BOX_HEIGHT - 4, BOX_FRAME_COLOUR);
-    tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, BOX_COLOUR);
+
+    if(mouse_x >= pos.x && mouse_x <= pos.x + BOX_WIDTH && mouse_y >= pos.y && mouse_y <= pos.y + BOX_HEIGHT) {
+
+        tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, Red);
+
+    } else {
+        tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, BOX_COLOUR);
+    }
 
     // Select Font
     tumFontSelectFontFromName(BUTTON_FONT);
@@ -150,4 +169,59 @@ void drawFPS(void)
 
     tumFontSelectFontFromHandle(cur_font);
     tumFontPutFontHandle(cur_font);
+}
+
+/* Function to initialize the Animations */
+void drawInitAnnimations(void)
+{   
+/* Init floor Animations */
+    // Set filenames to the spritesheets
+    char *floor_spritesheet_path = tumUtilFindResourcePath("floor_spritesheet.png");  
+
+    // Create handles for the images
+    image_handle_t floorSpritesheetImage = tumDrawLoadImage(floor_spritesheet_path);
+
+    // Load spritesheets with number of columns and rows
+    floorSpritesheet = tumDrawLoadSpritesheet(floorSpritesheetImage, 9, 1);
+
+    // Create animation handle with respective spritesheet
+    animation_handle_t floorAnimation = tumDrawAnimationCreate(floorSpritesheet);
+
+    // Add Sequence with starting column and row, direction and #frames
+    tumDrawAnimationAddSequence(floorAnimation, "FORWARDS", 0, 0,
+                                SPRITE_SEQUENCE_HORIZONTAL_POS, 8);
+
+    // Set sequence handle with time in ms between the frames
+    forwardSequence = tumDrawAnimationSequenceInstantiate(floorAnimation, "FORWARDS",
+                                            40);
+/* Init bird animations */
+    char *yellowbird_spritesheet_path = tumUtilFindResourcePath("yellowbird_spritesheet.png");
+    
+    image_handle_t yellowBirdSpritesheetImage = tumDrawLoadImage(yellowbird_spritesheet_path);
+
+    yellowBirdSpritesheet = tumDrawLoadSpritesheet(yellowBirdSpritesheetImage, 4, 1);
+
+    animation_handle_t birdAnimation = tumDrawAnimationCreate(yellowBirdSpritesheet);
+
+    tumDrawAnimationAddSequence(birdAnimation, "FLAPPING", 0, 0,
+                                SPRITE_SEQUENCE_HORIZONTAL_POS, 4);
+
+    flappingBird = tumDrawAnimationSequenceInstantiate(birdAnimation, "FLAPPING",
+                                           120);
+}
+
+/* Function to draw floor animation */
+void drawFloorAnnimations(TickType_t xLastFrameTime)
+{
+    tumDrawAnimationDrawFrame(forwardSequence,
+        xTaskGetTickCount() - xLastFrameTime,
+        0, SCREEN_HEIGHT - 70);
+}
+
+/* Function to draw floor animation */
+void drawBirdAnnimations(TickType_t xLastFrameTime)
+{
+    tumDrawAnimationDrawFrame(flappingBird,
+        xTaskGetTickCount() - xLastFrameTime,
+        SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300);
 }
