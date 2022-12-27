@@ -16,9 +16,13 @@
 TaskHandle_t MenuScreen = NULL;
 
 void vMenuScreen() {
+    // Time of the last drawn frame
+    TickType_t xLastFrameTime = xTaskGetTickCount();
 
-    coord_t playButtonPosition = {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2};
-    coord_t scoreButtonPosition = {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2};
+    drawInitAnnimations();
+
+    coord_t playButtonPosition = {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2 + 50};
+    coord_t scoreButtonPosition = {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2 + 50};
     coord_t logoPosition = {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150};
 
     while(1) {
@@ -26,18 +30,25 @@ void vMenuScreen() {
         if(DrawSignal) {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
-                tumDrawClear(Silver);
                 drawBackround();
                 drawButton(playButtonPosition, "Play");
                 drawButton(scoreButtonPosition, "Score");
                 drawLogo(logoPosition);
+                drawFloorAnnimations(xLastFrameTime);
+                drawBirdAnnimations(xLastFrameTime);
+
+                // Time after everithing is drawn
+                xLastFrameTime = xTaskGetTickCount();
+
+                // Show fps 
+                drawFPS();
 
                 /*Testing buttons*/
                 xGetButtonInput();                
                 if(checkButton(KEYCODE(X)))
                     tumDrawClear(White);
                 
-                vTaskDelay((TickType_t) 100);
+                //vTaskDelay((TickType_t) 50);
             }
         }
     }
