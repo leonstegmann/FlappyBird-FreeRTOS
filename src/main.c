@@ -19,41 +19,21 @@
 #include "TUM_Draw.h"
 #include "TUM_Utils.h"
 #include "TUM_Event.h"
+#include "TUM_Font.h"
 
 /* Project includes */
 #include "main.h"
 #include "swapBuffers.h"
 #include "draw.h"
-#include"buttons.h"
+#include "buttons.h"
+#include "menuScreen.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
 
-TaskHandle_t TestScreen = NULL;
 TaskHandle_t BufferSwap = NULL;
 
 SemaphoreHandle_t DrawSignal;
-
-void vTestScreen() {
-
-    while(1) {
-
-        if(DrawSignal) {
-            if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
-                
-                tumDrawClear(Silver);
-                drawBackround();
-
-                /*Testing buttons*/
-                xGetButtonInput();                
-                if(checkButton(KEYCODE(X)))
-                    tumDrawClear(White);
-                
-                vTaskDelay((TickType_t) 100);
-            }
-        }
-    }
-}
 
 int main(int argc, char *argv[])
 {
@@ -77,19 +57,20 @@ int main(int argc, char *argv[])
         goto err_draw_signal;
     }
     
+    // Load Font
+    tumFontLoadFont(BUTTON_FONT, BUTTON_FONT_SIZE);
+    tumFontLoadFont(FPS_FONT, DEFAULT_FONT_SIZE);
+    
     if (buttonsInit()) {
         printf("Failed to create buttons lock\n");
         goto err_buttonsInit;
     }
-
+    createMenuTask();
+    
     printf("\nInitialization SUCCESS!! \nMoving on to create tasks... \n");    
 
     /*-----------------------------------------------------------------------------------------------*/	
     /* FreeRTOS Task creation*/
-    
-    xTaskCreate(vTestScreen, "TestScreen", 
-            mainGENERIC_STACK_SIZE , NULL,
-			mainGENERIC_PRIORITY, &TestScreen);
     
     xTaskCreate(vSwapBuffers, "BufferSwap", 
             mainGENERIC_STACK_SIZE , NULL,

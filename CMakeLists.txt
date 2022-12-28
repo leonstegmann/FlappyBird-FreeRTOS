@@ -33,6 +33,7 @@ else()
         ${PROJECT_SOURCE_DIR}/lib/FreeRTOS_Kernel/include
         ${PROJECT_SOURCE_DIR}/lib/FreeRTOS_Kernel/portable/GCC/Posix
         ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/include/screens
         ${PROJECT_SOURCE_DIR}/lib/Gfx/include
         ${PROJECT_SOURCE_DIR}/lib/AsyncIO/include
         ${PROJECT_SOURCE_DIR}/lib/tracer/include
@@ -46,7 +47,7 @@ else()
         "${PROJECT_SOURCE_DIR}/lib/FreeRTOS_Kernel/portable/MemMang/*.c")
     file(GLOB GFX_SOURCES "${PROJECT_SOURCE_DIR}/lib/Gfx/*.c")
     file(GLOB ASYNC_SOURCES "${PROJECT_SOURCE_DIR}/lib/AsyncIO/*.c")
-    file(GLOB SIMULATOR_SOURCES "${PROJECT_SOURCE_DIR}/src/*.c")
+    file(GLOB SIMULATOR_SOURCES "${PROJECT_SOURCE_DIR}/src/*.c" "${PROJECT_SOURCE_DIR}/src/screens/*.c")
 
     SET(PROJECT_SOURCES
         ${SIMULATOR_SOURCES} ${FREERTOS_SOURCES} ${GFX_SOURCES} ${ASYNC_SOURCES}
