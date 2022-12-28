@@ -2,6 +2,7 @@
 #include "stdio.h"
 
 /* Project includes  */
+#include "states.h"
 #include "stateMachine.h"
 #include "menuScreen.h"
 
