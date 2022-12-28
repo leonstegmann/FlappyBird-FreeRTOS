@@ -2,7 +2,8 @@
 #define __MENUSCREEN_H__
 
 /**
- * @brief creates the FreeRTOS Task. Returns 0 on Succes, 1 on Error
+ * @brief Creates the FreeRTOS Task.
+ * @return Returns 0 on Succes, 1 on Error.
  */
 int createMenuTask();
 
