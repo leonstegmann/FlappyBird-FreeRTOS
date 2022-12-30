@@ -26,7 +26,8 @@
 #include "swapBuffers.h"
 #include "draw.h"
 #include "buttons.h"
-#include "menuScreen.h"
+#include "menuScreen.h" // for the Flappy Bird Logo
+#include "stateMachine.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -65,8 +66,8 @@ int main(int argc, char *argv[])
         printf("Failed to create buttons lock\n");
         goto err_buttonsInit;
     }
-    createMenuTask();
     
+    if (initStateMachine());
     printf("\nInitialization SUCCESS!! \nMoving on to create tasks... \n");    
 
     /*-----------------------------------------------------------------------------------------------*/	

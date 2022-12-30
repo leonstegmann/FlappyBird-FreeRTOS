@@ -63,3 +63,16 @@ int createMenuTask() {
     
     return 0;
 }
+
+void deleteMenuTask(){
+    if (MenuScreen)
+        vTaskDelete(MenuScreen);
+}
+
+void enterMenuTask(){
+    vTaskResume(MenuScreen);
+}
+
+void exitMenuTask(){
+    vTaskSuspend(MenuScreen);
+}
