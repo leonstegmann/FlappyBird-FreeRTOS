@@ -46,26 +46,25 @@ void vMenuScreen() {
 
                 // Show fps 
                 drawFPS();
-
-                /*Testing buttons*/
-                xGetButtonInput();                
-                if(checkButton(KEYCODE(X))){
-
-                    states_set_state(1);
-                    tumFUtilPrintTaskStateList();                
-                }
             }
         }
+        xGetButtonInput();                
+        if(checkButton(KEYCODE(X))){
+            states_set_state(1);
+            states_run();
+            tumFUtilPrintTaskStateList();                
+            }
+        vTaskDelay( (TickType_t) 10);
     }
 }
 
 int createMenuTask() {
 
     if(!xTaskCreate(vMenuScreen, "MenuScreen",  mainGENERIC_STACK_SIZE , NULL,
-			        mainGENERIC_PRIORITY, &MenuScreen)) {
+			        mainGENERIC_PRIORITY + 6, &MenuScreen)) {
                         return 1;
     }
-    
+    vTaskSuspend(MenuScreen);
     return 0;
 }
 

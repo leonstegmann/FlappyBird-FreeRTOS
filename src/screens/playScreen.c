@@ -4,6 +4,8 @@
 #include"task.h" // for xTaskGetTickCount()
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
 
+/* TUM_Library includes  */
+#include "TUM_Event.h" // for tumEventFetchEvents();
 
 /* Project includes  */
 #include "playScreen.h"
@@ -23,26 +25,25 @@ void vPlayScreen(){
     while(1){
         if(DrawSignal) {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
+                		tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
                 drawBackround();
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
 
-                xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
-
-                xGetButtonInput();                
-                if(checkButton(KEYCODE(SPACE))){
-                    tumDrawClear(White);
-                }
-
+                xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame    
             }
         }
-    //vTaskDelay((TickType_t) 50);
+        xGetButtonInput();                
+            if(checkButton(KEYCODE(SPACE))){
+        
+        }
+    vTaskDelay((TickType_t) 10);
     }
 }
 
 
 int createPlayTask(){
-    if(!xTaskCreate(vPlayScreen, "PlayScreen",  mainGENERIC_STACK_SIZE , NULL, mainGENERIC_PRIORITY, &PlayScreen)) {
+    if(!xTaskCreate(vPlayScreen, "PlayScreen",  mainGENERIC_STACK_SIZE , NULL, mainGENERIC_PRIORITY + 6, &PlayScreen)) {
         return 1;
     }
     vTaskSuspend(PlayScreen);
