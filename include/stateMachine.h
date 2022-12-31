@@ -13,8 +13,7 @@
 int initStateMachine();
 
 /**
- * @brief This function clears statem Machine input 
- * and deletes created Tasks running in the State machine.
+ * @brief This function deletes created Tasks running in the State machine.
  */
 void deleteStateMachine();
 

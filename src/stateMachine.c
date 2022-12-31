@@ -12,11 +12,11 @@ int initStateMachine(){
     states_add( (void*) createPlayTask, enterPlayTask, NULL, exitPlayTask, 1, "Play_Task");
     states_init();
     states_set_state(0);
+    states_run();
     return 0;
 }
 
 void deleteStateMachine(){
-    states_clear_input();
     deleteMenuTask();
     deletePlayTask();
 }
