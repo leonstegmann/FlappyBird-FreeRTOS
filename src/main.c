@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     
     if(xTaskCreate(vSwapBuffers, "BufferSwap", 
             mainGENERIC_STACK_SIZE , NULL,
-			mainGENERIC_PRIORITY, &BufferSwap)!= pdPASS){
+			configMAX_PRIORITIES, &BufferSwap)!= pdPASS){
         printf("Failed to create Buffer Task\n");
         goto err_bufferSwapTask;
             }

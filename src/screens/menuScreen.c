@@ -4,11 +4,15 @@
 #include"task.h" // for xTaskGetTickCount()
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
 
+/* TUM_Library includes  */
+#include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
+
 /* Project includes  */
 #include "menuScreen.h"
 #include "main.h"
 #include "buttons.h"
 #include "draw.h"
+#include "states.h" //for set_stages()
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -45,10 +49,11 @@ void vMenuScreen() {
 
                 /*Testing buttons*/
                 xGetButtonInput();                
-                if(checkButton(KEYCODE(X)))
-                    tumDrawClear(White);
-                
-                //vTaskDelay((TickType_t) 50);
+                if(checkButton(KEYCODE(X))){
+
+                    states_set_state(1);
+                    tumFUtilPrintTaskStateList();                
+                }
             }
         }
     }
