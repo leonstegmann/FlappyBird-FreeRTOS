@@ -12,4 +12,10 @@
  */
 int initStateMachine();
 
+/**
+ * @brief This function clears statem Machine input 
+ * and deletes created Tasks running in the State machine.
+ */
+void deleteStateMachine();
+
 #endif //__STATEMACHINE_H__
