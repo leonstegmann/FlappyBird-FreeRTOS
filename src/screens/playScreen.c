@@ -34,15 +34,12 @@ void vPlayScreen(){
                 drawBirdAnnimations(xLastFrameTime);
 
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
-
-                xSemaphoreGive(DrawSignal);
             }
         }
         xGetButtonInput();                
             if(checkButton(KEYCODE(SPACE))){
                 printf("Spacebar pressed");
         }
-    vTaskDelay((TickType_t) 10);
     }
 }
 
