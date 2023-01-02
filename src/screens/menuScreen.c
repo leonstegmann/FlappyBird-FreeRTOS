@@ -6,6 +6,7 @@
 
 /* TUM_Library includes  */
 #include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
+#include "TUM_Event.h" // for tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
 
 /* Project includes  */
 #include "menuScreen.h"
@@ -30,7 +31,6 @@ void vMenuScreen() {
     coord_t logoPosition = {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150};
 
     while(1) {
-
         if(DrawSignal) {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
@@ -46,37 +46,40 @@ void vMenuScreen() {
 
                 // Show fps 
                 drawFPS();
+            xSemaphoreGive(DrawSignal);
             }
         }
         xGetButtonInput();                
-        if(checkButton(KEYCODE(X))){
+        if(checkButton(KEYCODE(P))){
+            printf("changing states\n");
             states_set_state(1);
             states_run();
             tumFUtilPrintTaskStateList();                
             }
-        vTaskDelay( (TickType_t) 10);
+
+    vTaskDelayUntil(&xLastFrameTime, (TickType_t) 10);
     }
 }
 
-int createMenuTask() {
+int createMenuTask(void) {
 
-    if(!xTaskCreate(vMenuScreen, "MenuScreen",  mainGENERIC_STACK_SIZE , NULL,
+    if(!xTaskCreate(vMenuScreen, "MenuScreen",  mainGENERIC_STACK_SIZE *2, NULL,
 			        mainGENERIC_PRIORITY + 6, &MenuScreen)) {
                         return 1;
     }
-    vTaskSuspend(MenuScreen);
+    //vTaskSuspend(MenuScreen); 
     return 0;
 }
 
-void deleteMenuTask(){
+void deleteMenuTask(void){
     if (MenuScreen)
         vTaskDelete(MenuScreen);
 }
 
-void enterMenuTask(){
+void enterMenuTask(void){
     vTaskResume(MenuScreen);
 }
 
-void exitMenuTask(){
+void exitMenuTask(void){
     vTaskSuspend(MenuScreen);
 }
