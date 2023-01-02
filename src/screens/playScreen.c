@@ -19,23 +19,28 @@ TaskHandle_t PlayScreen = NULL;
 void vPlayScreen(){
 
    TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
-    
+
+    tumDrawBindThread();
+
     drawInitAnnimations();
 
     while(1){
         if(DrawSignal) {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
-                		tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
+                tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
+
                 drawBackround();
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
 
-                xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame    
+                xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
+
+                xSemaphoreGive(DrawSignal);
             }
         }
         xGetButtonInput();                
             if(checkButton(KEYCODE(SPACE))){
-        
+                printf("Spacebar pressed");
         }
     vTaskDelay((TickType_t) 10);
     }
@@ -43,7 +48,7 @@ void vPlayScreen(){
 
 
 int createPlayTask(){
-    if(!xTaskCreate(vPlayScreen, "PlayScreen",  mainGENERIC_STACK_SIZE , NULL, mainGENERIC_PRIORITY + 6, &PlayScreen)) {
+    if(!xTaskCreate(vPlayScreen, "PlayScreen",  mainGENERIC_STACK_SIZE*2 , NULL, mainGENERIC_PRIORITY + 6, &PlayScreen)) {
         return 1;
     }
     vTaskSuspend(PlayScreen);
@@ -60,5 +65,5 @@ void enterPlayTask(){
 }
 
 void exitPlayTask(){
-        vTaskSuspend(PlayScreen);
+    vTaskSuspend(PlayScreen);
 }
