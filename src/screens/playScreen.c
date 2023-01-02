@@ -31,7 +31,7 @@ void vPlayScreen(){
 
                 drawBackround();
                 drawFloorAnnimations(xLastFrameTime);
-                drawBirdAnnimations(xLastFrameTime);
+                drawBirdAnnimationsInGame(xLastFrameTime);
 
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
             }

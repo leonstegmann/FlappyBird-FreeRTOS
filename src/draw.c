@@ -11,6 +11,7 @@
 #include "TUM_Event.h"
 
 #include "draw.h"
+#include "objects.h" //Bird struct
 
 /* Aimed FPS */
 #define FPS_AVERAGE_COUNT 50
@@ -225,4 +226,12 @@ void drawBirdAnnimations(TickType_t xLastFrameTime)
     tumDrawAnimationDrawFrame(flappingBird,
         xTaskGetTickCount() - xLastFrameTime,
         SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
+}
+
+/* Function to draw bird animation */
+void drawBirdAnnimationsInGame(TickType_t xLastFrameTime)
+{
+    tumDrawAnimationDrawFrame(flappingBird,
+        xTaskGetTickCount() - xLastFrameTime,
+        player.pos.x, player.pos.y);
 }

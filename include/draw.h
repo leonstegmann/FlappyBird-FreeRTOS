@@ -55,9 +55,15 @@ void drawInitAnnimations(void);
 void drawFloorAnnimations(TickType_t xLastFrameTime);
 
 /**
- * @brief Draws the the flapping bird
+ * @brief Draws the the flapping bird while in Menu
  * @param xLastFrameTime time of the last drawn frame   
  */
 void drawBirdAnnimations(TickType_t xLastFrameTime);
+
+/**
+ * @brief Draws the the flapping bird while in Game
+ * @param xLastFrameTime time of the last drawn frame   
+ */
+void drawBirdAnnimationsInGame(TickType_t xLastFrameTime);
 
 #endif //__DRAW_H__
