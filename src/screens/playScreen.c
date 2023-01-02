@@ -13,6 +13,7 @@
 #include "main.h" // for DrawSignal
 #include "buttons.h"
 #include "draw.h"
+#include "objects.h"
 
 TaskHandle_t PlayScreen = NULL;
 
@@ -32,7 +33,7 @@ void vPlayScreen(){
                 drawBackround();
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimationsInGame(xLastFrameTime);
-
+                updateBirdPosition(xLastFrameTime);
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
             }
         }

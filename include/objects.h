@@ -4,10 +4,14 @@
 /* Standard library includes */
 #include <stdbool.h>
 
+/* FreeRTOS includes  */
+#include "semphr.h" // for .lock
+
 /* TUM_Library includes  */
 #include "TUM_Draw.h"
 
-#define Gravity 0.8
+#define GRAVITY 0.8
+
 
 typedef struct Bird {
 //    image_handle_t image; 
@@ -15,8 +19,14 @@ typedef struct Bird {
     unsigned short width;
     coord_t pos;
     double velocityY;
+    SemaphoreHandle_t lock;
 } bird_t;
 
-bird_t player = {.height = 34, .width = 34 , .velocityY = 0, .pos = (coord_t) {SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300} };
+
+extern bird_t* player;
+
+void updateBirdPosition( TickType_t);
+
+int initPlayer();
 
 #endif // __OBJECTS_H__

@@ -28,6 +28,7 @@
 #include "buttons.h"
 #include "menuScreen.h" // for the Flappy Bird Logo
 #include "stateMachine.h"
+#include "objects.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -57,6 +58,8 @@ int main(int argc, char *argv[])
         printf("Failed to create draw signal\n");
         goto err_draw_signal;
     }
+
+    if( initPlayer());
     
     // Load Font
     tumFontLoadFont(BUTTON_FONT, BUTTON_FONT_SIZE);
