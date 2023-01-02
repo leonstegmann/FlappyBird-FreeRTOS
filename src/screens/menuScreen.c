@@ -6,7 +6,6 @@
 
 /* TUM_Library includes  */
 #include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
-#include "TUM_Event.h" // for tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
 
 /* Project includes  */
 #include "menuScreen.h"
@@ -46,18 +45,15 @@ void vMenuScreen() {
 
                 // Show fps 
                 drawFPS();
-            xSemaphoreGive(DrawSignal);
             }
         }
         xGetButtonInput();                
         if(checkButton(KEYCODE(P))){
             printf("changing states\n");
             states_set_state(1);
-            states_run();
-            tumFUtilPrintTaskStateList();                
-            }
+                           
+        }
 
-    vTaskDelayUntil(&xLastFrameTime, (TickType_t) 10);
     }
 }
 
@@ -71,7 +67,7 @@ int createMenuTask(void) {
     return 0;
 }
 
-void deleteMenuTask(void){
+void deleteMenuTask(){
     if (MenuScreen)
         vTaskDelete(MenuScreen);
 }
@@ -80,6 +76,6 @@ void enterMenuTask(void){
     vTaskResume(MenuScreen);
 }
 
-void exitMenuTask(void){
+void exitMenuTask(){
     vTaskSuspend(MenuScreen);
 }
