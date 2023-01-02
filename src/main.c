@@ -67,11 +67,6 @@ int main(int argc, char *argv[])
         goto err_buttonsInit;
     }
     
-    if (initStateMachine()){
-        printf("Failed to initalize State Machine\n");
-        goto err_stateMachineInit;
-    }
-    
     printf("\nInitialization SUCCESS!! \nMoving on to create tasks... \n");    
 
     /*-----------------------------------------------------------------------------------------------*/	
@@ -82,8 +77,13 @@ int main(int argc, char *argv[])
 			configMAX_PRIORITIES, &BufferSwap)!= pdPASS){
         printf("Failed to create Buffer Task\n");
         goto err_bufferSwapTask;
-            }
+    }
 
+    if (initStateMachine()){
+        printf("Failed to initalize State Machine\n");
+        goto err_stateMachineInit;
+    }
+    
     /*-----------------------------------------------------------------------------------------------*/	
 	/* start FreeRTOS Sceduler: Should never get passed the function vTaskStartScheduler() */
 
@@ -97,10 +97,10 @@ int main(int argc, char *argv[])
 
     /*-----------------------------------------------------------------------------------------------*/	
     /* Error handling -> delete everything that has been initialized so far (Backwards the Init Order) */
-        vTaskDelete(BufferSwap);
-    err_bufferSwapTask:
         deleteStateMachine();
     err_stateMachineInit:
+        vTaskDelete(BufferSwap);
+    err_bufferSwapTask:
         buttonsExit();
     err_buttonsInit:
 	    vSemaphoreDelete(DrawSignal);
