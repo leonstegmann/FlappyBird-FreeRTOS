@@ -17,6 +17,6 @@ typedef struct Bird {
     double velocityY;
 } bird_t;
 
-bird_t player;
+bird_t player = {.height = 34, .width = 34 , .velocityY = 0, .pos = (coord_t) {SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300} };
 
 #endif // __OBJECTS_H__
