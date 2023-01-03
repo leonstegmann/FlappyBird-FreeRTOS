@@ -39,7 +39,7 @@ void vPlayScreen(){
         }
         xGetButtonInput();                
             if(checkButton(KEYCODE(SPACE))){
-                printf("Spacebar pressed");
+                player->velocityY -= UPWARDS_PUSH;
         }
     }
 }

@@ -5,7 +5,10 @@
 
 #include "objects.h"
 
-bird_t bird = {.height = 34, .width = 34 , .velocityY = 0, .pos = (coord_t) {SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300} };
+/* Defining and initializing "Object"*/
+bird_t bird = {.height = 34, .width = 34 , .velocityY = 0, .pos = (coord_t) {SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300}, .dead = false };
+
+/* creating pointer to "object" for extern usage */
 bird_t* player = &bird;
 
 int initPlayer(){

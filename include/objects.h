@@ -2,16 +2,17 @@
 #define __OBJECTS_H__
 
 /* Standard library includes */
-#include <stdbool.h>
+#include <stdbool.h> // for bool
 
 /* FreeRTOS includes  */
 #include "semphr.h" // for .lock
 
 /* TUM_Library includes  */
-#include "TUM_Draw.h"
+#include "TUM_Draw.h" // for image_handle_t
 
-#define GRAVITY 0.8
-
+/* Defines */
+#define GRAVITY 2           //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
+#define UPWARDS_PUSH 60     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
 
 typedef struct Bird {
 //    image_handle_t image; 
@@ -20,13 +21,22 @@ typedef struct Bird {
     coord_t pos;
     double velocityY;
     SemaphoreHandle_t lock;
+    bool dead;
 } bird_t;
 
-
+/* Pointer to Bird Object of Player */
 extern bird_t* player;
 
+/**
+ * @brief Updates the players position and velocity each time the function is called.
+ * @param xLastTimeUpdated is the time the function got called the last time. 
+ * This is used to calculatethe distance the bird travelt and is thus actualized.
+ */
 void updateBirdPosition( TickType_t);
 
+/**
+ * @brief creates the SemaphoreMutex() for the player.lock to ensure safe read and write on shared resource.
+ */
 int initPlayer();
 
 #endif // __OBJECTS_H__
