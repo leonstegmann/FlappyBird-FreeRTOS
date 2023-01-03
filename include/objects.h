@@ -39,4 +39,10 @@ void updateBirdPosition( TickType_t);
  */
 int initPlayer();
 
+/**
+ * @brief check Collision of the Bord with the Floor.
+ * @return 1 is collision = TRUE, 0 if collision = FALSE.
+ */
+short checkCollision();
+
 #endif // __OBJECTS_H__

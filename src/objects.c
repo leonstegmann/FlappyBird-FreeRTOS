@@ -28,5 +28,17 @@ void updateBirdPosition( TickType_t xLastTimeUpdated){
         player->velocityY+=GRAVITY;
         xSemaphoreGive(player->lock);
     }    
+}
 
+short checkCollision(){
+    short ret = 0;
+     if ( xSemaphoreTake(player->lock, portMAX_DELAY) == pdTRUE ){
+        if ((player->pos.y-player->height) > SCREEN_HEIGHT){
+            player->velocityY = 0;
+            player->dead = true;
+            ret = 1;
+        }
+        xSemaphoreGive(player->lock);
+     }
+    return ret;
 }
