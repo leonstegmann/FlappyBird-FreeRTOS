@@ -13,6 +13,7 @@
 /* Defines */
 #define GRAVITY 2           //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
 #define UPWARDS_PUSH 60     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
+#define GROUND ( SCREEN_HEIGHT - 100)
 
 typedef struct Bird {
 //    image_handle_t image; 

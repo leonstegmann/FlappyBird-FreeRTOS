@@ -14,6 +14,7 @@
 #include "buttons.h"
 #include "draw.h"
 #include "objects.h"
+#include "states.h"
 
 TaskHandle_t PlayScreen = NULL;
 
@@ -26,20 +27,26 @@ void vPlayScreen(){
     drawInitAnnimations();
 
     while(1){
-        if(DrawSignal) {
-            if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
-                tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
+        if (!checkCollision()){
+            if(DrawSignal) {
+                if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
+                    tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
 
-                drawBackround();
-                drawFloorAnnimations(xLastFrameTime);
-                drawBirdAnnimationsInGame(xLastFrameTime);
-                updateBirdPosition(xLastFrameTime);
-                xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
+                    drawBackround();
+                    drawFloorAnnimations(xLastFrameTime);
+                    drawBirdAnnimationsInGame(xLastFrameTime);
+                    updateBirdPosition(xLastFrameTime);
+                    xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
+                }
+            }
+            xGetButtonInput();                
+                if(checkButton(KEYCODE(SPACE))){
+                    player->velocityY -= UPWARDS_PUSH;
             }
         }
-        xGetButtonInput();                
-            if(checkButton(KEYCODE(SPACE))){
-                player->velocityY -= UPWARDS_PUSH;
+        else {
+            vTaskDelay((TickType_t) 1000);
+            states_set_state(0);
         }
     }
 }
