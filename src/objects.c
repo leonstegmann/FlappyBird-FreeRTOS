@@ -48,8 +48,22 @@ pipes_t* newPipe(){
     ret->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
     ret->positionX = SCREEN_WIDTH/2;
     ret->velocityX = PIPE_VELOCITY;
-
+    ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
+  
     return ret;
 
 }
 
+short updatePipePosition( TickType_t xLastTimeUpdated, pipes_t* pipe){
+    short ret = 0;
+    if(pipe != NULL){
+        TickType_t xtimepassed =  xTaskGetTickCount() - xLastTimeUpdated;
+        if( xSemaphoreTake(pipe->lock, portMAX_DELAY) == pdTRUE){
+            pipe->positionX -= pipe->velocityX* xtimepassed /1000;
+            xSemaphoreGive(pipe->lock);
+            ret = 1;
+        }
+        
+    }
+    return ret;
+}
