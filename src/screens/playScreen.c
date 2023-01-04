@@ -21,6 +21,8 @@ void vPlayScreen(){
 
    TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
+    pipes_t* pipe1 = newPipe();
+    
     tumDrawBindThread();
 
     drawInitAnnimations();
@@ -31,9 +33,11 @@ void vPlayScreen(){
                 tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
 
                 drawBackround();
+                drawPipe(pipe1);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimationsInGame(xLastFrameTime);
                 updateBirdPosition(xLastFrameTime);
+                updatePipePosition(xLastFrameTime, pipe1);
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
             }
         }
