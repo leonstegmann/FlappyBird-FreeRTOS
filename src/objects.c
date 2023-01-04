@@ -1,6 +1,7 @@
 /* Standard library includes */
 #include "stdio.h"
 #include <stdlib.h> // for malloc()
+#include "math.h" // for % operator
 
 /* FreeRTOS includes  */
 #include "FreeRTOS.h" // for TickType_t
@@ -46,7 +47,7 @@ pipes_t* newPipe(){
     ret->image_height = tumDrawGetLoadedImageHeight(ret->lowerPipeImage);
     ret->image_width = tumDrawGetLoadedImageWidth(ret->lowerPipeImage);
     ret->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
-    ret->positionX = SCREEN_WIDTH/2;
+    ret->positionX = SCREEN_WIDTH;
     ret->velocityX = PIPE_VELOCITY;
     ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
   
@@ -60,6 +61,8 @@ short updatePipePosition( TickType_t xLastTimeUpdated, pipes_t* pipe){
         TickType_t xtimepassed =  xTaskGetTickCount() - xLastTimeUpdated;
         if( xSemaphoreTake(pipe->lock, portMAX_DELAY) == pdTRUE){
             pipe->positionX -= pipe->velocityX* xtimepassed /1000;
+            if (pipe->positionX + pipe->image_width < 0)
+                pipe->positionX += SCREEN_WIDTH + pipe->image_width;
             xSemaphoreGive(pipe->lock);
             ret = 1;
         }
