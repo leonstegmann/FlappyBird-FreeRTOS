@@ -13,7 +13,7 @@
 /* Defines */
 #define GRAVITY 2           //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
 #define UPWARDS_PUSH 60     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
-#define PIPE_VELOCITY 100
+#define PIPE_VELOCITY 200
 #define GAP_HEIGHT 100
 #define FLOOR_HEIGHT 50
 
@@ -47,7 +47,7 @@ typedef struct Pipes {
     image_handle_t upperPipeImage; 
     unsigned short image_height;
     unsigned short image_width;
-    short positionX;
+    short positionX; //upper left corner of the image
     double velocityX;
     short gap_center; // Y-position of the Gap middle on the screen
     SemaphoreHandle_t lock;
