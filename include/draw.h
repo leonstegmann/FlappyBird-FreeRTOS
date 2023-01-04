@@ -7,6 +7,7 @@
 #define DRAW_H
 
 #include "TUM_Draw.h"
+#include "objects.h"
 
 /* FPS Font */
 #define FPS_FONT "scifieb.ttf"
@@ -16,6 +17,13 @@
 #define BUTTON_FONT_SIZE 22
 #define BOX_WIDTH 130
 #define BOX_HEIGHT 40
+
+/**
+ * @brief Draws the uppeer and lower pipe allocated around the Gap center.
+ * @param pipe Pipe Object 
+ * @return 1 on success and 0 when failed
+ */
+void drawPipe(pipes_t* pipe);
 
 /**
  * @brief Prints the backround image on the screen 
