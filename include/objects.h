@@ -13,6 +13,9 @@
 /* Defines */
 #define GRAVITY 2           //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
 #define UPWARDS_PUSH 60     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
+#define PIPE_VELOCITY 10
+#define GAP_HEIGHT 100
+#define FLOOR_HEIGHT 50
 
 typedef struct Bird {
 //    image_handle_t image; 
@@ -38,5 +41,22 @@ void updateBirdPosition( TickType_t);
  * @brief creates the SemaphoreMutex() for the player.lock to ensure safe read and write on shared resource.
  */
 int initPlayer();
+
+typedef struct Pipes {
+    image_handle_t lowerPipeImage;
+    image_handle_t upperPipeImage; 
+    unsigned short image_height;
+    unsigned short image_width;
+    short positionX;
+    double velocityX;
+    short gap_center; // Y-position of the Gap middle on the screen 
+} pipes_t;
+
+
+/**
+ * @brief create a pipe object returning the corresponding pointer. 
+ * @return pointer to the created Pipe Object.
+ */
+pipes_t* newPipe();
 
 #endif // __OBJECTS_H__
