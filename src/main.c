@@ -59,8 +59,6 @@ int main(int argc, char *argv[])
         goto err_draw_signal;
     }
 
-    if( initPlayer());
-    
     // Load Font
     tumFontLoadFont(BUTTON_FONT, BUTTON_FONT_SIZE);
     tumFontLoadFont(FPS_FONT, DEFAULT_FONT_SIZE);

@@ -12,23 +12,21 @@
 #include "objects.h"
 #include "defines.h"
 
-/* Defining and initializing "Object"*/
-bird_t bird = {.height = 34, .width = 34 , .velocityY = 0, .pos = (coord_t) {SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300}, .dead = false };
+bird_t* createNewPlayer(){
 
-/* creating pointer to "object" for extern usage */
-bird_t* player = &bird;
+    bird_t* ret = malloc(sizeof(bird_t));
 
-int initPlayer(){
-    player->lock = xSemaphoreCreateMutex(); // Locking mechanism
-        if (!player->lock) {
-        printf("Failed to create bird lock");
-        return -1;
-    }
+    ret->height = 24;
+    ret->width = 34;
+    ret->velocityY = 0;
+    ret->pos = (coord_t) {(SCREEN_WIDTH - ret->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
+    ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
+    ret->dead = false;
 
-    return 0;
+    return ret;
 }
 
-void updateBirdPosition( TickType_t xLastTimeUpdated){
+void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
     TickType_t xtimepassed =  xTaskGetTickCount() - xLastTimeUpdated;
     if( xSemaphoreTake(player->lock, portMAX_DELAY )== pdTRUE){
         player->pos.y += player->velocityY * (int) xtimepassed /100;   // devided by 1000 milliseconds

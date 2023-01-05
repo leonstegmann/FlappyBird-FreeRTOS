@@ -21,7 +21,7 @@
 #define GAP_HIGHEST 220
 
 typedef struct Bird {
-//    image_handle_t image; 
+ //   image_handle_t image; 
     unsigned short height;
     unsigned short width;
     coord_t pos;
@@ -30,20 +30,19 @@ typedef struct Bird {
     bool dead;
 } bird_t;
 
-/* Pointer to Bird Object of Player */
-extern bird_t* player;
-
 /**
  * @brief Updates the players position and velocity each time the function is called.
  * @param xLastTimeUpdated is the time the function got called the last time. 
+ * @param player intakes the bird_t* object to update the values
  * This is used to calculatethe distance the bird travelt and is thus actualized.
  */
-void updateBirdPosition( TickType_t);
+void updateBirdPosition( TickType_t, bird_t* );
 
 /**
- * @brief creates the SemaphoreMutex() for the player.lock to ensure safe read and write on shared resource.
+ * @brief create a PLayer object returning the corresponding pointer. 
+ * @return pointer to the created player Object.
  */
-int initPlayer();
+bird_t* createNewPlayer();
 
 typedef struct Pipes {
     image_handle_t lowerPipeImage;
