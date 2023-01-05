@@ -227,7 +227,7 @@ void drawFloorAnnimations(TickType_t xLastFrameTime)
 {
     tumDrawAnimationDrawFrame(forwardSequence,
         xTaskGetTickCount() - xLastFrameTime,
-        0, SCREEN_HEIGHT - 70);
+        0, SCREEN_HEIGHT - FLOOR_HEIGHT);
 }
 
 /* Function to draw bird animation */
