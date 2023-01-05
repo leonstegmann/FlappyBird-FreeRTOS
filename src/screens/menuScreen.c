@@ -40,7 +40,7 @@ void vMenuScreen() {
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
 
-                // Time after everithing is drawn
+                // Time after everything is drawn
                 xLastFrameTime = xTaskGetTickCount();
 
                 // Show fps 
