@@ -21,8 +21,11 @@ void vPlayScreen(){
 
    TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
+    /* create Pipes (here decided for having a maxium amount of 2 pipes on the screen)*/
     pipes_t* pipe1 = newPipe();
-    
+    pipes_t* pipe2 = newPipe();
+    pipe2->positionX += SCREEN_WIDTH/2; // to ensure the Offset bewteen the 2 pipes 
+
     tumDrawBindThread();
 
     drawInitAnnimations();
@@ -34,10 +37,12 @@ void vPlayScreen(){
 
                 drawBackround();
                 drawPipe(pipe1);
+                drawPipe(pipe2);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimationsInGame(xLastFrameTime);
                 updateBirdPosition(xLastFrameTime);
                 updatePipePosition(xLastFrameTime, pipe1);
+                updatePipePosition(xLastFrameTime, pipe2);
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
             }
         }
