@@ -239,8 +239,7 @@ void drawBirdAnnimations(TickType_t xLastFrameTime)
 }
 
 /* Function to draw bird animation */
-void drawBirdAnnimationsInGame(TickType_t xLastFrameTime)
-{
+void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player){
     tumDrawAnimationDrawFrame(flappingBird,
         xTaskGetTickCount() - xLastFrameTime,
         player->pos.x, player->pos.y);

@@ -72,6 +72,6 @@ void drawBirdAnnimations(TickType_t xLastFrameTime);
  * @brief Draws the the flapping bird while in Game
  * @param xLastFrameTime time of the last drawn frame   
  */
-void drawBirdAnnimationsInGame(TickType_t xLastFrameTime);
+void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player);
 
 #endif //__DRAW_H__
