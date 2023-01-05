@@ -61,12 +61,19 @@ short updatePipePosition( TickType_t xLastTimeUpdated, pipes_t* pipe){
         TickType_t xtimepassed =  xTaskGetTickCount() - xLastTimeUpdated;
         if( xSemaphoreTake(pipe->lock, portMAX_DELAY) == pdTRUE){
             pipe->positionX -= pipe->velocityX* xtimepassed /1000;
-            if (pipe->positionX + pipe->image_width < 0)
-                pipe->positionX += SCREEN_WIDTH + pipe->image_width;
+            if (pipe->positionX + pipe->image_width < 0){
+                pipe->gap_center = randomGenerator( GAP_LOWEST, GAP_HIGHEST); // generate Random Gap center
+                pipe->positionX += SCREEN_WIDTH + pipe->image_width; //respawn Pipe at Right end of the Screen
+            }
             xSemaphoreGive(pipe->lock);
             ret = 1;
         }
-        
+
     }
     return ret;
+}
+
+short randomGenerator(short min, short max){
+    short ret = min + (rand() % max);
+    return  ret;
 }

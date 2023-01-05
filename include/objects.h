@@ -11,11 +11,14 @@
 #include "TUM_Draw.h" // for image_handle_t
 
 /* Defines */
-#define GRAVITY 2           //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
-#define UPWARDS_PUSH 60     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
-#define PIPE_VELOCITY 200
+/* ATTENTION: THESE DEFINES ARE RANDOMLY SET */
+#define GRAVITY 6           //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
+#define UPWARDS_PUSH 100     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
+#define PIPE_VELOCITY 300
 #define GAP_HEIGHT 100
 #define FLOOR_HEIGHT 50
+#define GAP_LOWEST 150
+#define GAP_HIGHEST 220
 
 typedef struct Bird {
 //    image_handle_t image; 
@@ -65,5 +68,13 @@ pipes_t* newPipe();
  * @return returns 1 on success 0 if failed.
  */
 short updatePipePosition( TickType_t, pipes_t*);
+
+/**
+ * @brief generates a Random Number in a specific range  
+ * @param min lower range end
+ * @param max higher range end
+ * @return returns the random number
+ */
+short randomGenerator(short, short);
 
 #endif // __OBJECTS_H__
