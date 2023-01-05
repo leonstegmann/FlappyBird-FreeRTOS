@@ -19,7 +19,7 @@ bird_t* createNewPlayer(){
     ret->height = 24;
     ret->width = 34;
     ret->velocityY = 0;
-    ret->max_velocity = GRAVITY*7;
+    ret->max_velocity = GRAVITY*10;
     ret->pos = (coord_t) {(SCREEN_WIDTH - ret->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
     ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
     ret->dead = false;
@@ -30,7 +30,7 @@ bird_t* createNewPlayer(){
 void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
     TickType_t xtimepassed =  xTaskGetTickCount() - xLastTimeUpdated;
     if( xSemaphoreTake(player->lock, portMAX_DELAY )== pdTRUE){
-        player->pos.y += player->velocityY * (int) xtimepassed /100;   // devided by 1000 milliseconds
+        player->pos.y += player->velocityY * (int) xtimepassed /200;   // devided by 1000 milliseconds
             
         if(player->velocityY <= player->max_velocity) {
             player->velocityY+=GRAVITY;
@@ -38,11 +38,13 @@ void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
 
         if(player->pos.y >= SCREEN_HEIGHT - FLOOR_HEIGHT - 24/2) {
             player->pos.y = SCREEN_HEIGHT - FLOOR_HEIGHT - 24/2;
-        } else if(player->pos.y <= 0) {
+        } 
+
+        if(player->pos.y <= 0) {
             player->pos.y = 0;
-            player->velocityY = GRAVITY;
+            player->velocityY = 3*GRAVITY;
         }
-        
+
         xSemaphoreGive(player->lock);
     }    
 
