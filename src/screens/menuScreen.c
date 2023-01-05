@@ -4,11 +4,15 @@
 #include"task.h" // for xTaskGetTickCount()
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
 
+/* TUM_Library includes  */
+#include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
+
 /* Project includes  */
 #include "menuScreen.h"
 #include "main.h"
 #include "buttons.h"
 #include "draw.h"
+#include "states.h" //for set_stages()
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -26,7 +30,6 @@ void vMenuScreen() {
     coord_t logoPosition = {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150};
 
     while(1) {
-
         if(DrawSignal) {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
@@ -42,25 +45,25 @@ void vMenuScreen() {
 
                 // Show fps 
                 drawFPS();
-
-                /*Testing buttons*/
-                xGetButtonInput();                
-                if(checkButton(KEYCODE(X)))
-                    tumDrawClear(White);
-                
-                //vTaskDelay((TickType_t) 50);
             }
         }
+        xGetButtonInput();                
+        if(checkButton(KEYCODE(P))){
+            printf("changing states\n");
+            states_set_state(1);
+                           
+        }
+
     }
 }
 
-int createMenuTask() {
+int createMenuTask(void) {
 
-    if(!xTaskCreate(vMenuScreen, "MenuScreen",  mainGENERIC_STACK_SIZE , NULL,
-			        mainGENERIC_PRIORITY, &MenuScreen)) {
+    if(!xTaskCreate(vMenuScreen, "MenuScreen",  mainGENERIC_STACK_SIZE *2, NULL,
+			        mainGENERIC_PRIORITY + 6, &MenuScreen)) {
                         return 1;
     }
-    
+    //vTaskSuspend(MenuScreen); 
     return 0;
 }
 
@@ -69,7 +72,7 @@ void deleteMenuTask(){
         vTaskDelete(MenuScreen);
 }
 
-void enterMenuTask(){
+void enterMenuTask(void){
     vTaskResume(MenuScreen);
 }
 

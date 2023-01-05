@@ -12,4 +12,9 @@
  */
 int initStateMachine();
 
+/**
+ * @brief This function deletes created Tasks running in the State machine.
+ */
+void deleteStateMachine();
+
 #endif //__STATEMACHINE_H__

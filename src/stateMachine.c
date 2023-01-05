@@ -5,10 +5,18 @@
 #include "states.h"
 #include "stateMachine.h"
 #include "menuScreen.h"
+#include "playScreen.h"
 
 int initStateMachine(){
-    states_add( (void*) createMenuTask, enterMenuTask, NULL, exitMenuTask, 0, "Menu_Screen");
-    states_init();
-    states_set_state(0);
+    states_add( (void*) createMenuTask, enterMenuTask, NULL, exitMenuTask, 0, "Menu_Task");
+    states_add( (void*) createPlayTask, enterPlayTask, NULL, exitPlayTask, 1, "Play_Task");
+    states_init(); //calls probe functions
+    states_set_state(0); //sets state (default is first added state)
+    states_run();   // checks for changes in states
     return 0;
+}
+
+void deleteStateMachine(){
+    deleteMenuTask();
+    deletePlayTask();
 }

@@ -28,6 +28,7 @@
 #include "buttons.h"
 #include "menuScreen.h" // for the Flappy Bird Logo
 #include "stateMachine.h"
+#include "objects.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -57,6 +58,8 @@ int main(int argc, char *argv[])
         printf("Failed to create draw signal\n");
         goto err_draw_signal;
     }
+
+    if( initPlayer());
     
     // Load Font
     tumFontLoadFont(BUTTON_FONT, BUTTON_FONT_SIZE);
@@ -67,16 +70,23 @@ int main(int argc, char *argv[])
         goto err_buttonsInit;
     }
     
-    if (initStateMachine());
     printf("\nInitialization SUCCESS!! \nMoving on to create tasks... \n");    
 
     /*-----------------------------------------------------------------------------------------------*/	
     /* FreeRTOS Task creation*/
     
-    xTaskCreate(vSwapBuffers, "BufferSwap", 
+    if(xTaskCreate(vSwapBuffers, "BufferSwap", 
             mainGENERIC_STACK_SIZE , NULL,
-			mainGENERIC_PRIORITY, &BufferSwap); 
+			configMAX_PRIORITIES, &BufferSwap)!= pdPASS){
+        printf("Failed to create Buffer Task\n");
+        goto err_bufferSwapTask;
+    }
 
+    if (initStateMachine()){
+        printf("Failed to initalize State Machine\n");
+        goto err_stateMachineInit;
+    }
+    
     /*-----------------------------------------------------------------------------------------------*/	
 	/* start FreeRTOS Sceduler: Should never get passed the function vTaskStartScheduler() */
 
@@ -90,7 +100,10 @@ int main(int argc, char *argv[])
 
     /*-----------------------------------------------------------------------------------------------*/	
     /* Error handling -> delete everything that has been initialized so far (Backwards the Init Order) */
-
+        deleteStateMachine();
+    err_stateMachineInit:
+        vTaskDelete(BufferSwap);
+    err_bufferSwapTask:
         buttonsExit();
     err_buttonsInit:
 	    vSemaphoreDelete(DrawSignal);
