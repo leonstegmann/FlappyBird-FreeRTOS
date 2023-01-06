@@ -36,9 +36,9 @@ void vPlayScreen(){
 
     while(1){
     
-            if(DrawSignal) {
-                if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
-                    tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
+        if(DrawSignal) {
+            if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
+                tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
 
                 drawBackround();
                 drawPipe(pipe1);
@@ -49,21 +49,25 @@ void vPlayScreen(){
                 updatePipePosition(xLastFrameTime, pipe1);
                 updatePipePosition(xLastFrameTime, pipe2);
                 
-                /* if(checkCollision(player1)) {
+                if(checkCollision(player1, pipe1, pipe2)) {
                     vTaskDelay((TickType_t) 1000);
+                    deletePlayer(player1);
                     states_set_state(0);
-                } */
+                } 
                 
+                drawFPS();
+
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
                 
-                xGetButtonInput();                
-                    if(checkButton(KEYCODE(SPACE))){
-                        if(player1->velocityY >= -player1->max_velocity) {
-                            player1->velocityY -= UPWARDS_PUSH;
-                        }
-                    }   
-                }
+                xGetButtonInput();
+
+                if(checkButton(KEYCODE(SPACE))){
+                    if(player1->velocityY >= -player1->max_velocity) {
+                        player1->velocityY -= UPWARDS_PUSH;
+                    }
+                }   
             }
+        }
         
     }
 }
