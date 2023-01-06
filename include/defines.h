@@ -9,4 +9,8 @@
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
 
+/* Resource Paths */
+#define LOWER_PIPE_FILENAME "bottomPipe.png"
+#define UPPER_PIPE_FILENAME "topPipe.png"
+
 #endif //__DEFINES_H__

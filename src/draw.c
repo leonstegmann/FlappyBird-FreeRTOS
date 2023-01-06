@@ -12,6 +12,7 @@
 
 #include "draw.h"
 #include "objects.h" //Bird struct
+#include "defines.h"
 
 /* Aimed FPS */
 #define FPS_AVERAGE_COUNT 50
@@ -36,6 +37,15 @@ spritesheet_handle_t yellowBirdSpritesheet = NULL;
 /* Animation Handle */
 sequence_handle_t forwardSequence = NULL;
 sequence_handle_t flappingBird = NULL;
+
+void drawPipe(pipes_t* pipe){
+    if( xSemaphoreTake(pipe->lock, portMAX_DELAY ) == pdTRUE){
+        tumDrawLoadedImage(pipe->lowerPipeImage, pipe->positionX, pipe->gap_center + GAP_HEIGHT/2);
+        tumDrawLoadedImage(pipe->upperPipeImage, pipe->positionX, pipe->gap_center - GAP_HEIGHT/2 -pipe->image_height);
+        xSemaphoreGive(pipe->lock);
+    }
+
+}
 
 /* Function to set the backround immage */
 int drawBackround() {
@@ -217,7 +227,7 @@ void drawFloorAnnimations(TickType_t xLastFrameTime)
 {
     tumDrawAnimationDrawFrame(forwardSequence,
         xTaskGetTickCount() - xLastFrameTime,
-        0, SCREEN_HEIGHT - 70);
+        0, SCREEN_HEIGHT - FLOOR_HEIGHT);
 }
 
 /* Function to draw bird animation */
@@ -229,8 +239,7 @@ void drawBirdAnnimations(TickType_t xLastFrameTime)
 }
 
 /* Function to draw bird animation */
-void drawBirdAnnimationsInGame(TickType_t xLastFrameTime)
-{
+void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player){
     tumDrawAnimationDrawFrame(flappingBird,
         xTaskGetTickCount() - xLastFrameTime,
         player->pos.x, player->pos.y);
