@@ -27,6 +27,18 @@ bird_t* createNewPlayer(){
     return ret;
 }
 
+void deletePlayer(bird_t* player) {
+    
+    /* free(player->height);
+    free(player->width);
+    free(player->velocityY);
+    free(player->max_velocity);
+    free(player->pos);
+    free(player->dead);
+    vSemaphoreDelete(player->lock);
+    free(player); */
+}
+
 void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
     TickType_t xtimepassed =  xTaskGetTickCount() - xLastTimeUpdated;
     if( xSemaphoreTake(player->lock, portMAX_DELAY )== pdTRUE){
@@ -49,16 +61,40 @@ void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
     }    
 }
 
-short checkCollision(bird_t* player){
+short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2){
     short ret = 0;
-     if ( xSemaphoreTake(player->lock, portMAX_DELAY) == pdTRUE ){
-        if ((player->pos.y-player->height) > FLOOR_HEIGHT){
+
+    /* Check if the bird hit the ground */
+    if ((player->pos.y) >= SCREEN_HEIGHT - FLOOR_HEIGHT - player->height/2){
+        xSemaphoreTake(player->lock, portMAX_DELAY);
+        player->velocityY = 0;
+        player->dead = true;
+        xSemaphoreGive(player->lock);
+        return ret = 1;
+    } 
+
+    /* Check if the bird hit pipe1 */
+    if(player->pos.x >= pipe1->positionX && player->pos.x <= pipe1->positionX + pipe1->image_width) {
+        if(player->pos.y <= pipe1->gap_center - GAP_HEIGHT/2 || player->pos.y >= pipe1->gap_center + GAP_HEIGHT/2 ) {
+            xSemaphoreTake(player->lock, portMAX_DELAY);
             player->velocityY = 0;
             player->dead = true;
-            ret = 1;
+            xSemaphoreGive(player->lock);
+            return ret = 1;
         }
-        xSemaphoreGive(player->lock);
-     }
+    }
+
+    /* Check if the bird hit pipe2 */
+    if(player->pos.x >= pipe2->positionX && player->pos.x <= pipe2->positionX + pipe2->image_width) {
+        if(player->pos.y <= pipe2->gap_center - GAP_HEIGHT/2 || player->pos.y >= pipe2->gap_center + GAP_HEIGHT/2 ) {
+            xSemaphoreTake(player->lock, portMAX_DELAY);
+            player->velocityY = 0;
+            player->dead = true;
+            xSemaphoreGive(player->lock);
+            return ret = 1;
+        }
+    }
+
     return ret;
 }
 
