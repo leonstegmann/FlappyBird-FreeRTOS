@@ -30,14 +30,14 @@ bird_t* createNewPlayer(){
 void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
     TickType_t xtimepassed =  xTaskGetTickCount() - xLastTimeUpdated;
     if( xSemaphoreTake(player->lock, portMAX_DELAY )== pdTRUE){
-        player->pos.y += player->velocityY * (int) xtimepassed /200;   // devided by 1000 milliseconds
+        player->pos.y += player->velocityY * (int) xtimepassed /1000;   // devided by 1000 milliseconds
             
         if(player->velocityY <= player->max_velocity) {
             player->velocityY+=GRAVITY;
         }
 
-        if(player->pos.y >= SCREEN_HEIGHT - FLOOR_HEIGHT - 24/2) {
-            player->pos.y = SCREEN_HEIGHT - FLOOR_HEIGHT - 24/2;
+        if(player->pos.y >= SCREEN_HEIGHT - FLOOR_HEIGHT - player->height/2) {
+            player->pos.y = SCREEN_HEIGHT - FLOOR_HEIGHT - player->height/2;
         } 
 
         if(player->pos.y <= 0) {
