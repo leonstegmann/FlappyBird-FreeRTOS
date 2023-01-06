@@ -49,11 +49,10 @@ void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
     }    
 }
 
-<<<<<<< HEAD
-short checkCollision(){
+short checkCollision(bird_t* player){
     short ret = 0;
      if ( xSemaphoreTake(player->lock, portMAX_DELAY) == pdTRUE ){
-        if ((player->pos.y-player->height) > GROUND){
+        if ((player->pos.y-player->height) > FLOOR_HEIGHT){
             player->velocityY = 0;
             player->dead = true;
             ret = 1;
@@ -61,7 +60,6 @@ short checkCollision(){
         xSemaphoreGive(player->lock);
      }
     return ret;
-=======
 }
 
 pipes_t* newPipe(){
@@ -102,5 +100,4 @@ short updatePipePosition( TickType_t xLastTimeUpdated, pipes_t* pipe){
 short randomGenerator(short min, short max){
     short ret = min + (rand() % max);
     return  ret;
->>>>>>> 13-playscreen-gameplay
 }

@@ -35,29 +35,11 @@ void vPlayScreen(){
     drawInitAnnimations();
 
     while(1){
-        if (!checkCollision()){
+    
             if(DrawSignal) {
                 if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                     tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
 
-<<<<<<< HEAD
-                    drawBackround();
-                    drawFloorAnnimations(xLastFrameTime);
-                    drawBirdAnnimationsInGame(xLastFrameTime);
-                    updateBirdPosition(xLastFrameTime);
-                    xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
-                }
-            }
-            xGetButtonInput();                
-                if(checkButton(KEYCODE(SPACE))){
-                    player->velocityY -= UPWARDS_PUSH;
-            }
-        }
-        else {
-            vTaskDelay((TickType_t) 1000);
-            states_set_state(0);
-        }
-=======
                 drawBackround();
                 drawPipe(pipe1);
                 drawPipe(pipe2);
@@ -66,6 +48,12 @@ void vPlayScreen(){
                 updateBirdPosition(xLastFrameTime, player1);
                 updatePipePosition(xLastFrameTime, pipe1);
                 updatePipePosition(xLastFrameTime, pipe2);
+                
+                /* if(checkCollision(player1)) {
+                    vTaskDelay((TickType_t) 1000);
+                    states_set_state(0);
+                } */
+                
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
                 
                 xGetButtonInput();                
@@ -73,10 +61,10 @@ void vPlayScreen(){
                         if(player1->velocityY >= -player1->max_velocity) {
                             player1->velocityY -= UPWARDS_PUSH;
                         }
+                    }   
                 }
             }
-        }
->>>>>>> 13-playscreen-gameplay
+        
     }
 }
 
