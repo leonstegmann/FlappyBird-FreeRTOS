@@ -17,9 +17,10 @@
 
 TaskHandle_t PlayScreen = NULL;
 
+
 void vPlayScreen(){
 
-   TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
+    TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
     bird_t* player1 = createNewPlayer();
 
@@ -28,7 +29,7 @@ void vPlayScreen(){
     pipes_t* pipe2 = newPipe();
     pipe2->positionX += SCREEN_WIDTH/2; // to ensure the Offset bewteen the 2 pipes 
 
-    tumDrawBindThread();
+    //tumDrawBindThread();
 
     drawInitAnnimations();
 
@@ -46,11 +47,14 @@ void vPlayScreen(){
                 updatePipePosition(xLastFrameTime, pipe1);
                 updatePipePosition(xLastFrameTime, pipe2);
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
+                
+                xGetButtonInput();                
+                    if(checkButton(KEYCODE(SPACE))){
+                        if(player1->velocityY >= -player1->max_velocity) {
+                            player1->velocityY -= UPWARDS_PUSH;
+                        }
+                }
             }
-        }
-        xGetButtonInput();                
-            if(checkButton(KEYCODE(SPACE))){
-                player1->velocityY -= UPWARDS_PUSH;
         }
     }
 }

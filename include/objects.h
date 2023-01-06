@@ -12,13 +12,14 @@
 
 /* Defines */
 /* ATTENTION: THESE DEFINES ARE RANDOMLY SET */
-#define GRAVITY 6           //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
-#define UPWARDS_PUSH 100     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
-#define PIPE_VELOCITY 300
+#define GRAVITY 35          //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
+#define UPWARDS_PUSH 800     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
+#define PIPE_VELOCITY 200
 #define GAP_HEIGHT 100
-#define FLOOR_HEIGHT 50
+#define FLOOR_HEIGHT 70
 #define GAP_LOWEST 150
 #define GAP_HIGHEST 220
+
 
 typedef struct Bird {
  //   image_handle_t image; 
@@ -26,6 +27,7 @@ typedef struct Bird {
     unsigned short width;
     coord_t pos;
     double velocityY;
+    double max_velocity;
     SemaphoreHandle_t lock;
     bool dead;
 } bird_t;
