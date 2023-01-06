@@ -46,6 +46,8 @@ void updateBirdPosition( TickType_t, bird_t* );
  */
 bird_t* createNewPlayer();
 
+void deletePlayer(bird_t* player);
+
 typedef struct Pipes {
     image_handle_t lowerPipeImage;
     image_handle_t upperPipeImage; 
@@ -82,6 +84,6 @@ short randomGenerator(short, short);
  * @brief check Collision of the Bord with the Floor.
  * @return 1 is collision = TRUE, 0 if collision = FALSE.
  */
-short checkCollision(bird_t* player);
+short checkCollision(bird_t* player, pipes_t* pipe1, pipes_t* pipe2);
 
 #endif // __OBJECTS_H__
