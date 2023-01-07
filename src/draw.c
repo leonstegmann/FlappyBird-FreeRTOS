@@ -21,6 +21,7 @@
 /* Filenames */
 #define BACKGROUND_FILENAME "background.png"
 #define LOGO_FILENAME "FlappyBird.png"
+#define GAMEOVER_FILENAME "GameOver.png"
 
 /* Definitions for drawButton */
 #define BOX_COLOUR Teal
@@ -31,6 +32,7 @@
 /* Image handles */
 image_handle_t backroundImage = NULL;
 image_handle_t logoImage = NULL;
+image_handle_t gameOver = NULL;
 spritesheet_handle_t floorSpritesheet = NULL;
 spritesheet_handle_t yellowBirdSpritesheet = NULL;
 
@@ -85,6 +87,20 @@ int drawLogo(coord_t pos) {
                 BACKGROUND_FILENAME);
         return 0;
     }
+}
+
+void drawGameOver(){
+    static int image_height;
+    static int image_width;
+
+    if (gameOver == NULL) {
+        gameOver = tumDrawLoadScaledImage(GAMEOVER_FILENAME,0.5);
+    }
+    if ((image_height = tumDrawGetLoadedImageHeight(gameOver)) != -1) {
+        image_width = tumDrawGetLoadedImageWidth(gameOver);
+        tumDrawLoadedImage(gameOver,SCREEN_CENTER.x - image_width/2, SCREEN_CENTER.y - image_height/2);
+    }
+
 }
 
 /* Function to draw buttons on the screen */

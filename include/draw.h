@@ -47,6 +47,11 @@ int drawButton(coord_t pos, char *name);
 int drawLogo(coord_t pos);
 
 /**
+ * @brief Prints GAME OVER on the Screen 
+ */
+void drawGameOver();
+
+/**
  * @brief Prints the numper of FPS on the screen  
  */
 void drawFPS(void);
