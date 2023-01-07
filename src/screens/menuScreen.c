@@ -25,18 +25,14 @@ void vMenuScreen() {
 
     drawInitAnnimations();
 
-    coord_t playButtonPosition = {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2 + 50};
-    coord_t scoreButtonPosition = {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2 + 50};
-    coord_t logoPosition = {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150};
-
     while(1) {
         if(DrawSignal) {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
                 drawBackround();
-                drawButton(playButtonPosition, "Play");
-                drawButton(scoreButtonPosition, "Score");
-                drawLogo(logoPosition);
+                drawButton(LEFT_BUTTON_POSITION, "Play");
+                drawButton(RIGHT_BUTTON_POSITION, "Score");
+                drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
 
