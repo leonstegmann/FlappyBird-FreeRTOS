@@ -46,7 +46,11 @@ void updateBirdPosition( TickType_t, bird_t* );
  */
 bird_t* createNewPlayer();
 
-void deletePlayer(bird_t* player);
+/**
+ * @brief resets the all player variables to init values.
+ * @param player intakes the bird_t* object to update the values
+ */
+void resetPlayer(bird_t* player);
 
 typedef struct Pipes {
     image_handle_t lowerPipeImage;
@@ -71,6 +75,12 @@ pipes_t* newPipe();
  * @return returns 1 on success 0 if failed.
  */
 short updatePipePosition( TickType_t, pipes_t*);
+
+/**
+ * @brief resets the all pipe variables to init values.
+ * @param player intakes the bird_t* object to update the values
+ */
+void resetPipes(pipes_t* pipe1, pipes_t* pipe2);
 
 /**
  * @brief generates a Random Number in a specific range  

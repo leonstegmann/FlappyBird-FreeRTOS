@@ -27,16 +27,14 @@ bird_t* createNewPlayer(){
     return ret;
 }
 
-void deletePlayer(bird_t* player) {
+void resetPlayer(bird_t* player) {
     
-    /* free(player->height);
-    free(player->width);
-    free(player->velocityY);
-    free(player->max_velocity);
-    free(player->pos);
-    free(player->dead);
-    vSemaphoreDelete(player->lock);
-    free(player); */
+    xSemaphoreTake(player->lock, portMAX_DELAY);
+    player->velocityY = 0;
+    player->max_velocity = GRAVITY*10;
+    player->pos = (coord_t) {(SCREEN_WIDTH - player->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
+    player->dead = false;
+    xSemaphoreGive(player->lock);
 }
 
 void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
@@ -74,8 +72,12 @@ short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2){
     } 
 
     /* Check if the bird hit pipe1 */
-    if(player->pos.x >= pipe1->positionX && player->pos.x <= pipe1->positionX + pipe1->image_width) {
-        if(player->pos.y <= pipe1->gap_center - GAP_HEIGHT/2 || player->pos.y >= pipe1->gap_center + GAP_HEIGHT/2 ) {
+    if(player->pos.x + player->width >= pipe1->positionX + 7
+        && player->pos.x <= pipe1->positionX + pipe1->image_width - 7) {
+
+        if(player->pos.y < pipe1->gap_center - GAP_HEIGHT/2 
+            || player->pos.y + player->height >= pipe1->gap_center + GAP_HEIGHT/2 ) {
+
             xSemaphoreTake(player->lock, portMAX_DELAY);
             player->velocityY = 0;
             player->dead = true;
@@ -113,6 +115,21 @@ pipes_t* newPipe(){
   
     return ret;
 
+}
+
+void resetPipes(pipes_t* pipe1, pipes_t* pipe2) {
+
+    xSemaphoreTake(pipe1->lock, portMAX_DELAY);
+    pipe1->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
+    pipe1->positionX = SCREEN_WIDTH;
+    pipe1->velocityX = PIPE_VELOCITY;
+    xSemaphoreGive(pipe1->lock);
+
+    xSemaphoreTake(pipe2->lock, portMAX_DELAY);
+    pipe2->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
+    pipe2->positionX = SCREEN_WIDTH*1.5;
+    pipe2->velocityX = PIPE_VELOCITY;
+    xSemaphoreGive(pipe2->lock);
 }
 
 short updatePipePosition( TickType_t xLastTimeUpdated, pipes_t* pipe){
