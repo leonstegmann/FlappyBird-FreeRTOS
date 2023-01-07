@@ -51,7 +51,8 @@ void vPlayScreen(){
                 
                 if(checkCollision(player1, pipe1, pipe2)) {
                     vTaskDelay((TickType_t) 1000);
-                    deletePlayer(player1);
+                    resetPlayer(player1);
+                    resetPipes(pipe1, pipe2);
                     states_set_state(0);
                 } 
                 
