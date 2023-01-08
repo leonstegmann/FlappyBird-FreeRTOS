@@ -98,7 +98,7 @@ void drawGameOver(){
     }
     if ((image_height = tumDrawGetLoadedImageHeight(gameOver)) != -1) {
         image_width = tumDrawGetLoadedImageWidth(gameOver);
-        tumDrawLoadedImage(gameOver,SCREEN_CENTER.x - image_width/2, SCREEN_CENTER.y - image_height/2);
+        tumDrawLoadedImage(gameOver,SCREEN_CENTER.x - image_width/2, 0.5 * SCREEN_CENTER.y - image_height/2);
     }
 
 }
