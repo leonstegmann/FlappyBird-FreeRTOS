@@ -20,6 +20,10 @@
 #define BOX_WIDTH 130
 #define BOX_HEIGHT 40
 
+#define LEFT_BUTTON_POSITION  (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2 + 50}
+#define RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2 + 50}
+#define LOGO_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150}
+
 /**
  * @brief Draws the uppeer and lower pipe allocated around the Gap center.
  * @param pipe Pipe Object 
@@ -47,6 +51,11 @@ int drawButton(coord_t pos, char *name);
  * @return 1 on success and 0 when failed
  */
 int drawLogo(coord_t pos);
+
+/**
+ * @brief Prints GAME OVER on the Screen 
+ */
+void drawGameOver();
 
 /**
  * @brief Prints the numper of FPS on the screen  
