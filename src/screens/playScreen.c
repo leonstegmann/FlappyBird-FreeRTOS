@@ -45,6 +45,7 @@ void vPlayScreen(){
                 drawPipe(pipe2);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimationsInGame(xLastFrameTime, player1);
+                drawScore(player1->score);
                 
                 if(checkCollision(player1, pipe1, pipe2)) {
                     vTaskDelay((TickType_t) 1000);
@@ -67,7 +68,6 @@ void vPlayScreen(){
                     updatePipePosition(xLastFrameTime, pipe2);
                 }
 
-                
                 drawFPS();
 
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
