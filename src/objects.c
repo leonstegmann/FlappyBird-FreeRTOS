@@ -20,6 +20,7 @@ bird_t* createNewPlayer(){
     ret->width = 34;
     ret->velocityY = 0;
     ret->max_velocity = GRAVITY*10;
+    ret->score = 0;
     ret->pos = (coord_t) {(SCREEN_WIDTH - ret->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
     ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
     ret->dead = false;
@@ -34,6 +35,7 @@ void resetPlayer(bird_t* player) {
     player->max_velocity = GRAVITY*10;
     player->pos = (coord_t) {(SCREEN_WIDTH - player->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
     player->dead = false;
+    player->score = 0;
     xSemaphoreGive(player->lock);
 }
 

@@ -28,8 +28,9 @@ typedef struct Bird {
     coord_t pos;
     double velocityY;
     double max_velocity;
-    SemaphoreHandle_t lock;
     bool dead;
+    unsigned short score;
+    SemaphoreHandle_t lock;
 } bird_t;
 
 /**
