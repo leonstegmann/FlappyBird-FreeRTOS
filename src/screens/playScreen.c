@@ -30,13 +30,12 @@ void vPlayScreen(){
     pipes_t* pipe2 = newPipe();
     pipe2->positionX += SCREEN_WIDTH/2; // to ensure the Offset bewteen the 2 pipes 
 
-    //tumDrawBindThread();
-
     drawInitAnnimations();
 
     while(1){
     
         if(DrawSignal) {
+
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
 
@@ -47,12 +46,12 @@ void vPlayScreen(){
                 drawBirdAnnimationsInGame(xLastFrameTime, player1);
                 
                 if(checkCollision(player1, pipe1, pipe2)) {
-                    vTaskDelay((TickType_t) 1000);
                     resetPlayer(player1);
                     resetPipes(pipe1, pipe2);
-                    states_set_state(0);
+                    states_set_state(2);
 
                 } else {
+                    
                     xGetButtonInput();
                     if(checkButton(KEYCODE(SPACE))){
                         if(player1->velocityY >= -player1->max_velocity) {
@@ -66,19 +65,14 @@ void vPlayScreen(){
                     updatePipePosition(xLastFrameTime, pipe1);
                     updatePipePosition(xLastFrameTime, pipe2);
                 }
-
-                
+            
                 drawFPS();
 
-                xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
-                
-
+                xLastFrameTime = xTaskGetTickCount(); // Time of the last drawn frame
             }
-        }
-        
+        }    
     }
 }
-
 
 int createPlayTask(){
     if(!xTaskCreate(vPlayScreen, "PlayScreen",  mainGENERIC_STACK_SIZE*2 , NULL, mainGENERIC_PRIORITY + 6, &PlayScreen)) {
