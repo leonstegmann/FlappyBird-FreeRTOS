@@ -89,7 +89,7 @@ int drawLogo(coord_t pos) {
     }
 }
 
-void drawGameOver(){
+void drawGameOver() {
     static int image_height;
     static int image_width;
 
@@ -156,8 +156,8 @@ void drawScore(unsigned short count){
 
     // Draw Text
     if (!tumGetTextSize((char *)string, &text_width, NULL)) {
-        tumDrawFilledBox(SCREEN_WIDTH/2 - text_width/2 , SCREEN_HEIGHT/10,
-                            text_width - 5, DEFAULT_FONT_SIZE*2 - 5, White);
+        /* tumDrawFilledBox(SCREEN_WIDTH/2 - text_width/2 , SCREEN_HEIGHT/10,
+                            text_width - 5, DEFAULT_FONT_SIZE*2 - 5, White); */
         tumDrawText(string, SCREEN_WIDTH/2 - text_width/2 , SCREEN_HEIGHT/10 , Black);
         
     }           

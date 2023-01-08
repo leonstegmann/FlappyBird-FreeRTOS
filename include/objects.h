@@ -20,7 +20,6 @@
 #define GAP_LOWEST 150
 #define GAP_HIGHEST 220
 
-
 typedef struct Bird {
  //   image_handle_t image; 
     unsigned short height;
@@ -96,5 +95,7 @@ short randomGenerator(short, short);
  * @return 1 is collision = TRUE, 0 if collision = FALSE.
  */
 short checkCollision(bird_t* player, pipes_t* pipe1, pipes_t* pipe2);
+
+void checkScore(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2);
 
 #endif // __OBJECTS_H__
