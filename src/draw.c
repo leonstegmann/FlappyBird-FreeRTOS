@@ -21,7 +21,7 @@
 /* Filenames */
 #define BACKGROUND_FILENAME "background.png"
 #define LOGO_FILENAME "FlappyBird.png"
-#define GAMEOVER_FILENAME "GameOver.png"
+#define GAMEOVER_FILENAME "gameover.png"
 
 /* Definitions for drawButton */
 #define BOX_COLOUR Teal
@@ -94,7 +94,7 @@ void drawGameOver(){
     static int image_width;
 
     if (gameOver == NULL) {
-        gameOver = tumDrawLoadScaledImage(GAMEOVER_FILENAME,0.5);
+        gameOver = tumDrawLoadScaledImage(GAMEOVER_FILENAME,1);
     }
     if ((image_height = tumDrawGetLoadedImageHeight(gameOver)) != -1) {
         image_width = tumDrawGetLoadedImageWidth(gameOver);
