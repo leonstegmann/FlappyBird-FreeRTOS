@@ -72,8 +72,8 @@ short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2){
     } 
 
     /* Check if the bird hit pipe1 */
-    if(player->pos.x + player->width >= pipe1->positionX + 7
-        && player->pos.x <= pipe1->positionX + pipe1->image_width - 7) {
+    if(player->pos.x + player->width >= pipe1->positionX 
+        && player->pos.x <= pipe1->positionX + pipe1->image_width) {
 
         if(player->pos.y < pipe1->gap_center - GAP_HEIGHT/2 
             || player->pos.y + player->height >= pipe1->gap_center + GAP_HEIGHT/2 ) {
