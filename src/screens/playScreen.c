@@ -45,28 +45,34 @@ void vPlayScreen(){
                 drawPipe(pipe2);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimationsInGame(xLastFrameTime, player1);
-                updateBirdPosition(xLastFrameTime, player1);
-                updatePipePosition(xLastFrameTime, pipe1);
-                updatePipePosition(xLastFrameTime, pipe2);
                 
                 if(checkCollision(player1, pipe1, pipe2)) {
                     vTaskDelay((TickType_t) 1000);
                     resetPlayer(player1);
                     resetPipes(pipe1, pipe2);
                     states_set_state(0);
-                } 
+
+                } else {
+                    xGetButtonInput();
+                    if(checkButton(KEYCODE(SPACE))){
+                        if(player1->velocityY >= -player1->max_velocity) {
+                            xSemaphoreTake(player1->lock, portMAX_DELAY);
+                            player1->velocityY -= UPWARDS_PUSH;
+                            xSemaphoreGive(player1->lock);
+                        }
+                    } 
+
+                    updateBirdPosition(xLastFrameTime, player1);
+                    updatePipePosition(xLastFrameTime, pipe1);
+                    updatePipePosition(xLastFrameTime, pipe2);
+                }
+
                 
                 drawFPS();
 
                 xLastFrameTime = xTaskGetTickCount(); //  Actualize Time of the last drawn frame
                 
-                xGetButtonInput();
 
-                if(checkButton(KEYCODE(SPACE))){
-                    if(player1->velocityY >= -player1->max_velocity) {
-                        player1->velocityY -= UPWARDS_PUSH;
-                    }
-                }   
             }
         }
         
