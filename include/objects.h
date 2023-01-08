@@ -46,6 +46,12 @@ void updateBirdPosition( TickType_t, bird_t* );
  */
 bird_t* createNewPlayer();
 
+/**
+ * @brief resets the all player variables to init values.
+ * @param player intakes the bird_t* object to update the values
+ */
+void resetPlayer(bird_t* player);
+
 typedef struct Pipes {
     image_handle_t lowerPipeImage;
     image_handle_t upperPipeImage; 
@@ -71,11 +77,23 @@ pipes_t* newPipe();
 short updatePipePosition( TickType_t, pipes_t*);
 
 /**
+ * @brief resets the all pipe variables to init values.
+ * @param player intakes the bird_t* object to update the values
+ */
+void resetPipes(pipes_t* pipe1, pipes_t* pipe2);
+
+/**
  * @brief generates a Random Number in a specific range  
  * @param min lower range end
  * @param max higher range end
  * @return returns the random number
  */
 short randomGenerator(short, short);
+
+/**
+ * @brief check Collision of the Bord with the Floor.
+ * @return 1 is collision = TRUE, 0 if collision = FALSE.
+ */
+short checkCollision(bird_t* player, pipes_t* pipe1, pipes_t* pipe2);
 
 #endif // __OBJECTS_H__
