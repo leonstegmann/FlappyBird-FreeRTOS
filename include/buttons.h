@@ -16,14 +16,9 @@
  * extern buttons_buffer_t buttons
  * @endcode
  * 
- * To call simply use first
+ * To call simply use: (here example with button Q)
  * @code
- * xGetButtonInput()
- * @endcode
- * to capture the current values for pressed buttons.
- * Follow that command by (here example with button Q)
- * @code
- * if( chekcButton(KEYCODE(Q)))
+ * if( checkButton(KEYCODE(Q)))
  * @endcode
  * To check if a specific Button was pressed. 
  * This function already considers the Debounce Delay,

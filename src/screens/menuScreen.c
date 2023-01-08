@@ -47,7 +47,6 @@ void vMenuScreen() {
                 drawFPS();
             }
         }
-        xGetButtonInput();                
         if(checkButton(KEYCODE(P))){
             printf("changing states\n");
             states_set_state(1);
