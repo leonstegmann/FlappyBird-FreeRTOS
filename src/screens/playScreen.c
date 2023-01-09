@@ -44,6 +44,8 @@ void vPlayScreen(){
                 drawPipe(pipe2);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimationsInGame(xLastFrameTime, player1);
+                checkScore(player1, pipe1, pipe2);
+                drawScore(player1->score);
                 
                 if(checkCollision(player1, pipe1, pipe2)) {
                     resetPlayer(player1);
