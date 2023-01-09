@@ -12,6 +12,8 @@
 #include "objects.h"
 #include "defines.h"
 
+highscore_t highscore = {0};
+
 bird_t* createNewPlayer(){
 
     bird_t* ret = malloc(sizeof(bird_t));
@@ -28,8 +30,23 @@ bird_t* createNewPlayer(){
     return ret;
 }
 
+void initHighscore() {
+
+    highscore.lock = xSemaphoreCreateBinary();
+    if(!highscore.lock) {
+        printf("Failed to create lock");
+    }
+ 
+}
+
 void resetPlayer(bird_t* player) {
     
+    if(player->score > highscore.score[0]) {
+        highscore.score[0] = player->score;
+    }
+
+    highscore.score[1] = player->score;
+
     xSemaphoreTake(player->lock, portMAX_DELAY);
     player->velocityY = 0;
     player->pos = (coord_t) {(SCREEN_WIDTH - player->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
