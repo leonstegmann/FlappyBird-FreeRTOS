@@ -14,7 +14,7 @@
 /* ATTENTION: THESE DEFINES ARE RANDOMLY SET */
 #define GRAVITY 35          //is added to the bird velocity in Y-direction (downwards) each time UpdateBirdPosition is called.
 #define UPWARDS_PUSH 800     //is added to the bird velocity in Y-direction (upwards) when pressing spacebar.
-#define PIPE_VELOCITY 200
+#define PIPE_VELOCITY 180
 #define GAP_HEIGHT 100
 #define FLOOR_HEIGHT 70
 #define GAP_LOWEST 150

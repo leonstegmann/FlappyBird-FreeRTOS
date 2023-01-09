@@ -19,7 +19,7 @@ bird_t* createNewPlayer(){
     ret->height = 24;
     ret->width = 34;
     ret->velocityY = 0;
-    ret->max_velocity = GRAVITY*10;
+    ret->max_velocity = GRAVITY*11;
     ret->score = 0;
     ret->pos = (coord_t) {(SCREEN_WIDTH - ret->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
     ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
@@ -32,7 +32,6 @@ void resetPlayer(bird_t* player) {
     
     xSemaphoreTake(player->lock, portMAX_DELAY);
     player->velocityY = 0;
-    player->max_velocity = GRAVITY*10;
     player->pos = (coord_t) {(SCREEN_WIDTH - player->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
     player->dead = false;
     player->score = 0;
@@ -62,13 +61,16 @@ void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
 }
 
 void checkScore(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2) {
+    /* Check if bird passed pipe1*/
     if(player->pos.x + player->width/8 -1 >= pipe1->positionX + pipe1->image_width &&
-        player->pos.x <= pipe1->positionX + pipe1->image_width) 
-        player->score++;
-    
+        player->pos.x <= pipe1->positionX + pipe1->image_width) {
+            player->score++;
+        } 
+    /* Check if bird passed pipe2 */
     if(player->pos.x + player->width/8 -1>= pipe2->positionX + pipe2->image_width &&
-        player->pos.x <= pipe2->positionX + pipe2->image_width) 
-        player->score++;
+        player->pos.x <= pipe2->positionX + pipe2->image_width) {
+            player->score++;
+        } 
 
 }
 
