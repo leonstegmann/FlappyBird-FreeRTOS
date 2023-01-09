@@ -3,6 +3,7 @@
 #include "semphr.h" // for buttons.lock
 #include"task.h" // for xTaskGetTickCount()
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
+#include "TUM_Utils.h"
 
 /* TUM_Library includes  */
 #include "TUM_Event.h" // for tumEventFetchEvents();
@@ -31,6 +32,7 @@ void vPlayScreen(){
     pipe2->positionX += SCREEN_WIDTH/2; // to ensure the Offset bewteen the 2 pipes 
 
     drawInitAnnimations();
+    initHighscore();
 
     while(1){
     
@@ -90,6 +92,8 @@ void deletePlayTask(){
 }
 
 void enterPlayTask(){
+    printf("Start game\n");
+    tumFUtilPrintTaskStateList();
     vTaskResume(PlayScreen);
 }
 

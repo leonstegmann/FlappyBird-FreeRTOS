@@ -3,6 +3,7 @@
 #include "semphr.h" // for buttons.lock
 #include"task.h" // for xTaskGetTickCount()
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
+#include "TUM_Utils.h"
 
 /* TUM_Library includes  */
 #include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
@@ -44,10 +45,13 @@ void vMenuScreen() {
             }
         }
         xGetButtonInput();                
-        if(checkButton(KEYCODE(P))){
-            printf("changing states\n");
-            states_set_state(1);
-                           
+        if(checkButton(KEYCODE(P))){            
+            states_set_state(1);                 
+        }
+
+        xGetButtonInput();                
+        if(checkButton(KEYCODE(S))){
+            states_set_state(3);                       
         }
 
     }
@@ -69,6 +73,8 @@ void deleteMenuTask(){
 }
 
 void enterMenuTask(void){
+    printf("Enter Menu\n");
+    tumFUtilPrintTaskStateList();
     vTaskResume(MenuScreen);
 }
 
