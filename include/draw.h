@@ -9,7 +9,7 @@
 #include "TUM_Draw.h"
 #include "objects.h"
 
-#define SCORE_FONT "flappy-bird-font.ttf"
+#define SCORE_FONT /* "SF Automaton.ttf" */"flappy-bird-font.ttf"
 
 /* FPS Font */
 #define FPS_FONT "scifieb.ttf"
