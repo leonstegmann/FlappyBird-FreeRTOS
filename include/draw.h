@@ -10,6 +10,7 @@
 #include "objects.h"
 
 #define SCORE_FONT /* "SF Automaton.ttf" */"flappy-bird-font.ttf"
+#define HIGHSCORE_FONT "SF Automaton.ttf"
 
 /* FPS Font */
 #define FPS_FONT "scifieb.ttf"
@@ -20,9 +21,10 @@
 #define BOX_WIDTH 130
 #define BOX_HEIGHT 40
 
-#define LEFT_BUTTON_POSITION  (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2 + 50}
-#define RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2 + 50}
+#define LEFT_BUTTON_POSITION  (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2 + 100}
+#define RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2 + 100}
 #define LOGO_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150}
+#define HIGHSCORE_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}
 
 /**
  * @brief Draws the uppeer and lower pipe allocated around the Gap center.
@@ -57,6 +59,7 @@ int drawLogo(coord_t pos);
  */
 void drawGameOver();
 
+int drawHighscore(coord_t pos);
 /**
  * @brief Prints the numper of FPS on the screen  
  */
