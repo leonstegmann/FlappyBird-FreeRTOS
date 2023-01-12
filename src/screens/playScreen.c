@@ -7,6 +7,7 @@
 /* TUM_Library includes  */
 #include "TUM_Event.h" // for tumEventFetchEvents();
 #include "TUM_FreeRTOS_Utils.h" // for tumFUtilPrintTaskStateList()
+#include "TUM_Sound.h"
 
 /* Project includes  */
 #include "playScreen.h"
@@ -21,6 +22,9 @@ TaskHandle_t PlayScreen = NULL;
 
 
 void vPlayScreen(){
+
+    tumSoundLoadUserSample("../resources/waveforms/wing.wav");
+    tumSoundLoadUserSample("../resources/waveforms/hit.wav");
 
     TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
@@ -50,6 +54,7 @@ void vPlayScreen(){
                 drawScore(player1->score);
                 
                 if(checkCollision(player1, pipe1, pipe2)) {
+                    tumSoundPlayUserSample("hit.wav");
                     resetPlayer(player1);
                     resetPipes(pipe1, pipe2);
                     states_set_state(2);
@@ -62,6 +67,7 @@ void vPlayScreen(){
                             xSemaphoreTake(player1->lock, portMAX_DELAY);
                             player1->velocityY -= UPWARDS_PUSH;
                             xSemaphoreGive(player1->lock);
+                            tumSoundPlayUserSample("wing.wav");
                         }
                     } 
 
