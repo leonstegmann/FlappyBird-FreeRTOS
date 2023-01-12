@@ -32,6 +32,15 @@ typedef struct Bird {
     SemaphoreHandle_t lock;
 } bird_t;
 
+typedef struct Highscore {
+    unsigned short score[2]; // stores highest and current score
+    SemaphoreHandle_t lock;
+} highscore_t;
+
+extern highscore_t highscore;
+
+void initHighscore();
+
 /**
  * @brief Updates the players position and velocity each time the function is called.
  * @param xLastTimeUpdated is the time the function got called the last time. 
@@ -62,7 +71,6 @@ typedef struct Pipes {
     short gap_center; // Y-position of the Gap middle on the screen
     SemaphoreHandle_t lock;
 } pipes_t;
-
 
 /**
  * @brief create a pipe object returning the corresponding pointer. 

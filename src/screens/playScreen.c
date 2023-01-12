@@ -6,6 +6,7 @@
 
 /* TUM_Library includes  */
 #include "TUM_Event.h" // for tumEventFetchEvents();
+#include "TUM_FreeRTOS_Utils.h" // for tumFUtilPrintTaskStateList()
 
 /* Project includes  */
 #include "playScreen.h"
@@ -31,6 +32,7 @@ void vPlayScreen(){
     pipe2->positionX += SCREEN_WIDTH/2; // to ensure the Offset bewteen the 2 pipes 
 
     drawInitAnnimations();
+    initHighscore();
 
     while(1){
     
@@ -53,8 +55,6 @@ void vPlayScreen(){
                     states_set_state(2);
 
                 } else {
-                    
-                    xGetButtonInput();
                     if(checkButton(KEYCODE(SPACE))){
                         if(player1->velocityY >= -player1->max_velocity) {
                             xSemaphoreTake(player1->lock, portMAX_DELAY);
@@ -102,7 +102,9 @@ void deletePlayTask(){
 }
 
 void enterPlayTask(){
+    printf("Start game\n");
     vTaskResume(PlayScreen);
+    tumFUtilPrintTaskStateList();
 }
 
 void exitPlayTask(){
