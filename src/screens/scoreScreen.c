@@ -3,7 +3,9 @@
 #include "semphr.h" // for Semaphore take and give
 #include"task.h" // for Taskhandle_t
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
-#include "TUM_Utils.h"
+
+/* TUM_Library includes  */
+#include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
 
 /* Project includes  */
 #include "main.h" // for Semaphore drawSignal
@@ -64,8 +66,8 @@ void deleteScoreScreenTask(){
 
 void enterScoreScreenTask(void){
     printf("Enter highscore\n");
-    tumFUtilPrintTaskStateList();
     vTaskResume(ScoreScreen);
+    tumFUtilPrintTaskStateList();
 }
 
 void exitScoreScreenTask(){
