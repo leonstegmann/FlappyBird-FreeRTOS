@@ -12,4 +12,6 @@ void deletePlayTask();
 void enterPlayTask();
 void exitPlayTask();
 
+void pauseGame();
+
 #endif // __PLAYSCREEN_H__

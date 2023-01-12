@@ -61,7 +61,9 @@ void vPlayScreen(){
                             player1->velocityY -= UPWARDS_PUSH;
                             xSemaphoreGive(player1->lock);
                         }
-                    } 
+                    }
+                    if (checkButton(KEYCODE(U)))
+                        pauseGame();
 
                     updateBirdPosition(xLastFrameTime, player1);
                     updatePipePosition(xLastFrameTime, pipe1);
@@ -74,6 +76,16 @@ void vPlayScreen(){
             }
         }    
     }
+}
+
+void pauseGame(){
+    bool pause = true;  
+    do {
+        vTaskDelay((TickType_t) 20);
+        xGetButtonInput();        
+        if (checkButton(KEYCODE(U)))
+            pause = false;
+    } while(pause);
 }
 
 int createPlayTask(){
