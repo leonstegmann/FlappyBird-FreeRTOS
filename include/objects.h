@@ -104,6 +104,11 @@ short randomGenerator(short, short);
  */
 short checkCollision(bird_t* player, pipes_t* pipe1, pipes_t* pipe2);
 
-void checkScore(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2);
+
+/**
+ * @brief check if the bird passed a pipe.
+ * @return 1 is passed = TRUE, 0 if passed = FALSE.
+ */
+short checkScore(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2);
 
 #endif // __OBJECTS_H__
