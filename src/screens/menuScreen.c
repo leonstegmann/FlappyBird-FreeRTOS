@@ -3,7 +3,6 @@
 #include "semphr.h" // for buttons.lock
 #include"task.h" // for xTaskGetTickCount()
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
-#include "TUM_Utils.h"
 
 /* TUM_Library includes  */
 #include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
@@ -74,8 +73,8 @@ void deleteMenuTask(){
 
 void enterMenuTask(void){
     printf("Enter Menu\n");
-    tumFUtilPrintTaskStateList();
     vTaskResume(MenuScreen);
+    tumFUtilPrintTaskStateList();
 }
 
 void exitMenuTask(){
