@@ -25,18 +25,14 @@ void vMenuScreen() {
 
     drawInitAnnimations();
 
-    coord_t playButtonPosition = {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2 + 50};
-    coord_t scoreButtonPosition = {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2 + 50};
-    coord_t logoPosition = {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150};
-
     while(1) {
         if(DrawSignal) {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
                 drawBackround();
-                drawButton(playButtonPosition, "Play");
-                drawButton(scoreButtonPosition, "Score");
-                drawLogo(logoPosition);
+                drawButton(LEFT_BUTTON_POSITION, "Play");
+                drawButton(RIGHT_BUTTON_POSITION, "Score");
+                drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
 
@@ -47,10 +43,13 @@ void vMenuScreen() {
                 drawFPS();
             }
         }
-        if(checkButton(KEYCODE(P))){
-            printf("changing states\n");
-            states_set_state(1);
-                           
+                   
+        if(checkButton(KEYCODE(P))){            
+            states_set_state(1);                 
+        }
+
+        if(checkButton(KEYCODE(S))){
+            states_set_state(3);                       
         }
 
     }
@@ -72,7 +71,9 @@ void deleteMenuTask(){
 }
 
 void enterMenuTask(void){
+    printf("Enter Menu\n");
     vTaskResume(MenuScreen);
+    tumFUtilPrintTaskStateList();
 }
 
 void exitMenuTask(){

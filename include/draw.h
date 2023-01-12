@@ -9,6 +9,9 @@
 #include "TUM_Draw.h"
 #include "objects.h"
 
+#define SCORE_FONT /* "SF Automaton.ttf" */"flappy-bird-font.ttf"
+#define HIGHSCORE_FONT "SF Automaton.ttf"
+
 /* FPS Font */
 #define FPS_FONT "scifieb.ttf"
 
@@ -17,6 +20,11 @@
 #define BUTTON_FONT_SIZE 22
 #define BOX_WIDTH 130
 #define BOX_HEIGHT 40
+
+#define LEFT_BUTTON_POSITION  (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2 + 100}
+#define RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2 + 100}
+#define LOGO_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150}
+#define HIGHSCORE_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}
 
 /**
  * @brief Draws the uppeer and lower pipe allocated around the Gap center.
@@ -47,6 +55,12 @@ int drawButton(coord_t pos, char *name);
 int drawLogo(coord_t pos);
 
 /**
+ * @brief Prints GAME OVER on the Screen 
+ */
+void drawGameOver();
+
+int drawHighscore(coord_t pos);
+/**
  * @brief Prints the numper of FPS on the screen  
  */
 void drawFPS(void);
@@ -73,5 +87,7 @@ void drawBirdAnnimations(TickType_t xLastFrameTime);
  * @param xLastFrameTime time of the last drawn frame   
  */
 void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player);
+
+void drawScore(unsigned short count);
 
 #endif //__DRAW_H__
