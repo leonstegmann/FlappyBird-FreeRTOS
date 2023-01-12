@@ -22,6 +22,10 @@
 #define BACKGROUND_FILENAME "background.png"
 #define LOGO_FILENAME "FlappyBird.png"
 #define GAMEOVER_FILENAME "gameover.png"
+#define HIGHSCORE_FILENAME "Score.png"
+#define GOLDCOIN_FILENAME "goldCoin.png"
+#define SILVERCOIN_FILENAME "silverCoin.png"
+#define BRONZECOIN_FILENAME "bronzeCoin.png"
 
 /* Definitions for drawButton */
 #define BOX_COLOUR Teal
@@ -33,6 +37,10 @@
 image_handle_t backroundImage = NULL;
 image_handle_t logoImage = NULL;
 image_handle_t gameOver = NULL;
+image_handle_t highScore = NULL;
+image_handle_t goldCoin = NULL;
+image_handle_t silverCoin = NULL;
+image_handle_t bronzeCoin = NULL;
 spritesheet_handle_t floorSpritesheet = NULL;
 spritesheet_handle_t yellowBirdSpritesheet = NULL;
 
@@ -165,6 +173,82 @@ void drawScore(unsigned short count){
     tumFontPutFontHandle(cur_font);
 }
 
+int drawHighscore(coord_t pos) {
+    static int image_height;
+    static int image_width;
+    static int text_width;
+    static char string[10];
+    font_handle_t cur_font = tumFontGetCurFontHandle();
+
+    if (highScore == NULL) {
+        highScore = tumDrawLoadScaledImage(HIGHSCORE_FILENAME, 1.25);
+    }
+
+    if (goldCoin == NULL) {
+        goldCoin = tumDrawLoadScaledImage(GOLDCOIN_FILENAME, 1.25);
+    }
+
+    if (silverCoin == NULL) {
+        silverCoin = tumDrawLoadScaledImage(SILVERCOIN_FILENAME, 1.25);
+    }
+
+    if (bronzeCoin == NULL) {
+        bronzeCoin = tumDrawLoadScaledImage(BRONZECOIN_FILENAME, 1.25);
+    }
+
+    if ((image_height = tumDrawGetLoadedImageHeight(highScore)) != -1) {
+        image_width = tumDrawGetLoadedImageWidth(highScore);
+        tumDrawLoadedImage(highScore, pos.x - image_width/2, pos.y - image_height/2);
+
+    } else { 
+        printf("Failed to get size of image '%s', does it exist?\n",
+                HIGHSCORE_FILENAME);
+        return 0;
+    }
+
+    // Select Font
+    tumFontSelectFontFromName(HIGHSCORE_FONT);
+
+    /* print last score */
+    sprintf(string, "%d", highscore.score[1]);
+
+    if (!tumGetTextSize((char *)string, &text_width, NULL)) {
+        tumDrawText(string, pos.x - text_width/2 + (image_width/8)*3 , pos.y - DEFAULT_FONT_SIZE , White);  
+    }
+
+    /* print highest score */
+    sprintf(string, "%d", highscore.score[0]);
+
+    if (!tumGetTextSize((char *)string, &text_width, NULL)) {
+        tumDrawText(string, pos.x - text_width/2 + (image_width/8)*3 , pos.y + DEFAULT_FONT_SIZE*1.5 , White);  
+    }                
+
+    // Reset Font
+    tumFontSelectFontFromHandle(cur_font);
+    tumFontPutFontHandle(cur_font);
+
+    if(highscore.score[0] >= 15) {
+        image_height = tumDrawGetLoadedImageHeight(goldCoin);
+        image_width = tumDrawGetLoadedImageWidth(goldCoin);
+        tumDrawLoadedImage(goldCoin, pos.x - image_width*2 , pos.y - image_height/2 + 7);
+        return 1;
+        
+    } else if(highscore.score[0] >= 10) {
+        image_height = tumDrawGetLoadedImageHeight(silverCoin);
+        image_width = tumDrawGetLoadedImageWidth(silverCoin);
+        tumDrawLoadedImage(silverCoin, pos.x - image_width*2 , pos.y - image_height/2 + 7);
+        return 1;
+
+    } else if(highscore.score[0] >= 5) {
+        image_height = tumDrawGetLoadedImageHeight(bronzeCoin);
+        image_width = tumDrawGetLoadedImageWidth(bronzeCoin);
+        tumDrawLoadedImage(bronzeCoin, pos.x - image_width*2 , pos.y - image_height/2 + 7);
+        return 1;
+    }      
+
+    return 1;
+}
+
 /* Function to draw FPS on the screen */
 void drawFPS(void)
 {
@@ -282,3 +366,4 @@ void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player){
         xTaskGetTickCount() - xLastFrameTime,
         player->pos.x, player->pos.y);
 }
+

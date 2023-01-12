@@ -44,10 +44,13 @@ void vMenuScreen() {
             }
         }
         xGetButtonInput();                
-        if(checkButton(KEYCODE(P))){
-            printf("changing states\n");
-            states_set_state(1);
-                           
+        if(checkButton(KEYCODE(P))){            
+            states_set_state(1);                 
+        }
+
+        xGetButtonInput();                
+        if(checkButton(KEYCODE(S))){
+            states_set_state(3);                       
         }
 
     }
@@ -69,7 +72,9 @@ void deleteMenuTask(){
 }
 
 void enterMenuTask(void){
+    printf("Enter Menu\n");
     vTaskResume(MenuScreen);
+    tumFUtilPrintTaskStateList();
 }
 
 void exitMenuTask(){
