@@ -54,7 +54,12 @@ void vPlayScreen(){
                     resetPipes(pipe1, pipe2);
                     states_set_state(2);
 
-                } else {
+                } 
+                else if(checkButton(KEYCODE(U))){
+                        drawPause();
+                        pauseGame();
+                }
+                else {
                     if(checkButton(KEYCODE(SPACE))){
                         if(player1->velocityY >= -player1->max_velocity) {
                             xSemaphoreTake(player1->lock, portMAX_DELAY);
@@ -62,8 +67,6 @@ void vPlayScreen(){
                             xSemaphoreGive(player1->lock);
                         }
                     }
-                    if (checkButton(KEYCODE(U)))
-                        pauseGame();
 
                     updateBirdPosition(xLastFrameTime, player1);
                     updatePipePosition(xLastFrameTime, pipe1);
@@ -81,8 +84,7 @@ void vPlayScreen(){
 void pauseGame(){
     bool pause = true;  
     do {
-        vTaskDelay((TickType_t) 20);
-        xGetButtonInput();        
+        vTaskDelay((TickType_t) 10);
         if (checkButton(KEYCODE(U)))
             pause = false;
     } while(pause);
