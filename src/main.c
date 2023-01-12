@@ -20,6 +20,7 @@
 #include "TUM_Utils.h"
 #include "TUM_Event.h"
 #include "TUM_Font.h"
+#include "TUM_Sound.h"
 
 /* Project includes */
 #include "main.h"
@@ -52,6 +53,10 @@ int main(int argc, char *argv[])
 		printf("Failed to initialize Events\n");
         goto err_tumEventInit;
 	}
+
+    if (tumSoundInit(bin_folder_path)) {
+        
+    }
     
     DrawSignal = xSemaphoreCreateBinary(); // Screen buffer locking
     if (!DrawSignal) {
