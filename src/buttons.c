@@ -66,6 +66,7 @@ void setButtonColour(unsigned int colour, int keyvalue){
 
 int checkButton(int keyvalue){
     int ret = 0;
+    xGetButtonInput(); // read in current state of all buttons on the keyboard                
     if (xSemaphoreTake(buttons.lock, 0) == pdTRUE) {
         if (buttons.currentState[keyvalue]) { // Equiv to SDL_SCANCODE_Q
             TickType_t now = xTaskGetTickCount();

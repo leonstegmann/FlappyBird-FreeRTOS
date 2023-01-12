@@ -55,8 +55,6 @@ void vPlayScreen(){
                     states_set_state(2);
 
                 } else {
-                    
-                    xGetButtonInput();
                     if(checkButton(KEYCODE(SPACE))){
                         if(player1->velocityY >= -player1->max_velocity) {
                             xSemaphoreTake(player1->lock, portMAX_DELAY);
