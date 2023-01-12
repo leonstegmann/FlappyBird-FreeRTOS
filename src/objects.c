@@ -62,13 +62,13 @@ void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
 
 void checkScore(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2) {
     /* Check if bird passed pipe1*/
-    if(player->pos.x + player->width/8 -1 >= pipe1->positionX + pipe1->image_width &&
-        player->pos.x <= pipe1->positionX + pipe1->image_width) {
+    if(player->pos.x + player->width/8 -1 >= pipe1->positionX + pipe1->image_width && 
+        player->pos.x <= pipe1->positionX + pipe1->image_width) { // 5 pixel wide threshold
             player->score++;
         } 
     /* Check if bird passed pipe2 */
     if(player->pos.x + player->width/8 -1>= pipe2->positionX + pipe2->image_width &&
-        player->pos.x <= pipe2->positionX + pipe2->image_width) {
+        player->pos.x <= pipe2->positionX + pipe2->image_width) { // 5 pixel wide threshold
             player->score++;
         } 
 
