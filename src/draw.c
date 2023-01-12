@@ -209,12 +209,14 @@ int drawHighscore(coord_t pos) {
     // Select Font
     tumFontSelectFontFromName(HIGHSCORE_FONT);
 
+    /* print last score */
     sprintf(string, "%d", highscore.score[1]);
 
     if (!tumGetTextSize((char *)string, &text_width, NULL)) {
         tumDrawText(string, pos.x - text_width/2 + (image_width/8)*3 , pos.y - DEFAULT_FONT_SIZE , White);  
     }
 
+    /* print highest score */
     sprintf(string, "%d", highscore.score[0]);
 
     if (!tumGetTextSize((char *)string, &text_width, NULL)) {

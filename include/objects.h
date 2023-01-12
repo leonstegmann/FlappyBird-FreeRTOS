@@ -33,7 +33,7 @@ typedef struct Bird {
 } bird_t;
 
 typedef struct Highscore {
-    unsigned short score[2];
+    unsigned short score[2]; // stores highest and current score
     SemaphoreHandle_t lock;
 } highscore_t;
 
