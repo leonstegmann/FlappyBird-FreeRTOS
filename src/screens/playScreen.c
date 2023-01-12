@@ -25,6 +25,8 @@ void vPlayScreen(){
 
     tumSoundLoadUserSample("../resources/waveforms/wing.wav");
     tumSoundLoadUserSample("../resources/waveforms/hit.wav");
+    tumSoundLoadUserSample("../resources/waveforms/point.wav");
+    tumSoundLoadUserSample("../resources/waveforms/die.wav");
 
     TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
@@ -50,13 +52,18 @@ void vPlayScreen(){
                 drawPipe(pipe2);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimationsInGame(xLastFrameTime, player1);
-                checkScore(player1, pipe1, pipe2);
+
+                if(checkScore(player1, pipe1, pipe2)) {
+                    tumSoundPlayUserSample("point.wav");
+                }
+
                 drawScore(player1->score);
                 
                 if(checkCollision(player1, pipe1, pipe2)) {
                     tumSoundPlayUserSample("hit.wav");
                     resetPlayer(player1);
                     resetPipes(pipe1, pipe2);
+                    tumSoundPlayUserSample("die.wav");
                     states_set_state(2);
 
                 } else {
