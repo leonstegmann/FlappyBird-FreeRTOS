@@ -54,8 +54,8 @@ void deleteGameOverTask(){
 
 void enterGameOverTask(void){
     printf("Game over\n");
-    tumFUtilPrintTaskStateList();
     vTaskResume(GameOverScreen);
+    tumFUtilPrintTaskStateList();
 }
 
 void exitGameOverTask(){

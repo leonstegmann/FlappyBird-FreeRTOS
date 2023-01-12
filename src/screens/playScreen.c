@@ -3,10 +3,10 @@
 #include "semphr.h" // for buttons.lock
 #include"task.h" // for xTaskGetTickCount()
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
-#include "TUM_Utils.h"
 
 /* TUM_Library includes  */
 #include "TUM_Event.h" // for tumEventFetchEvents();
+#include "TUM_FreeRTOS_Utils.h" // for tumFUtilPrintTaskStateList()
 
 /* Project includes  */
 #include "playScreen.h"
@@ -93,8 +93,8 @@ void deletePlayTask(){
 
 void enterPlayTask(){
     printf("Start game\n");
-    tumFUtilPrintTaskStateList();
     vTaskResume(PlayScreen);
+    tumFUtilPrintTaskStateList();
 }
 
 void exitPlayTask(){

@@ -74,8 +74,8 @@ void deleteMenuTask(){
 
 void enterMenuTask(void){
     printf("Enter Menu\n");
-    tumFUtilPrintTaskStateList();
     vTaskResume(MenuScreen);
+    tumFUtilPrintTaskStateList();
 }
 
 void exitMenuTask(){
