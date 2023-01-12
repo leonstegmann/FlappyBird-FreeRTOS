@@ -89,7 +89,7 @@ int drawLogo(coord_t pos) {
     }
 }
 
-void drawGameOver(){
+void drawGameOver() {
     static int image_height;
     static int image_width;
 
@@ -141,6 +141,28 @@ int drawButton(coord_t pos, char *str) {
     tumFontPutFontHandle(cur_font);
 
     return 1;
+}
+
+void drawScore(unsigned short count){
+    
+    static int text_width;
+    static char string[10];
+    font_handle_t cur_font = tumFontGetCurFontHandle();
+
+    // Select Font
+    tumFontSelectFontFromName(SCORE_FONT);
+
+    sprintf(string, "%d", count);
+
+    // Draw Text
+    if (!tumGetTextSize((char *)string, &text_width, NULL)) {
+        tumDrawText(string, SCREEN_WIDTH/2 - text_width/2 , SCREEN_HEIGHT/10 , White);
+        
+    }           
+
+    // Reset Font
+    tumFontSelectFontFromHandle(cur_font);
+    tumFontPutFontHandle(cur_font);
 }
 
 /* Function to draw FPS on the screen */

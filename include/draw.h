@@ -9,6 +9,8 @@
 #include "TUM_Draw.h"
 #include "objects.h"
 
+#define SCORE_FONT /* "SF Automaton.ttf" */"flappy-bird-font.ttf"
+
 /* FPS Font */
 #define FPS_FONT "scifieb.ttf"
 
@@ -82,5 +84,7 @@ void drawBirdAnnimations(TickType_t xLastFrameTime);
  * @param xLastFrameTime time of the last drawn frame   
  */
 void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player);
+
+void drawScore(unsigned short count);
 
 #endif //__DRAW_H__

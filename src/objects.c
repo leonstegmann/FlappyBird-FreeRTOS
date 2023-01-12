@@ -19,7 +19,8 @@ bird_t* createNewPlayer(){
     ret->height = 24;
     ret->width = 34;
     ret->velocityY = 0;
-    ret->max_velocity = GRAVITY*10;
+    ret->max_velocity = GRAVITY*11;
+    ret->score = 0;
     ret->pos = (coord_t) {(SCREEN_WIDTH - ret->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
     ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
     ret->dead = false;
@@ -31,9 +32,9 @@ void resetPlayer(bird_t* player) {
     
     xSemaphoreTake(player->lock, portMAX_DELAY);
     player->velocityY = 0;
-    player->max_velocity = GRAVITY*10;
     player->pos = (coord_t) {(SCREEN_WIDTH - player->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
     player->dead = false;
+    player->score = 0;
     xSemaphoreGive(player->lock);
 }
 
@@ -59,7 +60,21 @@ void updateBirdPosition( TickType_t xLastTimeUpdated, bird_t* player){
     }    
 }
 
-short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2){
+void checkScore(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2) {
+    /* Check if bird passed pipe1*/
+    if(player->pos.x + player->width/8 -1 >= pipe1->positionX + pipe1->image_width && 
+        player->pos.x <= pipe1->positionX + pipe1->image_width) { // 5 pixel wide threshold
+            player->score++;
+        } 
+    /* Check if bird passed pipe2 */
+    if(player->pos.x + player->width/8 -1>= pipe2->positionX + pipe2->image_width &&
+        player->pos.x <= pipe2->positionX + pipe2->image_width) { // 5 pixel wide threshold
+            player->score++;
+        } 
+
+}
+
+short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2) {
     short ret = 0;
 
     /* Check if the bird hit the ground */
@@ -87,8 +102,12 @@ short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2){
     }
 
     /* Check if the bird hit pipe2 */
-    if(player->pos.x >= pipe2->positionX && player->pos.x <= pipe2->positionX + pipe2->image_width) {
-        if(player->pos.y <= pipe2->gap_center - GAP_HEIGHT/2 || player->pos.y >= pipe2->gap_center + GAP_HEIGHT/2 ) {
+    if(player->pos.x + player->width >= pipe2->positionX 
+        && player->pos.x <= pipe2->positionX + pipe2->image_width) {
+
+        if(player->pos.y < pipe2->gap_center - GAP_HEIGHT/2 
+            || player->pos.y + player->height >= pipe2->gap_center + GAP_HEIGHT/2 ) {
+
             xSemaphoreTake(player->lock, portMAX_DELAY);
             player->velocityY = 0;
             player->dead = true;
@@ -109,7 +128,7 @@ pipes_t* newPipe(){
     ret->image_height = tumDrawGetLoadedImageHeight(ret->lowerPipeImage);
     ret->image_width = tumDrawGetLoadedImageWidth(ret->lowerPipeImage);
     ret->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
-    ret->positionX = SCREEN_WIDTH;
+    ret->positionX = SCREEN_WIDTH*2;
     ret->velocityX = PIPE_VELOCITY;
     ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
   
@@ -121,13 +140,13 @@ void resetPipes(pipes_t* pipe1, pipes_t* pipe2) {
 
     xSemaphoreTake(pipe1->lock, portMAX_DELAY);
     pipe1->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
-    pipe1->positionX = SCREEN_WIDTH;
+    pipe1->positionX = SCREEN_WIDTH*2;
     pipe1->velocityX = PIPE_VELOCITY;
     xSemaphoreGive(pipe1->lock);
 
     xSemaphoreTake(pipe2->lock, portMAX_DELAY);
     pipe2->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
-    pipe2->positionX = SCREEN_WIDTH*1.5;
+    pipe2->positionX = SCREEN_WIDTH*2.5;
     pipe2->velocityX = PIPE_VELOCITY;
     xSemaphoreGive(pipe2->lock);
 }
