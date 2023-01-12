@@ -90,4 +90,9 @@ void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player);
 
 void drawScore(unsigned short count);
 
+/**
+ * @brief Draws Pause Text
+ */
+void drawPause();
+
 #endif //__DRAW_H__

@@ -22,6 +22,7 @@
 #define BACKGROUND_FILENAME "background.png"
 #define LOGO_FILENAME "FlappyBird.png"
 #define GAMEOVER_FILENAME "gameover.png"
+#define PAUSE_FILENAME "paused.png"
 #define HIGHSCORE_FILENAME "Score.png"
 #define GOLDCOIN_FILENAME "goldCoin.png"
 #define SILVERCOIN_FILENAME "silverCoin.png"
@@ -37,6 +38,7 @@
 image_handle_t backroundImage = NULL;
 image_handle_t logoImage = NULL;
 image_handle_t gameOver = NULL;
+image_handle_t pauseImage = NULL;
 image_handle_t highScore = NULL;
 image_handle_t goldCoin = NULL;
 image_handle_t silverCoin = NULL;
@@ -47,6 +49,18 @@ spritesheet_handle_t yellowBirdSpritesheet = NULL;
 /* Animation Handle */
 sequence_handle_t forwardSequence = NULL;
 sequence_handle_t flappingBird = NULL;
+
+void drawPause(){
+    static int image_height;
+    static int image_width;
+
+    if (pauseImage == NULL)
+        pauseImage = tumDrawLoadScaledImage( PAUSE_FILENAME,0.2);
+    if ((image_height = tumDrawGetLoadedImageHeight(pauseImage)) != -1)
+        image_width = tumDrawGetLoadedImageWidth(pauseImage);    
+    tumDrawLoadedImage(pauseImage,SCREEN_CENTER.x - image_width/2, 0.5 * SCREEN_CENTER.y - image_height/2);
+
+}
 
 void drawPipe(pipes_t* pipe){
     if( xSemaphoreTake(pipe->lock, portMAX_DELAY ) == pdTRUE){
