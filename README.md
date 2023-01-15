@@ -4,7 +4,7 @@
 
 As final project of the Course ESPL it is to create the well known game Flappy Bird using the FreeRTOS Emulator.
 
-A longside this the [TUM Drawing Library](https://alxhoff.github.io/FreeRTOS-Emulator/index.html) is used.
+A longside this the [TUM Drawing Library](https://alxhoff.github.io/FreeRTOS-Emulator/index.html) is used for drawing graphical objects onto the screen.
 
 ## Setup
 The FreeRTOS Emulator is set up following this [setup](https://github.com/alxhoff/FreeRTOS-Emulator#freertos-emulator).
