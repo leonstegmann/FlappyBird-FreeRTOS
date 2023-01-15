@@ -16,7 +16,7 @@ cd build
 cmake ..
 make
 ```
-to then run the project simply use
+to then run the executable simply use
 ```
 ./bin/Flappybird
 ```
