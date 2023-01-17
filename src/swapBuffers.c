@@ -5,6 +5,7 @@
 #include "TUM_Event.h"
 #include "main.h"
 #include "swapBuffers.h"
+#include "stateMachine.h"
 #include "states.h"
 
 void vSwapBuffers(void *pvParameters)
