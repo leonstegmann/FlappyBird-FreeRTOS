@@ -13,6 +13,7 @@
 #include "draw.h"   // for drawButtons() and drawGameOver()
 #include "states.h" //for set_stages()
 #include "gameOver.h"
+#include "stateMachine.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -21,6 +22,8 @@ TaskHandle_t GameOverScreen = NULL;
 
 void vGameOverScreen() {
 
+    TickType_t xLastFrameTime = xTaskGetTickCount();
+
     while(1) {
         if(DrawSignal)
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
@@ -28,6 +31,8 @@ void vGameOverScreen() {
             drawHighscore(HIGHSCORE_POSITION);
             drawButton(LEFT_BUTTON_POSITION, "Retry");
             drawButton(RIGHT_BUTTON_POSITION, "Menu");
+            checkStateInput(xLastFrameTime);
+
             xGetButtonInput();                
             if(checkButton(KEYCODE(R))){
                 states_set_state(1);
@@ -35,7 +40,11 @@ void vGameOverScreen() {
             else if(checkButton(KEYCODE(M))){
                 states_set_state(0);
             }
+
+            // Time after everything is drawn
+            xLastFrameTime = xTaskGetTickCount();
         }
+
         
     }
 }

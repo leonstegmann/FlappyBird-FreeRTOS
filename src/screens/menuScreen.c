@@ -13,6 +13,7 @@
 #include "buttons.h"
 #include "draw.h"
 #include "states.h" //for set_stages()
+#include "stateMachine.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -35,6 +36,7 @@ void vMenuScreen() {
                 drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
+                checkStateInput(xTaskGetTickCount());
 
                 // Time after everything is drawn
                 xLastFrameTime = xTaskGetTickCount();
