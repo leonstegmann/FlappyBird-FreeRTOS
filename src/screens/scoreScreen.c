@@ -28,8 +28,8 @@ void vScoreScreen() {
             drawBackround();
             drawHighscore(HIGHSCORE_POSITION);
             drawLogo(LOGO_POSITION);
-            drawButton(RIGHT_BUTTON_POSITION, "Menu");
-            drawButton(LEFT_BUTTON_POSITION, "Play");
+            drawButton(RIGHT_BUTTON_POSITION, "Menu", xLastFrameTime);
+            drawButton(LEFT_BUTTON_POSITION, "Play", xLastFrameTime);
             drawFloorAnnimations(xLastFrameTime);
             checkStateInput(xLastFrameTime);
 

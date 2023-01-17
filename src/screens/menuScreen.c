@@ -31,8 +31,8 @@ void vMenuScreen() {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
                 drawBackround();
-                drawButton(LEFT_BUTTON_POSITION, "Play");
-                drawButton(RIGHT_BUTTON_POSITION, "Score");
+                drawButton(LEFT_BUTTON_POSITION, "Play", xLastFrameTime);
+                drawButton(RIGHT_BUTTON_POSITION, "Score", xLastFrameTime);
                 drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);

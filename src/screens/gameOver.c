@@ -29,8 +29,8 @@ void vGameOverScreen() {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
             drawGameOver();
             drawHighscore(HIGHSCORE_POSITION);
-            drawButton(LEFT_BUTTON_POSITION, "Retry");
-            drawButton(RIGHT_BUTTON_POSITION, "Menu");
+            drawButton(LEFT_BUTTON_POSITION, "Retry", xLastFrameTime);
+            drawButton(RIGHT_BUTTON_POSITION, "Menu", xLastFrameTime);
             checkStateInput(xLastFrameTime);
 
             xGetButtonInput();                
