@@ -14,6 +14,7 @@
 #include "objects.h" //Bird struct
 #include "defines.h"
 #include "main.h" // State queue
+#include "stateMachine.h"
 
 /* Aimed FPS */
 #define FPS_AVERAGE_COUNT 50
@@ -127,7 +128,7 @@ void drawGameOver() {
 }
 
 /* Function to draw buttons on the screen */
-int drawButton(coord_t pos, char *str) {
+int drawButton(coord_t pos, char *str, TickType_t lastFrameTime) {
 
     int mouse_x = tumEventGetMouseX();
     int mouse_y = tumEventGetMouseY();
@@ -145,8 +146,11 @@ int drawButton(coord_t pos, char *str) {
 
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, Red);
         
-        if(tumEventGetMouseLeft()) {
+        if(tumEventGetMouseLeft() && (lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
             xQueueSend(StateQueue, &str, 0);
+            /* xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
+            stateMachine.last_change = xTaskGetTickCount();
+            xSemaphoreGive(stateMachine.lock); */
         }
 
     } else {
