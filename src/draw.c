@@ -13,6 +13,7 @@
 #include "draw.h"
 #include "objects.h" //Bird struct
 #include "defines.h"
+#include "main.h" // State queue
 
 /* Aimed FPS */
 #define FPS_AVERAGE_COUNT 50
@@ -143,6 +144,10 @@ int drawButton(coord_t pos, char *str) {
     if(mouse_x >= pos.x && mouse_x <= pos.x + BOX_WIDTH && mouse_y >= pos.y && mouse_y <= pos.y + BOX_HEIGHT) {
 
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, Red);
+        
+        if(tumEventGetMouseLeft()) {
+            xQueueOverwrite(StateQueue, &str);
+        }
 
     } else {
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, BOX_COLOUR);
