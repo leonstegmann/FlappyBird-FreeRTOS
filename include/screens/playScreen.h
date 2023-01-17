@@ -17,6 +17,9 @@ void exitPlayTask();
 
 void pauseGame();
 
+/**
+ * @brief Enables the GodMode for this player.
+ */
 void godMode(bird_t* player);
 
 #endif // __PLAYSCREEN_H__
