@@ -32,6 +32,7 @@ int initStateMachine(){
 }
 
 void handleStateInput(char *input) {
+
     if (!strcmp(input, "Play") || !strcmp(input, "Retry")) {
         printf("%s button pressed\n", input);
         states_set_state(1); 
@@ -53,9 +54,10 @@ void checkStateInput(TickType_t lastFrameTime) {
     
     char *input;
 
-    if (lastFrameTime - stateMachine.last_change >= STATE_DEBOUNCE_DELAY) {
 
-        if(tumEventGetMouseLeft() && xQueueReceive(StateQueue, &input, 0)) {
+        printf("%d - %d\n", lastFrameTime, stateMachine.last_change); 
+
+        if(xQueueReceive(StateQueue, &input, 0)) {
             
             xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
             stateMachine.last_change = xTaskGetTickCount();
@@ -63,9 +65,8 @@ void checkStateInput(TickType_t lastFrameTime) {
             handleStateInput(input);
             xQueueReset(StateQueue);   
         }
-    }
-
 }
+
 
 void deleteStateMachine(){
     deleteMenuTask();
