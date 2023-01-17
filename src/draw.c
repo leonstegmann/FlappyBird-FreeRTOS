@@ -146,7 +146,7 @@ int drawButton(coord_t pos, char *str) {
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, Red);
         
         if(tumEventGetMouseLeft()) {
-            xQueueOverwrite(StateQueue, &str);
+            xQueueSend(StateQueue, &str, 0);
         }
 
     } else {

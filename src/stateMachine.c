@@ -47,8 +47,6 @@ void handleStateInput(char *input) {
         states_set_state(0); 
     }
 
-    xQueueReset(StateQueue);   
-
 }
 
 void checkStateInput(TickType_t lastFrameTime) {
@@ -56,20 +54,18 @@ void checkStateInput(TickType_t lastFrameTime) {
     char *input;
 
     if (lastFrameTime - stateMachine.last_change >= STATE_DEBOUNCE_DELAY) {
-        
-        printf("%d - %d\n", lastFrameTime, stateMachine.last_change);
 
-        if(tumEventGetMouseLeft()) {
-            xQueueReceive(StateQueue, &input, 0);
+        if(tumEventGetMouseLeft() && xQueueReceive(StateQueue, &input, 0)) {
+            
             xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
             stateMachine.last_change = xTaskGetTickCount();
             xSemaphoreGive(stateMachine.lock);
             handleStateInput(input);
+            xQueueReset(StateQueue);   
         }
     }
 
 }
-
 
 void deleteStateMachine(){
     deleteMenuTask();
