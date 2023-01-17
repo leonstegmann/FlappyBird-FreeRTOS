@@ -25,7 +25,7 @@ bird_t* createNewPlayer(){
     ret->score = 0;
     ret->pos = (coord_t) {(SCREEN_WIDTH - ret->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
     ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
-    ret->dead = false;
+    ret->godMode = false;
 
     return ret;
 }
@@ -50,7 +50,6 @@ void resetPlayer(bird_t* player) {
     xSemaphoreTake(player->lock, portMAX_DELAY);
     player->velocityY = 0;
     player->pos = (coord_t) {(SCREEN_WIDTH - player->width)/2, (SCREEN_HEIGHT-FLOOR_HEIGHT)/2 };
-    player->dead = false;
     player->score = 0;
     xSemaphoreGive(player->lock);
 }
@@ -101,7 +100,6 @@ short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2) {
     if ((player->pos.y) >= SCREEN_HEIGHT - FLOOR_HEIGHT - player->height/2){
         xSemaphoreTake(player->lock, portMAX_DELAY);
         player->velocityY = 0;
-        player->dead = true;
         xSemaphoreGive(player->lock);
         return ret = 1;
     } 
@@ -115,7 +113,6 @@ short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2) {
 
             xSemaphoreTake(player->lock, portMAX_DELAY);
             player->velocityY = 0;
-            player->dead = true;
             xSemaphoreGive(player->lock);
             return ret = 1;
         }
@@ -130,7 +127,6 @@ short checkCollision(bird_t* player ,pipes_t* pipe1, pipes_t* pipe2) {
 
             xSemaphoreTake(player->lock, portMAX_DELAY);
             player->velocityY = 0;
-            player->dead = true;
             xSemaphoreGive(player->lock);
             return ret = 1;
         }
