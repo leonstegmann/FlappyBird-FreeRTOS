@@ -31,14 +31,6 @@ void vPlayScreen(){
     TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
     bird_t* player1 = createNewPlayer();
-
-     if(ulTaskNotifyTake(pdTRUE, (TickType_t) 100) != 0){
-        player1->godMode = !player1->godMode; // turn GodMode on/ off
-        if(player1->godMode == false) 
-            printf("Normal MODE\n");
-        else 
-            printf("GOD MODE ACTIVATED!\n");
-     }
      
     /* create Pipes (here decided for having a maxium amount of 2 pipes on the screen)*/
     pipes_t* pipe1 = newPipe();
@@ -79,6 +71,10 @@ void vPlayScreen(){
                         drawPause();
                         pauseGame();
                 }
+                else if (checkButton(KEYCODE(G))){
+                    godMode(player1);
+                }
+
                 else {
                     if(checkButton(KEYCODE(SPACE))){
                         if(player1->velocityY >= -player1->max_velocity) {
@@ -100,6 +96,14 @@ void vPlayScreen(){
             }
         }    
     }
+}
+
+void godMode(bird_t* player){
+    player->godMode = !player->godMode; // turn GodMode on/ off
+    if(player->godMode == false) 
+        printf("Back to Normal MODE\n");
+    else 
+        printf("GOD MODE ACTIVATED!\n");
 }
 
 void pauseGame(){

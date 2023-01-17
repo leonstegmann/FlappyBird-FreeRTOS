@@ -1,8 +1,8 @@
 #ifndef __PLAYSCREEN_H__
 #define __PLAYSCREEN_H__
 
-#include "FreeRTOS.h" // must appear in source files before include task.h"
-#include "task.h" // for Taskhandle
+#include "FreeRTOS.h" // must appear in source files before other includes
+#include "objects.h" // for bird_t
 
 /**
  * @brief Creates the FreeRTOS Task.
@@ -17,6 +17,6 @@ void exitPlayTask();
 
 void pauseGame();
 
-extern TaskHandle_t PlayScreen; // to be able to notify Task
+void godMode(bird_t* player);
 
 #endif // __PLAYSCREEN_H__
