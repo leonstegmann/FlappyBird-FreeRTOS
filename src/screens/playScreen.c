@@ -32,6 +32,14 @@ void vPlayScreen(){
 
     bird_t* player1 = createNewPlayer();
 
+     if(ulTaskNotifyTake(pdTRUE, (TickType_t) 100) != 0){
+        player1->godMode = !player1->godMode; // turn GodMode on/ off
+        if(player1->godMode == false) 
+            printf("Normal MODE\n");
+        else 
+            printf("GOD MODE ACTIVATED!\n");
+     }
+     
     /* create Pipes (here decided for having a maxium amount of 2 pipes on the screen)*/
     pipes_t* pipe1 = newPipe();
     pipes_t* pipe2 = newPipe();
@@ -59,7 +67,7 @@ void vPlayScreen(){
 
                 drawScore(player1->score);
                 
-                if(checkCollision(player1, pipe1, pipe2)) {
+                if(!player1->godMode && checkCollision(player1, pipe1, pipe2)) {
                     tumSoundPlayUserSample("hit.wav");
                     resetPlayer(player1);
                     resetPipes(pipe1, pipe2);

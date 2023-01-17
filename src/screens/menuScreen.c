@@ -13,6 +13,7 @@
 #include "buttons.h"
 #include "draw.h"
 #include "states.h" //for set_stages()
+#include "playScreen.h" // for Tasknotification GodMode
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -50,6 +51,10 @@ void vMenuScreen() {
 
         if(checkButton(KEYCODE(S))){
             states_set_state(3);                       
+        }
+        if(checkButton(KEYCODE(G))){
+            printf("God Mode chosen\n");
+            xTaskNotifyGive( PlayScreen);                      
         }
 
     }
