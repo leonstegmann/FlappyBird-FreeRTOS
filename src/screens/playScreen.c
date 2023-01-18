@@ -103,14 +103,33 @@ void vPlayScreen(){
     }
 }
 
-void setScoreCheat(bird_t* player){
-    drawPause();
-    int newScore = 0;
-    printf("insert new Score: ");
-    scanf("%d",&newScore);
-    do {
-        vTaskDelay(2000);
-    } while (newScore == 0);
+void setScoreCheat(bird_t* player){    
+    printf("in CHEAT Score Mode");
+    short newScore = player->score;
+    bool finished = false;
+    do{ 
+        if(DrawSignal)
+            if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
+                tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
+                tumDrawClear(Grey); // Clear screen
+                drawPause();
+                drawScore(newScore);                
+            }
+        xGetButtonInput();
+        if(checkButton(KEYCODE(S)))
+            finished = true;
+        switch (vCheckArrowInput()){
+            case 'U':
+                newScore++;
+                break;
+            case 'D':
+                newScore--;
+                break;
+            default:
+                break;
+        }
+        vTaskDelay(10);   
+    } while(finished == false);
     player->score = newScore;
 }
 
