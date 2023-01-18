@@ -85,4 +85,10 @@ void setButtonPosition(coord_t , int );
  */ 
 void setButtonColour(unsigned int , int );
 
+/**
+ * @brief Checks if one of the Arrow Keys was pressed 
+ * @return returns the first Letter of the Arrow Key as char e.g. UP return 'U'
+ */ 
+char vCheckArrowInput();
+
 #endif //__BUTTONS_H__

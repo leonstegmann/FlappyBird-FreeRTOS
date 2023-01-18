@@ -81,3 +81,23 @@ int checkButton(int keyvalue){
     buttons.prevState[keyvalue] = buttons.currentState[keyvalue];
     return ret;
 }
+
+
+char vCheckArrowInput() {
+    char ret = 'N';
+
+        if (checkButton(KEYCODE(UP))) {
+            ret = 'U';
+        }
+        else if (checkButton(KEYCODE(DOWN))) {
+            ret = 'D';
+        }
+        else if (checkButton(KEYCODE(LEFT))) {
+            ret = 'L';
+        }
+        else if (checkButton(KEYCODE(RIGHT))) {
+            ret = 'R';
+        }
+
+    return ret;
+}
