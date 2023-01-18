@@ -37,8 +37,6 @@ TaskHandle_t BufferSwap = NULL;
 
 SemaphoreHandle_t DrawSignal;
 
-QueueHandle_t StateQueue = NULL;
-
 int main(int argc, char *argv[])
 {
     char *bin_folder_path = tumUtilGetBinFolderPath(argv[0]);
@@ -58,11 +56,6 @@ int main(int argc, char *argv[])
     if (tumSoundInit(bin_folder_path)) {
         printf("Failed to initialize sound\n");
         goto err_tumSoundInit;
-    }
-    
-    StateQueue = xQueueCreate(1, sizeof(char*));
-    if(!StateQueue) {
-        printf("Cant open state queue");
     }
 
     DrawSignal = xSemaphoreCreateBinary(); // Screen buffer locking

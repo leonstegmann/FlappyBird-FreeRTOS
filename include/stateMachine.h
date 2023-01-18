@@ -5,6 +5,8 @@
 
 #include "FreeRTOS.h"
 #include "semphr.h"
+#include "queue.h"
+#include "task.h"
 
 typedef struct stateMachine {
     TickType_t last_change;
@@ -12,6 +14,8 @@ typedef struct stateMachine {
 } StateMachine_t;
 
 extern StateMachine_t stateMachine;
+
+extern QueueHandle_t StateQueue;
 
 /**
  * @brief This function has to be modified if new stages are added.

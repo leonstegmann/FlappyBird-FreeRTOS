@@ -148,10 +148,7 @@ int drawButton(coord_t pos, char *str, TickType_t lastFrameTime) {
         
         if(tumEventGetMouseLeft() && (lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
             xQueueSend(StateQueue, &str, 0);
-            /* xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
-            stateMachine.last_change = xTaskGetTickCount();
-            xSemaphoreGive(stateMachine.lock); */
-        }
+        }   
 
     } else {
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, BOX_COLOUR);

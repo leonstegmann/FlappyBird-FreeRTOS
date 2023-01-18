@@ -16,17 +16,30 @@
 
 StateMachine_t stateMachine = {0};
 
+QueueHandle_t StateQueue = NULL;
+
 int initStateMachine(){
+  
+    StateQueue = xQueueCreate(1, sizeof(char*));
+    if(!StateQueue) {
+        printf("Cant open state queue");
+        return 1;
+    }
+
     states_add( (void*) createMenuTask, enterMenuTask, NULL, exitMenuTask, 0, "Menu_Task");
     states_add( (void*) createPlayTask, enterPlayTask, NULL, exitPlayTask, 1, "Play_Task");
     states_add( (void*) createGameOverTask, enterGameOverTask, NULL, exitGameOverTask, 2, "GameOver_Task");
     states_add( (void*) createScoreScreenTask, enterScoreScreenTask, NULL, exitScoreScreenTask, 3, "Score_Task");
+    
     stateMachine.lock = xSemaphoreCreateMutex();
+    
     states_init(); //calls probe functions
     states_set_state(0); //sets state (default is first added state)
+    
     xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
     stateMachine.last_change = xTaskGetTickCount();
     xSemaphoreGive(stateMachine.lock);
+    
     states_run();   // checks for changes in states
     return 0;
 }
@@ -54,6 +67,7 @@ void checkStateInput(TickType_t lastFrameTime) {
     
     char *input;
 
+    if((lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
 
         printf("%d - %d\n", lastFrameTime, stateMachine.last_change); 
 
@@ -62,11 +76,12 @@ void checkStateInput(TickType_t lastFrameTime) {
             xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
             stateMachine.last_change = xTaskGetTickCount();
             xSemaphoreGive(stateMachine.lock);
-            handleStateInput(input);
             xQueueReset(StateQueue);   
+            handleStateInput(input);
         }
-}
 
+    }
+}
 
 void deleteStateMachine(){
     deleteMenuTask();
