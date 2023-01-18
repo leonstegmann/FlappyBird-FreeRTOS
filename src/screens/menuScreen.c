@@ -32,6 +32,7 @@ void vMenuScreen() {
                 drawBackround();
                 drawButton(LEFT_BUTTON_POSITION, "Play");
                 drawButton(RIGHT_BUTTON_POSITION, "Score");
+                drawButton(LOWER_MIDDLE_BUTTON_POSITION, "Multiplayer");
                 drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
