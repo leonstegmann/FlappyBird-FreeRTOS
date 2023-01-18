@@ -22,4 +22,6 @@ void pauseGame();
  */
 void godMode(bird_t* player);
 
+void setScoreCheat(bird_t* player);
+
 #endif // __PLAYSCREEN_H__

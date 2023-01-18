@@ -1,3 +1,6 @@
+/* Standard library includes */
+#include <stdio.h> // for scanf
+
 /* FreeRTOS includes  */
 #include "FreeRTOS.h"
 #include "semphr.h" // for buttons.lock
@@ -74,7 +77,9 @@ void vPlayScreen(){
                 else if (checkButton(KEYCODE(G))){
                     godMode(player1);
                 }
-
+                else if (checkButton(KEYCODE(S))){
+                    setScoreCheat(player1);
+                }
                 else {
                     if(checkButton(KEYCODE(SPACE))){
                         if(player1->velocityY >= -player1->max_velocity) {
@@ -96,6 +101,17 @@ void vPlayScreen(){
             }
         }    
     }
+}
+
+void setScoreCheat(bird_t* player){
+    drawPause();
+    int newScore = 0;
+    printf("insert new Score: ");
+    scanf("%d",&newScore);
+    do {
+        vTaskDelay(2000);
+    } while (newScore == 0);
+    player->score = newScore;
 }
 
 void godMode(bird_t* player){
