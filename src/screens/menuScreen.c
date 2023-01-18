@@ -43,11 +43,10 @@ void vMenuScreen() {
                 drawFPS();
             }
         }
-                   
+        xGetButtonInput();                
         if(checkButton(KEYCODE(P))){            
             states_set_state(1);                 
         }
-
         if(checkButton(KEYCODE(S))){
             states_set_state(3);                       
         }

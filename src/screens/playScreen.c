@@ -44,7 +44,7 @@ void vPlayScreen(){
     initHighscore();
 
     while(1){
-    
+        xGetButtonInput();
         if(DrawSignal) {
 
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
