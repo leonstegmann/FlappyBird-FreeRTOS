@@ -31,7 +31,7 @@ void vScoreScreen() {
             drawButton(RIGHT_BUTTON_POSITION, "Menu", xLastFrameTime);
             drawButton(LEFT_BUTTON_POSITION, "Play", xLastFrameTime);
             drawFloorAnnimations(xLastFrameTime);
-            checkStateInput(xLastFrameTime);
+
 
             // Time after everything is drawn
             xLastFrameTime = xTaskGetTickCount();

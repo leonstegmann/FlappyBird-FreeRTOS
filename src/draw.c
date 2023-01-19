@@ -146,8 +146,18 @@ int drawButton(coord_t pos, char *str, TickType_t lastFrameTime) {
 
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, Red);
         
-        if(tumEventGetMouseLeft() && (lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
-            xQueueSend(StateQueue, &str, 0);
+        if(tumEventGetMouseLeft() && (xSemaphoreTake(stateMachine.lock, portMAX_DELAY) == pdTRUE)) {
+            
+            if((lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
+
+                stateMachine.str = str;
+                handleStateInput(stateMachine.str, lastFrameTime);
+                //stateMachine.last_change = xTaskGetTickCount();
+                stateMachine.str = NULL;
+
+            }
+            
+            xSemaphoreGive(stateMachine.lock);     
         }   
 
     } else {

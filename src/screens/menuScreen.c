@@ -36,7 +36,9 @@ void vMenuScreen() {
                 drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
-                checkStateInput(xTaskGetTickCount());
+                //checkStateInput(xTaskGetTickCount());
+
+                //handleStateInput(stateMachine.str);
 
                 // Time after everything is drawn
                 xLastFrameTime = xTaskGetTickCount();

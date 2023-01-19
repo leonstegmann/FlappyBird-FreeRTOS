@@ -19,13 +19,7 @@ StateMachine_t stateMachine = {0};
 QueueHandle_t StateQueue = NULL;
 
 int initStateMachine(){
-  
-    StateQueue = xQueueCreate(1, sizeof(char*));
-    if(!StateQueue) {
-        printf("Cant open state queue");
-        return 1;
-    }
-
+ 
     states_add( (void*) createMenuTask, enterMenuTask, NULL, exitMenuTask, 0, "Menu_Task");
     states_add( (void*) createPlayTask, enterPlayTask, NULL, exitPlayTask, 1, "Play_Task");
     states_add( (void*) createGameOverTask, enterGameOverTask, NULL, exitGameOverTask, 2, "GameOver_Task");
@@ -38,49 +32,56 @@ int initStateMachine(){
     
     xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
     stateMachine.last_change = xTaskGetTickCount();
+    stateMachine.str = NULL;
     xSemaphoreGive(stateMachine.lock);
     
     states_run();   // checks for changes in states
     return 0;
 }
 
-void handleStateInput(char *input) {
-
-    if (!strcmp(input, "Play") || !strcmp(input, "Retry")) {
-        printf("%s button pressed\n", input);
-        states_set_state(1); 
-    }
-
-    else if (!strcmp(input, "Score")) {
-        printf("%s button pressed\n", input);
-        states_set_state(3); 
-    }
-
-    else if (!strcmp(input, "Menu")) {
-        printf("%s button pressed\n", input);
-        states_set_state(0); 
-    }
-
-}
-
-void checkStateInput(TickType_t lastFrameTime) {
-    
-    char *input;
+void handleStateInput(char *input, int lastFrameTime) {
 
     if((lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
 
-        printf("%d - %d\n", lastFrameTime, stateMachine.last_change); 
-
-        if(xQueueReceive(StateQueue, &input, 0)) {
-            
-            xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
-            stateMachine.last_change = xTaskGetTickCount();
-            xSemaphoreGive(stateMachine.lock);
-            xQueueReset(StateQueue);   
-            handleStateInput(input);
+        if (!strcmp(input, "Play") || !strcmp(input, "Retry")) {
+            printf("%s button pressed\n", input);
+            states_set_state(1); 
         }
 
+        else if (!strcmp(input, "Score")) {
+            printf("%s button pressed\n", input);
+            states_set_state(3); 
+        }
+
+        else if (!strcmp(input, "Menu")) {
+            printf("%s button pressed\n", input);
+            states_set_state(0); 
+        }
+
+        xSemaphoreTake(stateMachine.lock, portMAX_DELAY);
+        stateMachine.last_change = xTaskGetTickCount();
+        xSemaphoreGive(stateMachine.lock);
     }
+}
+
+void checkStateInput(int lastFrameTime) {
+    
+
+    /* if((lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
+
+        printf("%d - %d\n", lastFrameTime, stateMachine.last_change); 
+
+        if(xSemaphoreTake(stateMachine.lock, portMAX_DELAY) == pdTRUE) {
+
+            printf("%c\n", stateMachine.str[0]);
+            stateMachine.last_change = xTaskGetTickCount();
+            handleStateInput(stateMachine.str, lastFrameTime);
+            //stateMachine.str = NULL;
+            xSemaphoreGive(stateMachine.lock);          
+        }
+        
+
+    } */
 }
 
 void deleteStateMachine(){
