@@ -51,8 +51,11 @@ void vMenuScreen() {
         if(checkButton(KEYCODE(S))){
             states_set_state(3);                       
         }
-
+        if(checkButton(KEYCODE(M))){
+            states_set_state(4);                       
+        }        
     }
+    
 }
 
 int createMenuTask(void) {
