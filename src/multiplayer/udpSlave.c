@@ -24,9 +24,6 @@
 /* using Serial Peripheral Interface (SPI)*/
 #define MISO_Port 1234 // Master in Slave out
 #define MOSI_Port 4321 // Master out Slave in
-#define IP4_ADDR_LEON_VM "192.168.0.68" // Leons VM
-#define IP4_ADDR_MANJARO "192.168.0.120" // Leons old Computer running Manjaro
-#define LOCAL_HOST_IP "127.0.0.1"
 
 #define UDP_BUFFER_SIZE 2000
 
@@ -44,13 +41,13 @@ void slaveRecv(size_t recv_size, char *buffer, void *args){
 
 void slaveSend(int send_val){
     /* Sending via UDP from Slave to Master*/
-    if(aIOSocketPut(UDP, IP4_ADDR_LEON_VM, MISO_Port, (char *) &send_val, sizeof(send_val)))
+    if(aIOSocketPut(UDP, IP4_HOST_ADDR, MISO_Port, (char *) &send_val, sizeof(send_val)))
         PRINT_ERROR("FAILED TO SEND from SLAVE");
 }
 
 void initUDPConnectionSlave(){
     /* Opening UDP connection */
-    slave_UDP_handle = aIOOpenUDPSocket((char*) LOCAL_HOST_IP, MOSI_Port, UDP_BUFFER_SIZE, slaveRecv, NULL );
+    slave_UDP_handle = aIOOpenUDPSocket(NULL, MOSI_Port, UDP_BUFFER_SIZE, slaveRecv, NULL );
     if(slave_UDP_handle == NULL){
         PRINT_ERROR("FAILED TO OPEN SLave UDP Socket");
         exit(EXIT_FAILURE);
