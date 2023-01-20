@@ -32,12 +32,16 @@
 
 static aIO_handle_t master_UDP_handle = NULL;
 
+static TaskHandle_t MasterTask = NULL;
+
 void masterRecv(size_t recv_size, char *buffer, void *args){
 
 }
 
 void initUDPConnectionMaster(){
+
     master_UDP_handle = aIOOpenUDPSocket((char*) testing_MASTER_IP4_ADDR, MOSI_Port, UDP_BUFFER_SIZE, masterRecv, NULL );
+
     if(master_UDP_handle == NULL){  
         PRINT_ERROR("FAILED TO OPEN SLave UDP Socket");
         exit(EXIT_FAILURE);
@@ -45,15 +49,42 @@ void initUDPConnectionMaster(){
 }
 
 void masterSend(){
-    //char send_val[10] = "Hello"; 
-    int send_val = rand();
+
+    int send_val = rand()%10;
+
     /* Sending via UDP from Master to Slave*/
     if(aIOSocketPut(UDP, LOCAL_HOST_IP, MOSI_Port, (char *) &send_val, sizeof(send_val))){
         PRINT_ERROR("FAILED TO SEND from MASTER");
     }
     else {
-        printf("SEDNING: %d\n", send_val); 
+        printf("SEDNING: (random number) %d\n", send_val); 
     }
 
+}
+
+
+void vMasterTask(void *pvParameters){
+
+    initUDPConnectionMaster();
+
+    while (1) {
+        masterSend();
+        vTaskDelay(500);
+    }
+    
+}
+
+
+void createMasterTask(){
+    if (xTaskCreate(vMasterTask, "MasterTask", mainGENERIC_STACK_SIZE * 2,
+                    NULL, mainGENERIC_PRIORITY + 7, &MasterTask) != pdPASS) {
+        PRINT_ERROR("Failed to create FreeRTOS Task");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void deleteMasterTask(){
+    if( MasterTask != NULL)
+        vTaskDelete(MasterTask);
 }
 

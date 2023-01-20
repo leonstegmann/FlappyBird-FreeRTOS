@@ -1,8 +1,15 @@
 #ifndef __UDP_MASTER_H_
 #define __UDP_MASTER_H_
 
-void initUDPConnectionMaster();
+/**
+ * @brief creates a FreeRTOS Task that initiates the UDP-connection from the Master's
+ * Side and keeps sending Data to the Slave.
+ */
+void createMasterTask();
 
-void masterSend();
+/**
+ * @brief deletes the FreeRTOS Task
+ */
+void deleteMasterTask();
 
 #endif // __UDP_MASTER_H_

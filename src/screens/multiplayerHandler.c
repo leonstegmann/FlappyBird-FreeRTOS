@@ -23,6 +23,8 @@
 #include "draw.h"
 #include "multiplayerIPConfigScreen.h"
 #include "states.h"
+#include "udpMaster.h"
+#include "udpSlave.h"
 
 #define UDP_BUFFER_SIZE 2000
 
@@ -44,10 +46,10 @@ void vMultiplayerScreen() {
         if(checkButton(KEYCODE(H))){
             printf("Host\n");
             states_set_state(5);
-            
         }        
         if(checkButton(KEYCODE(I))){
             printf("Invite\n");
+            initUDPConnectionSlave();
         }    
     }
 }

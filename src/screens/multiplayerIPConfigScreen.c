@@ -19,6 +19,7 @@
 #include "defines.h"
 #include "buttons.h" // for vCheckArrowInput
 #include "main.h" //for DrawSignal
+#include "udpMaster.h"
 
 static TaskHandle_t IPScreen = NULL;
 
@@ -97,7 +98,7 @@ void vIPScreen(void *pvParameters)
         xGetButtonInput(); // Update global input
 
         if (checkButton(KEYCODE(S)))
-    
+            createMasterTask();
         if ((xTaskGetTickCount() - prev_button_press) >
             pdMS_TO_TICKS(SCROLL_DELAY)) {
             if (xSemaphoreTake(ip_and_port.lock, 0) == pdTRUE) {

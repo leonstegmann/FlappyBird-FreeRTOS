@@ -30,6 +30,7 @@
 #include "menuScreen.h" // for the Flappy Bird Logo
 #include "stateMachine.h"
 #include "objects.h"
+#include "udpMaster.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -105,6 +106,9 @@ int main(int argc, char *argv[])
 
     /*-----------------------------------------------------------------------------------------------*/	
     /* Error handling -> delete everything that has been initialized so far (Backwards the Init Order) */
+
+        deleteMasterTask(); // deletes udp MasterTask for multiplayer if used
+
         deleteStateMachine();
     err_stateMachineInit:
         vTaskDelete(BufferSwap);
