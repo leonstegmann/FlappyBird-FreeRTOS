@@ -24,8 +24,8 @@
 /* using Serial Peripheral Interface (SPI)*/
 #define MISO_Port 1234 // Master in Slave out
 #define MOSI_Port 4321 // Master out Slave in
-#define testing_MASTER_IP4_ADDR "192.168.0.68" // Leons Surface VM
-#define testing_SLAVE_IP4_ADDR "192.168.0.120" // Leons old Computer running Manjaro
+#define IP4_ADDR_LEON_VM "192.168.0.68" // Leons VM
+#define IP4_ADDR_MANJARO "192.168.0.120" // Leons old Computer running Manjaro
 #define LOCAL_HOST_IP "127.0.0.1"
 
 #define UDP_BUFFER_SIZE 2000
@@ -40,7 +40,7 @@ void masterRecv(size_t recv_size, char *buffer, void *args){
 
 void initUDPConnectionMaster(){
 
-    master_UDP_handle = aIOOpenUDPSocket((char*) testing_MASTER_IP4_ADDR, MOSI_Port, UDP_BUFFER_SIZE, masterRecv, NULL );
+    master_UDP_handle = aIOOpenUDPSocket((char*) LOCAL_HOST_IP, MISO_Port, UDP_BUFFER_SIZE, masterRecv, NULL );
 
     if(master_UDP_handle == NULL){  
         PRINT_ERROR("FAILED TO OPEN SLave UDP Socket");
@@ -53,7 +53,7 @@ void masterSend(){
     int send_val = rand()%10;
 
     /* Sending via UDP from Master to Slave*/
-    if(aIOSocketPut(UDP, LOCAL_HOST_IP, MOSI_Port, (char *) &send_val, sizeof(send_val))){
+    if(aIOSocketPut(UDP, IP4_ADDR_MANJARO, MOSI_Port, (char *) &send_val, sizeof(send_val))){
         PRINT_ERROR("FAILED TO SEND from MASTER");
     }
     else {
@@ -65,7 +65,8 @@ void masterSend(){
 
 void vMasterTask(void *pvParameters){
 
-    initUDPConnectionMaster();
+    /* for Receiving on Master */
+    initUDPConnectionMaster(); 
 
     while (1) {
         masterSend();
