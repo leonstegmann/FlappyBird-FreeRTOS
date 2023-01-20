@@ -5,6 +5,7 @@
 #include "FreeRTOS.h"
 #include"task.h" // for Task_handle
 #include "semphr.h"
+#include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
 
 /* TUM_Library includes  */
 #include "TUM_Draw.h"
@@ -19,13 +20,9 @@
 #include "buttons.h" // for vCheckArrowInput
 #include "main.h" //for DrawSignal
 
-static TaskHandle_t IPTask = NULL;
+static TaskHandle_t IPScreen = NULL;
 
-struct ip_port {
-    SemaphoreHandle_t lock;
-    unsigned char IP[4];
-    unsigned int port;
-} ip_and_port = { .lock = NULL, .IP = { 10, 181, 72, 199 }, .port = 12345 };
+ip_port_t ip_and_port =  { .lock = NULL, .IP = { 10, 181, 72, 199 }, .port = 12345 };
 
 
 #define OCTET_Y SCREEN_HEIGHT / 2
@@ -88,7 +85,7 @@ void vDrawArrow(char orientation, coord_t point)
 
 #define SCROLL_DELAY 50
 
-void vIPTask(void *pvParameters)
+void vIPScreen(void *pvParameters)
 {
     unsigned int selected_octet = 0;
 
@@ -98,7 +95,9 @@ void vIPTask(void *pvParameters)
         tumEventFetchEvents(FETCH_EVENT_NONBLOCK); // Query events backend for new events, ie. button presses
         
         xGetButtonInput(); // Update global input
-        
+
+        if (checkButton(KEYCODE(S)))
+    
         if ((xTaskGetTickCount() - prev_button_press) >
             pdMS_TO_TICKS(SCROLL_DELAY)) {
             if (xSemaphoreTake(ip_and_port.lock, 0) == pdTRUE) {
@@ -202,28 +201,28 @@ int createIPConfigTask(void) {
         return 1;
     }
 
-    if(!xTaskCreate(vIPTask, "MultiplayerScreen",  mainGENERIC_STACK_SIZE *2, NULL,
-			        mainGENERIC_PRIORITY + 6, &IPTask)) {
+    if(!xTaskCreate(vIPScreen, "vIPScreen",  mainGENERIC_STACK_SIZE *2, NULL,
+			        mainGENERIC_PRIORITY + 6, &IPScreen)) {
                         return 1;
     }
-    vTaskSuspend(IPTask); 
+    vTaskSuspend(IPScreen); 
     return 0;
 }
 
 void enterIPConfigTask(void){
     printf("Enter IP config\n");
-    vTaskResume(IPTask);
+    vTaskResume(IPScreen);
     tumFUtilPrintTaskStateList();
 }
 
 void exitIPConfigTask(void)
 {
-    vTaskSuspend(IPTask);
+    vTaskSuspend(IPScreen);
 }
 
 void deleteIPConfigTask(){
-    if (IPTask)
-        vTaskDelete(IPTask);
+    if (IPScreen)
+        vTaskDelete(IPScreen);
     if(ip_and_port.lock)
         vSemaphoreDelete(ip_and_port.lock);
 }
