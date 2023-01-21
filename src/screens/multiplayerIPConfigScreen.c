@@ -130,6 +130,8 @@ void vIPScreen(void *pvParameters)
     char host_or_guest[20];
     sprintf( host_or_guest, " " );
 
+    bool connected = false;
+
     TickType_t xLastFrameTime = xTaskGetTickCount();
 
     unsigned int selected_octet = 0;
@@ -190,10 +192,14 @@ void vIPScreen(void *pvParameters)
             drawBackround();
             drawMultiplayerLogo(LOGO_POSITION);
             drawButton(LOWER_LEFT_BUTTON_POSITION, "Back", xLastFrameTime);
-            drawButton(LEFT_BUTTON_POSITION, "Host", xLastFrameTime); // Master
-            drawButton(RIGHT_BUTTON_POSITION,"Guest", xLastFrameTime); // Slave
-            drawFPS();
+            drawButton(MIDDLE_BUTTON_POSITION, "Host", xLastFrameTime); // Master
+            drawButton(LOWER_RIGHT_BUTTON_POSITION,"Guest", xLastFrameTime); // Slave
             tumDrawText( host_or_guest, MIDDLE_BUTTON_POSITION.x - 30, MIDDLE_BUTTON_POSITION.y - 50, Orange);
+            drawFPS();
+            if(connected){
+                tumDrawText("CONNECTED!",RIGHT_BUTTON_POSITION.x, RIGHT_BUTTON_POSITION.y, Gray);
+                drawButton(LOWER_RIGHT_BUTTON_POSITION,"Play", xLastFrameTime); // Slave
+            }
 
             /* DRAW IP*/
             if (xSemaphoreTake(ip_and_port.lock, 0) == pdTRUE) {
@@ -210,14 +216,12 @@ void vIPScreen(void *pvParameters)
         if(checkButton(KEYCODE(H))){
             printf("Host\n");
             sprintf(host_or_guest,"YOU ARE HOST NOW");
+            createMasterTask();
         }        
         if(checkButton(KEYCODE(G))){
             printf("Guest\n");
             sprintf(host_or_guest,"YOU ARE GUEST NOW");
-//            initUDPConnectionSlave();
-        }                
-        if (checkButton(KEYCODE(S))){
-            createMasterTask();
+            initUDPConnectionSlave();
         }
         if (checkButton(KEYCODE(B))){
             states_set_state(0);
