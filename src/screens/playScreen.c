@@ -70,7 +70,7 @@ void vPlayScreen(){
                     states_set_state(2);
 
                 } 
-                else if(checkButton(KEYCODE(U))){
+                else if(checkButton(KEYCODE(P))){
                         drawPause();
                         pauseGame();
                 }
@@ -144,8 +144,9 @@ void godMode(bird_t* player){
 void pauseGame(){
     bool pause = true;  
     do {
+        xGetButtonInput();
         vTaskDelay((TickType_t) 10);
-        if (checkButton(KEYCODE(U)))
+        if (checkButton(KEYCODE(P)))
             pause = false;
     } while(pause);
 }
