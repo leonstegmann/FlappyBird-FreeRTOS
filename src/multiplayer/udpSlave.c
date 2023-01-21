@@ -47,7 +47,8 @@ void slaveSend(int send_val){
 
 void initUDPConnectionSlave(){
     /* Opening UDP connection */
-    slave_UDP_handle = aIOOpenUDPSocket(NULL, MOSI_Port, UDP_BUFFER_SIZE, slaveRecv, NULL );
+    if(slave_UDP_handle == NULL)
+        slave_UDP_handle = aIOOpenUDPSocket(NULL, MOSI_Port, UDP_BUFFER_SIZE, slaveRecv, NULL );
     if(slave_UDP_handle == NULL){
         PRINT_ERROR("FAILED TO OPEN SLave UDP Socket");
         exit(EXIT_FAILURE);
