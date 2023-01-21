@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "TUM_Event.h"
 
 /* Project includes  */
@@ -11,11 +14,25 @@
 #include "playScreen.h"
 #include "gameOver.h"
 #include "scoreScreen.h"
-#include "main.h"
+#include "defines.h"
 
 StateMachine_t stateMachine = {0};
 
+TaskHandle_t StateMachineTask = NULL;
+
+void vStateMachineTask() {
+
+    while(1) {
+        states_run();
+        xSemaphoreGive(stateMachine.lock);
+        vTaskDelay((TickType_t) 50);
+    }
+}
+
 int initStateMachine(){
+
+    xTaskCreate(vStateMachineTask, "StateMachine", mainGENERIC_STACK_SIZE/2, NULL,
+                    configMAX_PRIORITIES, &StateMachineTask);
  
     states_add( (void*) createMenuTask, enterMenuTask, NULL, exitMenuTask, 0, "Menu_Task");
     states_add( (void*) createPlayTask, enterPlayTask, NULL, exitPlayTask, 1, "Play_Task");
