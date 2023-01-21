@@ -152,7 +152,7 @@ int drawButton(coord_t pos, char *str, TickType_t lastFrameTime) {
 
                 stateMachine.str = str;
                 handleStateInput(stateMachine.str, lastFrameTime);
-                //stateMachine.last_change = xTaskGetTickCount();
+                stateMachine.last_change = xTaskGetTickCount();
                 stateMachine.str = NULL;
 
             }
