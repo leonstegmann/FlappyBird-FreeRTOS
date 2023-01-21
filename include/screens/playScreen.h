@@ -22,6 +22,9 @@ void pauseGame();
  */
 void godMode(bird_t* player);
 
+/**
+ * @brief Enables the Cheat Mode for this player. Here he can set the score he want using the arrow keys.
+ */
 void setScoreCheat(bird_t* player);
 
 #endif // __PLAYSCREEN_H__
