@@ -14,6 +14,7 @@
 #include "states.h" //for set_stages()
 #include "scoreScreen.h"
 #include "defines.h"
+#include "stateMachine.h"
 
 TaskHandle_t ScoreScreen = NULL;
 
@@ -27,9 +28,10 @@ void vScoreScreen() {
             drawBackround();
             drawHighscore(HIGHSCORE_POSITION);
             drawLogo(LOGO_POSITION);
-            drawButton(RIGHT_BUTTON_POSITION, "Menu");
-            drawButton(LEFT_BUTTON_POSITION, "Play");
+            drawButton(RIGHT_BUTTON_POSITION, "Menu", xLastFrameTime);
+            drawButton(LEFT_BUTTON_POSITION, "Play", xLastFrameTime);
             drawFloorAnnimations(xLastFrameTime);
+
 
             // Time after everything is drawn
             xLastFrameTime = xTaskGetTickCount();

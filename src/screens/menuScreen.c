@@ -13,6 +13,7 @@
 #include "buttons.h"
 #include "draw.h"
 #include "states.h" //for set_stages()
+#include "stateMachine.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -30,8 +31,8 @@ void vMenuScreen() {
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 
                 drawBackround();
-                drawButton(LEFT_BUTTON_POSITION, "Play");
-                drawButton(RIGHT_BUTTON_POSITION, "Score");
+                drawButton(LEFT_BUTTON_POSITION, "Play", xLastFrameTime);
+                drawButton(RIGHT_BUTTON_POSITION, "Score", xLastFrameTime);
                 drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime);
