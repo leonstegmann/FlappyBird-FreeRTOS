@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h> // for atexit
 
-
 /* FreeRTOS includes  */
 #include "FreeRTOS.h"
 #include "queue.h"
@@ -55,9 +54,10 @@ int main(int argc, char *argv[])
 	}
 
     if (tumSoundInit(bin_folder_path)) {
-        
+        printf("Failed to initialize sound\n");
+        goto err_tumSoundInit;
     }
-    
+
     DrawSignal = xSemaphoreCreateBinary(); // Screen buffer locking
     if (!DrawSignal) {
         printf("Failed to create draw signal\n");
@@ -111,6 +111,8 @@ int main(int argc, char *argv[])
     err_bufferSwapTask:
         buttonsExit();
     err_buttonsInit:
+        tumSoundExit();
+    err_tumSoundInit:
 	    vSemaphoreDelete(DrawSignal);
     err_draw_signal:
 	    tumEventExit();
