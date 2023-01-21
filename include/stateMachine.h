@@ -28,6 +28,11 @@ extern StateMachine_t stateMachine;
  */
 int initStateMachine();
 
+/**
+ * @brief Handles the input from a button press.
+ * @param input String input
+ * @param lastFrameTime last time something was printed on the screen 
+ */
 void handleStateInput(char *input, int lastFrameTime);
 
 /**

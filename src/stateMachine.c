@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 #include "TUM_Event.h"
 
 /* Project includes  */
@@ -15,8 +14,6 @@
 #include "main.h"
 
 StateMachine_t stateMachine = {0};
-
-QueueHandle_t StateQueue = NULL;
 
 int initStateMachine(){
  
@@ -62,26 +59,6 @@ void handleStateInput(char *input, int lastFrameTime) {
         stateMachine.last_change = xTaskGetTickCount();
         xSemaphoreGive(stateMachine.lock);
     }
-}
-
-void checkStateInput(int lastFrameTime) {
-    
-
-    /* if((lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
-
-        printf("%d - %d\n", lastFrameTime, stateMachine.last_change); 
-
-        if(xSemaphoreTake(stateMachine.lock, portMAX_DELAY) == pdTRUE) {
-
-            printf("%c\n", stateMachine.str[0]);
-            stateMachine.last_change = xTaskGetTickCount();
-            handleStateInput(stateMachine.str, lastFrameTime);
-            //stateMachine.str = NULL;
-            xSemaphoreGive(stateMachine.lock);          
-        }
-        
-
-    } */
 }
 
 void deleteStateMachine(){

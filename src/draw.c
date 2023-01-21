@@ -13,7 +13,6 @@
 #include "draw.h"
 #include "objects.h" //Bird struct
 #include "defines.h"
-#include "main.h" // State queue
 #include "stateMachine.h"
 
 /* Aimed FPS */
