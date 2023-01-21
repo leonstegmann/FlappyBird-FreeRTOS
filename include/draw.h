@@ -100,4 +100,9 @@ void drawScore(unsigned short count);
  */
 void drawPause();
 
+/**
+ * @brief Draws Multiplayer Text
+ */
+void drawMultiplayerLogo(coord_t pos);
+
 #endif //__DRAW_H__
