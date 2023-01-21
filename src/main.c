@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     /* FreeRTOS Task creation*/
     
     if(xTaskCreate(vSwapBuffers, "BufferSwap", 
-            mainGENERIC_STACK_SIZE , NULL,
+            mainGENERIC_STACK_SIZE/2 , NULL,
 			configMAX_PRIORITIES, &BufferSwap)!= pdPASS){
         printf("Failed to create Buffer Task\n");
         goto err_bufferSwapTask;
