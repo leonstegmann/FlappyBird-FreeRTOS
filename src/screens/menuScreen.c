@@ -53,7 +53,7 @@ void vMenuScreen() {
             states_set_state(3);                       
         }
         if(checkButton(KEYCODE(M))){
-            states_set_state(4);                       
+            states_set_state(4);
         }        
     }
     

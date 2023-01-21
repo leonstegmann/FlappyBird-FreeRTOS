@@ -15,7 +15,6 @@
 #include "playScreen.h"
 #include "gameOver.h"
 #include "scoreScreen.h"
-#include "multiplayerHandler.h"
 #include "multiplayerIPConfigScreen.h"
 #include "defines.h"
 
@@ -43,8 +42,7 @@ int initStateMachine(){
     states_add( (void*) createPlayTask, enterPlayTask, NULL, exitPlayTask, 1, "Play_Task");
     states_add( (void*) createGameOverTask, enterGameOverTask, NULL, exitGameOverTask, 2, "GameOver_Task");
     states_add( (void*) createScoreScreenTask, enterScoreScreenTask, NULL, exitScoreScreenTask, 3, "Score_Task");
-    states_add( (void*) createMultiplayerTask, enterMultiplayerTask, NULL, exitMultiplayerTask, 4, "Multiplayer_Task");
-    states_add( (void*) createIPConfigTask, enterIPConfigTask, NULL, exitIPConfigTask, 5, "IPConfigTask");
+    states_add( (void*) createIPConfigTask, enterIPConfigTask, NULL, exitIPConfigTask, 4, "IPConfigTask");
     
     stateMachine.lock = xSemaphoreCreateMutex();
     
@@ -91,6 +89,5 @@ void deleteStateMachine(){
     deletePlayTask();
     deleteGameOverTask();
     deleteScoreScreenTask();
-    deleteMultiplayerTask();
     deleteIPConfigTask();
 }

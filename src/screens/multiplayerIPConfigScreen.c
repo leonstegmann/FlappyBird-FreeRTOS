@@ -20,13 +20,15 @@
 #include "buttons.h" // for vCheckArrowInput
 #include "main.h" //for DrawSignal
 #include "udpMaster.h"
+#include "udpSlave.h"
+#include "states.h"
 
 static TaskHandle_t IPScreen = NULL;
 
 ip_port_t ip_and_port =  { .lock = NULL, .IP = { 10, 181, 72, 199 }, .port = 12345 };
 
 
-#define OCTET_Y SCREEN_HEIGHT / 2
+#define OCTET_Y SCREEN_HEIGHT * 4/10
 #define FIRST_OCTET SCREEN_WIDTH / 2 - 100
 #define SECOND_OCTET SCREEN_WIDTH / 2 - 70
 #define THIRD_OCTET SCREEN_WIDTH / 2 - 40
@@ -84,10 +86,50 @@ void vDrawArrow(char orientation, coord_t point)
     }
 }
 
+void drawArrows(unsigned int selected_octet){
+    switch (selected_octet) {
+                case 0: {
+                    coord_t up = { FIRST_OCTET, OCTET_Y - ARROW_OFFSET };
+                    vDrawArrow(UP, up);
+                    coord_t down = { FIRST_OCTET, OCTET_Y + ARROW_OFFSET };
+                    vDrawArrow(DOWN, down);
+                } break;
+                case 1: {
+                    coord_t up = { SECOND_OCTET, OCTET_Y - ARROW_OFFSET };
+                    vDrawArrow(UP, up);
+                    coord_t down = { SECOND_OCTET, OCTET_Y + ARROW_OFFSET };
+                    vDrawArrow(DOWN, down);
+                } break;
+                case 2: {
+                    coord_t up = { THIRD_OCTET, OCTET_Y - ARROW_OFFSET };
+                    vDrawArrow(UP, up);
+                    coord_t down = { THIRD_OCTET, OCTET_Y + ARROW_OFFSET };
+                    vDrawArrow(DOWN, down);
+                } break;
+                case 3: {
+                    coord_t up = { FOURTH_OCTET, OCTET_Y - ARROW_OFFSET };
+                    vDrawArrow(UP, up);
+                    coord_t down = { FOURTH_OCTET, OCTET_Y + ARROW_OFFSET };
+                    vDrawArrow(DOWN, down);
+                } break;
+                case 4: {
+                    coord_t up = { PORT_X, OCTET_Y - ARROW_OFFSET };
+                    vDrawArrow(UP, up);
+                    coord_t down = { PORT_X, OCTET_Y + ARROW_OFFSET };
+                    vDrawArrow(DOWN, down);
+                } break;
+                default:
+                    break;
+            }             
+}
+
 #define SCROLL_DELAY 50
 
 void vIPScreen(void *pvParameters)
 {
+    char host_or_guest[20];
+    sprintf( host_or_guest, " " );
+
     TickType_t xLastFrameTime = xTaskGetTickCount();
 
     unsigned int selected_octet = 0;
@@ -97,10 +139,6 @@ void vIPScreen(void *pvParameters)
     while (1) {
         tumEventFetchEvents(FETCH_EVENT_NONBLOCK); // Query events backend for new events, ie. button presses
         
-        xGetButtonInput(); // Update global input
-
-        if (checkButton(KEYCODE(S)))
-            createMasterTask();
         if ((xTaskGetTickCount() - prev_button_press) >
             pdMS_TO_TICKS(SCROLL_DELAY)) {
             if (xSemaphoreTake(ip_and_port.lock, 0) == pdTRUE) {
@@ -148,54 +186,47 @@ void vIPScreen(void *pvParameters)
 
             tumDrawClear(White); // Clear screen
 
+            /* DRAW */
+            drawBackround();
+            drawMultiplayerLogo(LOGO_POSITION);
+            drawButton(LOWER_LEFT_BUTTON_POSITION, "Back", xLastFrameTime);
+            drawButton(LEFT_BUTTON_POSITION, "Host", xLastFrameTime); // Master
+            drawButton(RIGHT_BUTTON_POSITION,"Guest", xLastFrameTime); // Slave
+            drawFPS();
+            tumDrawText( host_or_guest, MIDDLE_BUTTON_POSITION.x - 30, MIDDLE_BUTTON_POSITION.y - 50, Orange);
+
+            /* DRAW IP*/
             if (xSemaphoreTake(ip_and_port.lock, 0) == pdTRUE) {
                 vDrawIP(ip_and_port.IP, ip_and_port.port);
                 xSemaphoreGive(ip_and_port.lock);
             }
+        } //END drawSignal
+            
+        /* DRAW ARROWS*/
+        drawArrows(selected_octet);
 
-            switch (selected_octet) {
-                case 0: {
-                    coord_t up = { FIRST_OCTET, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
-                    coord_t down = { FIRST_OCTET, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
-                } break;
-                case 1: {
-                    coord_t up = { SECOND_OCTET, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
-                    coord_t down = { SECOND_OCTET, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
-                } break;
-                case 2: {
-                    coord_t up = { THIRD_OCTET, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
-                    coord_t down = { THIRD_OCTET, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
-                } break;
-                case 3: {
-                    coord_t up = { FOURTH_OCTET, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
-                    coord_t down = { FOURTH_OCTET, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
-                } break;
-                case 4: {
-                    coord_t up = { PORT_X, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
-                    coord_t down = { PORT_X, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
-                } break;
-                default:
-                    break;
-            }
-
-            drawButton(LOWER_MIDDLE_BUTTON_POSITION, "Start", xLastFrameTime);
-            drawButton(LEFT_BUTTON_POSITION, "Back", xLastFrameTime);
-             
+        /* Check Buttons*/
+        xGetButtonInput();
+        if(checkButton(KEYCODE(H))){
+            printf("Host\n");
+            sprintf(host_or_guest,"YOU ARE HOST NOW");
+        }        
+        if(checkButton(KEYCODE(G))){
+            printf("Guest\n");
+            sprintf(host_or_guest,"YOU ARE GUEST NOW");
+//            initUDPConnectionSlave();
+        }                
+        if (checkButton(KEYCODE(S))){
+            createMasterTask();
+        }
+        if (checkButton(KEYCODE(B))){
+            states_set_state(0);
         }
 
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
+
 
 int createIPConfigTask(void) {
 
