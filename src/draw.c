@@ -13,6 +13,7 @@
 #include "draw.h"
 #include "objects.h" //Bird struct
 #include "defines.h"
+#include "stateMachine.h"
 
 /* Aimed FPS */
 #define FPS_AVERAGE_COUNT 50
@@ -126,7 +127,7 @@ void drawGameOver() {
 }
 
 /* Function to draw buttons on the screen */
-int drawButton(coord_t pos, char *str) {
+int drawButton(coord_t pos, char *str, TickType_t lastFrameTime) {
 
     int mouse_x = tumEventGetMouseX();
     int mouse_y = tumEventGetMouseY();
@@ -143,6 +144,20 @@ int drawButton(coord_t pos, char *str) {
     if(mouse_x >= pos.x && mouse_x <= pos.x + BOX_WIDTH && mouse_y >= pos.y && mouse_y <= pos.y + BOX_HEIGHT) {
 
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, Red);
+        
+        if(tumEventGetMouseLeft() && (xSemaphoreTake(stateMachine.lock, portMAX_DELAY) == pdTRUE)) {
+            
+            if((lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
+
+                stateMachine.str = str;
+                handleStateInput(stateMachine.str, lastFrameTime);
+                stateMachine.last_change = xTaskGetTickCount();
+                stateMachine.str = NULL;
+
+            }
+            
+            xSemaphoreGive(stateMachine.lock);     
+        }   
 
     } else {
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, BOX_COLOUR);

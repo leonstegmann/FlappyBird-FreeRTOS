@@ -5,6 +5,7 @@
 #include "TUM_Event.h"
 #include "main.h"
 #include "swapBuffers.h"
+#include "stateMachine.h"
 #include "states.h"
 
 void vSwapBuffers(void *pvParameters)
@@ -18,6 +19,7 @@ void vSwapBuffers(void *pvParameters)
         tumEventFetchEvents(FETCH_EVENT_BLOCK);
         states_run();
         xSemaphoreGive(DrawSignal);
+        xSemaphoreGive(stateMachine.lock);
         vTaskDelayUntil(&xLastWakeTime,
                         pdMS_TO_TICKS(frameratePeriod));
     }

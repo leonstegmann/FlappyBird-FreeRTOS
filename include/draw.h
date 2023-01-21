@@ -21,9 +21,13 @@
 #define BOX_WIDTH 130
 #define BOX_HEIGHT 40
 
-#define LEFT_BUTTON_POSITION  (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH*1.5, SCREEN_HEIGHT/2 + 70}
-#define RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.5, SCREEN_HEIGHT/2 + 70}
+#define LEFT_BUTTON_POSITION  (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH*1.75, SCREEN_HEIGHT/2 + 100}
+#define RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.75, SCREEN_HEIGHT/2 + 100}
+#define MIDDLE_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH/2, SCREEN_HEIGHT/2 + 100}
+#define LOWER_LEFT_BUTTON_POSITION  (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH*1.75, SCREEN_HEIGHT/2 + 150}
+#define LOWER_RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.75, SCREEN_HEIGHT/2 + 150}
 #define LOWER_MIDDLE_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH/2, SCREEN_HEIGHT/2 + 150}
+
 #define LOGO_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150}
 #define HIGHSCORE_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}
 
@@ -46,7 +50,7 @@ int drawBackround();
  * @param name String of the displayed name
  * @return 1 on success and 0 when failed
  */
-int drawButton(coord_t pos, char *name);
+int drawButton(coord_t pos, char *name, TickType_t lastFrameTime);
 
 /**
  * @brief Prints the Logo on the screen 

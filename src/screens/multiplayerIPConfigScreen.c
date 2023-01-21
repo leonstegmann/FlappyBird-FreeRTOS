@@ -88,6 +88,8 @@ void vDrawArrow(char orientation, coord_t point)
 
 void vIPScreen(void *pvParameters)
 {
+    TickType_t xLastFrameTime = xTaskGetTickCount();
+
     unsigned int selected_octet = 0;
 
     TickType_t prev_button_press = xTaskGetTickCount();
@@ -186,8 +188,9 @@ void vIPScreen(void *pvParameters)
                     break;
             }
 
-            drawButton(LOWER_MIDDLE_BUTTON_POSITION, "Start");
-
+            drawButton(LOWER_MIDDLE_BUTTON_POSITION, "Start", xLastFrameTime);
+            drawButton(LEFT_BUTTON_POSITION, "Back", xLastFrameTime);
+             
         }
 
         vTaskDelay(pdMS_TO_TICKS(10));

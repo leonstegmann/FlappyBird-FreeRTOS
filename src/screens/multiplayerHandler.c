@@ -34,12 +34,14 @@ static TaskHandle_t MultiplayerScreen = NULL;
 
 void vMultiplayerScreen() {
 
+    TickType_t xLastFrameTime = xTaskGetTickCount();
+
     while(1) {
         if(DrawSignal)
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
                 drawBackround();
-                drawButton(LEFT_BUTTON_POSITION, "Host"); // Master
-                drawButton(RIGHT_BUTTON_POSITION,"Invite"); // Slave
+                drawButton(LEFT_BUTTON_POSITION, "Host", xLastFrameTime); // Master
+                drawButton(RIGHT_BUTTON_POSITION,"Invite", xLastFrameTime); // Slave
                 vTaskDelay(10);
             }
         xGetButtonInput();
