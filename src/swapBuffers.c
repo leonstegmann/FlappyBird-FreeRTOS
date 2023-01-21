@@ -17,9 +17,7 @@ void vSwapBuffers(void *pvParameters)
     while (1) {
         tumDrawUpdateScreen();
         tumEventFetchEvents(FETCH_EVENT_BLOCK);
-        states_run();
         xSemaphoreGive(DrawSignal);
-        xSemaphoreGive(stateMachine.lock);
         vTaskDelayUntil(&xLastWakeTime,
                         pdMS_TO_TICKS(frameratePeriod));
     }

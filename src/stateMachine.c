@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "FreeRTOS.h"
+#include "FreeRTOSConfig.h"
+#include "task.h"
+
 #include "TUM_Event.h"
 
 /* Project includes  */
@@ -13,12 +17,28 @@
 #include "scoreScreen.h"
 #include "multiplayerHandler.h"
 #include "multiplayerIPConfigScreen.h"
-#include "main.h"
+#include "defines.h"
 
 StateMachine_t stateMachine = {0};
 
+TaskHandle_t StateMachineTask = NULL;
+
+void vStateMachineTask() {
+    /* if local variable are needed first increase currnet Stack Size!!!*/
+    while(1) {
+        states_run();
+        xSemaphoreGive(stateMachine.lock);
+        vTaskDelay((TickType_t) 50);
+    }
+}
+
 int initStateMachine(){
+
+    /* Create State Machine Task*/
+    xTaskCreate(vStateMachineTask, "StateMachine", mainGENERIC_STACK_SIZE/10, NULL,
+                    configMAX_PRIORITIES-5, &StateMachineTask);
  
+    /*  Adding States to the State Machine*/
     states_add( (void*) createMenuTask, enterMenuTask, NULL, exitMenuTask, 0, "Menu_Task");
     states_add( (void*) createPlayTask, enterPlayTask, NULL, exitPlayTask, 1, "Play_Task");
     states_add( (void*) createGameOverTask, enterGameOverTask, NULL, exitGameOverTask, 2, "GameOver_Task");
@@ -66,6 +86,7 @@ void handleStateInput(char *input, int lastFrameTime) {
 }
 
 void deleteStateMachine(){
+    vTaskDelete(StateMachineTask);
     deleteMenuTask();
     deletePlayTask();
     deleteGameOverTask();
