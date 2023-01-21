@@ -45,7 +45,7 @@ int drawBackround();
  * @param name String of the displayed name
  * @return 1 on success and 0 when failed
  */
-int drawButton(coord_t pos, char *name);
+int drawButton(coord_t pos, char *name, TickType_t lastFrameTime);
 
 /**
  * @brief Prints the Logo on the screen 
