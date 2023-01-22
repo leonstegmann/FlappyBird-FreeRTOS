@@ -12,4 +12,15 @@ void createMasterTask();
  */
 void deleteMasterTask();
 
+/**
+ * @brief Opens the UDP connection from the master's side.
+ * This Function is already called once when creating the master FreeRTOS-task in 'createMasterTask()'.
+ */
+void initUDPConnectionMaster();
+
+/**
+ * @brief  Closes the UDP connection from the master's side.
+ */
+void closeUDPConnectionMaster();
+
 #endif // __UDP_MASTER_H_

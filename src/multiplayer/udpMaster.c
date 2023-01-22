@@ -36,15 +36,26 @@ void masterRecv(size_t recv_size, char *buffer, void *args){
 }
 
 void initUDPConnectionMaster(){
-
-    master_UDP_handle = aIOOpenUDPSocket(NULL, MISO_Port, UDP_BUFFER_SIZE, masterRecv, NULL );
-
+    if(master_UDP_handle == NULL){
+        master_UDP_handle = aIOOpenUDPSocket(NULL, MISO_Port, UDP_BUFFER_SIZE, masterRecv, NULL );
+        printf("Opened Master Connection");
+    }
     if(master_UDP_handle == NULL){  
         PRINT_ERROR("FAILED TO OPEN SLave UDP Socket");
         exit(EXIT_FAILURE);
     }
+    if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
+        ip_and_port.port = MOSI_Port;
+        xSemaphoreGive(ip_and_port.lock);
+    }
 }
 
+void closeUDPConnectionMaster(){
+    if(master_UDP_handle != NULL){
+        aIOCloseConn(master_UDP_handle);
+        printf("Closed Master Connection\n");
+    }
+}
 void masterSend(){
 
     int send_val = rand()%10;
