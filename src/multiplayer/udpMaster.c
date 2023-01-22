@@ -27,11 +27,31 @@
 
 #define UDP_BUFFER_SIZE 2000
 
+/* Master UDP Socket for Receiving Data */
 static aIO_handle_t master_UDP_handle = NULL;
 
+/* Master Task running and Sending Data*/
 static TaskHandle_t MasterTask = NULL;
 
 void masterRecv(size_t recv_size, char *buffer, void *args){
+
+    int recv_val = *((int*) buffer);
+
+    printf(" Master Received %ld (bytes): %d\n", recv_size, recv_val);
+
+}
+
+void masterSend(){
+
+    int send_val = rand()%10;
+
+    /* Sending via UDP from Master to Slave*/
+    if(aIOSocketPut(UDP, IP4_SLAVE_ADDR, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
+        PRINT_ERROR("FAILED TO SEND from MASTER");
+    }
+    else {
+        printf("Master SEDNING: (random number) %d\n", send_val); 
+    }
 
 }
 
@@ -51,21 +71,6 @@ void initUDPConnectionMaster(){
     }
 }
 
-void masterSend(){
-
-    int send_val = rand()%10;
-
-    /* Sending via UDP from Master to Slave*/
-    if(aIOSocketPut(UDP, IP4_SLAVE_ADDR, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
-        PRINT_ERROR("FAILED TO SEND from MASTER");
-    }
-    else {
-        printf("SEDNING: (random number) %d\n", send_val); 
-    }
-
-}
-
-
 void vMasterTask(void *pvParameters){
 
     /* for Receiving on Master */
@@ -74,11 +79,10 @@ void vMasterTask(void *pvParameters){
     if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
         while (1) {
             masterSend();
-            vTaskDelay(500);
+            vTaskDelay(1000);
         }
     }
 }
-
 
 void createMasterTask(){
     if(MasterTask == NULL)

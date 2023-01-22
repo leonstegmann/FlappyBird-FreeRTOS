@@ -31,18 +31,23 @@ static aIO_handle_t slave_UDP_handle = NULL;
 
 void slaveRecv(size_t recv_size, char *buffer, void *args){
 
-    //char recv_val[10] = *buffer;
     int recv_val = *((int*) buffer);
 
     printf(" Slave Received %ld (bytes): %d\n", recv_size, recv_val);
 
+    slaveSend(recv_val);
 
 }
 
 void slaveSend(int send_val){
     /* Sending via UDP from Slave to Master*/
-    if(aIOSocketPut(UDP, IP4_HOST_ADDR, MISO_Port, (char *) &send_val, sizeof(send_val)))
+    if(aIOSocketPut(UDP, IP4_HOST_ADDR, MISO_Port, (char *) &send_val, sizeof(send_val))){
         PRINT_ERROR("FAILED TO SEND from SLAVE");
+    }
+    else {
+        printf("Slave SEDNING: %d\n", send_val); 
+    }
+
 }
 
 void initUDPConnectionSlave(){
