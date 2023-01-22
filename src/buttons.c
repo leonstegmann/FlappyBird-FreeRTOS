@@ -66,7 +66,6 @@ void setButtonColour(unsigned int colour, int keyvalue){
 
 int checkButton(int keyvalue){
     int ret = 0;
-    xGetButtonInput(); // read in current state of all buttons on the keyboard                
     if (xSemaphoreTake(buttons.lock, 0) == pdTRUE) {
         if (buttons.currentState[keyvalue]) { // Equiv to SDL_SCANCODE_Q
             TickType_t now = xTaskGetTickCount();
@@ -80,5 +79,25 @@ int checkButton(int keyvalue){
         xSemaphoreGive(buttons.lock);
 		}
     buttons.prevState[keyvalue] = buttons.currentState[keyvalue];
+    return ret;
+}
+
+
+char vCheckArrowInput() {
+    char ret = 'N';
+
+        if (checkButton(KEYCODE(UP))) {
+            ret = 'U';
+        }
+        else if (checkButton(KEYCODE(DOWN))) {
+            ret = 'D';
+        }
+        else if (checkButton(KEYCODE(LEFT))) {
+            ret = 'L';
+        }
+        else if (checkButton(KEYCODE(RIGHT))) {
+            ret = 'R';
+        }
+
     return ret;
 }

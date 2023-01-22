@@ -1,3 +1,6 @@
+/* Standard library includes */
+#include <stdio.h> // for scanf
+
 /* FreeRTOS includes  */
 #include "FreeRTOS.h"
 #include "semphr.h" // for buttons.lock
@@ -20,6 +23,53 @@
 
 TaskHandle_t PlayScreen = NULL;
 
+void setScoreCheat(bird_t* player){    
+    printf("in CHEAT Score Mode\n");
+    short newScore = player->score;
+    bool finished = false;
+    do{ 
+        if(DrawSignal)
+            if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
+                tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
+                tumDrawClear(Grey); // Clear screen
+                drawPause();
+                drawScore(newScore);                
+            }
+        xGetButtonInput();
+        if(checkButton(KEYCODE(S)))
+            finished = true;
+        switch (vCheckArrowInput()){
+            case 'U':
+                newScore++;
+                break;
+            case 'D':
+                newScore--;
+                break;
+            default:
+                break;
+        }
+        vTaskDelay(10);   
+    } while(finished == false);
+    player->score = newScore;
+}
+
+void godMode(bird_t* player){
+    player->godMode = !player->godMode; // turn GodMode on/ off
+    if(player->godMode == false) 
+        printf("Back to Normal MODE\n");
+    else 
+        printf("GOD MODE ACTIVATED!\n");
+}
+
+void pauseGame(){
+    bool pause = true;  
+    do {
+        xGetButtonInput();
+        vTaskDelay((TickType_t) 10);
+        if (checkButton(KEYCODE(P)))
+            pause = false;
+    } while(pause);
+}
 
 void vPlayScreen(){
 
@@ -31,7 +81,7 @@ void vPlayScreen(){
     TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
     bird_t* player1 = createNewPlayer();
-
+     
     /* create Pipes (here decided for having a maxium amount of 2 pipes on the screen)*/
     pipes_t* pipe1 = newPipe();
     pipes_t* pipe2 = newPipe();
@@ -41,7 +91,7 @@ void vPlayScreen(){
     initHighscore();
 
     while(1){
-    
+        xGetButtonInput();
         if(DrawSignal) {
 
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
@@ -59,7 +109,7 @@ void vPlayScreen(){
 
                 drawScore(player1->score);
                 
-                if(checkCollision(player1, pipe1, pipe2)) {
+                if(!player1->godMode && checkCollision(player1, pipe1, pipe2)) {
                     tumSoundPlayUserSample("hit.wav");
                     resetPlayer(player1);
                     resetPipes(pipe1, pipe2);
@@ -67,9 +117,15 @@ void vPlayScreen(){
                     states_set_state(2);
 
                 } 
-                else if(checkButton(KEYCODE(U))){
+                else if(checkButton(KEYCODE(P))){
                         drawPause();
                         pauseGame();
+                }
+                else if (checkButton(KEYCODE(G))){
+                    godMode(player1);
+                }
+                else if (checkButton(KEYCODE(S))){
+                    setScoreCheat(player1);
                 }
                 else {
                     if(checkButton(KEYCODE(SPACE))){
@@ -92,15 +148,6 @@ void vPlayScreen(){
             }
         }    
     }
-}
-
-void pauseGame(){
-    bool pause = true;  
-    do {
-        vTaskDelay((TickType_t) 10);
-        if (checkButton(KEYCODE(U)))
-            pause = false;
-    } while(pause);
 }
 
 int createPlayTask(){

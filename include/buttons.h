@@ -16,9 +16,14 @@
  * extern buttons_buffer_t buttons
  * @endcode
  * 
- * To call simply use: (here example with button Q)
+ * To call simply use first
  * @code
- * if( checkButton(KEYCODE(Q)))
+ * xGetButtonInput()
+ * @endcode
+ * to capture the current values for pressed buttons.
+ * Follow that command by (here example with button Q)
+ * @code
+ * if( chekcButton(KEYCODE(Q)))
  * @endcode
  * To check if a specific Button was pressed. 
  * This function already considers the Debounce Delay,
@@ -79,5 +84,11 @@ void setButtonPosition(coord_t , int );
  * @param keyvalue intakes the "#define KEYCODE(CHAR)" from the "SDL_SCANCODE_##CHAR" as "int"
  */ 
 void setButtonColour(unsigned int , int );
+
+/**
+ * @brief Checks if one of the Arrow Keys was pressed 
+ * @return returns the first Letter of the Arrow Key as char e.g. UP return 'U'
+ */ 
+char vCheckArrowInput();
 
 #endif //__BUTTONS_H__
