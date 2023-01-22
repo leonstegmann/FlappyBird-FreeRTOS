@@ -56,7 +56,8 @@ void initUDPConnectionSlave(){
         exit(EXIT_FAILURE);
     }
     if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
-        ip_and_port.port = MISO_Port;
+        ip_and_port.port_in = MOSI_Port;
+        ip_and_port.port_out = MISO_Port; 
         xSemaphoreGive(ip_and_port.lock);
     }
 }

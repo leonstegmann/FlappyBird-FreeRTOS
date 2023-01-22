@@ -25,7 +25,7 @@
 
 static TaskHandle_t IPScreen = NULL;
 
-ip_port_t ip_and_port =  { .lock = NULL, .IP = { 10, 181, 72, 199 }, .port = 12345 };
+ip_port_t ip_and_port =  { .lock = NULL, .IP4 = { 10, 181, 72, 199 }, .port_in = 12345 };
 
 
 #define OCTET_Y SCREEN_HEIGHT * 4/10
@@ -147,22 +147,22 @@ void vIPScreen(void *pvParameters)
                 switch (vCheckArrowInput()) {
                     case UP:
                         if (selected_octet == 4) {
-                            ip_and_port.port++;
+                            ip_and_port.port_in++;
                         }
                         else
-                            ip_and_port.IP[selected_octet] =
-                                (ip_and_port.IP
+                            ip_and_port.IP4[selected_octet] =
+                                (ip_and_port.IP4
                                  [selected_octet] +
                                  1) %
                                 255;
                         break;
                     case DOWN:
                         if (selected_octet == 4) {
-                            ip_and_port.port--;
+                            ip_and_port.port_in--;
                         }
                         else
-                            ip_and_port.IP[selected_octet] =
-                                (ip_and_port.IP
+                            ip_and_port.IP4[selected_octet] =
+                                (ip_and_port.IP4
                                  [selected_octet] -
                                  1) %
                                 255;
@@ -203,7 +203,7 @@ void vIPScreen(void *pvParameters)
 
             /* DRAW IP*/
             if (xSemaphoreTake(ip_and_port.lock, 0) == pdTRUE) {
-                vDrawIP(ip_and_port.IP, ip_and_port.port);
+                vDrawIP(ip_and_port.IP4, ip_and_port.port_in);
                 xSemaphoreGive(ip_and_port.lock);
             }
         } //END drawSignal
@@ -216,11 +216,13 @@ void vIPScreen(void *pvParameters)
         if(checkButton(KEYCODE(H))){
             printf("Host\n");
             sprintf(host_or_guest,"YOU ARE HOST NOW");
+            closeUDPConnectionSlave();
             createMasterTask();
         }        
         if(checkButton(KEYCODE(G))){
             printf("Guest\n");
             sprintf(host_or_guest,"YOU ARE GUEST NOW");
+            closeUDPConnectionMaster();
             initUDPConnectionSlave();
         }
         if (checkButton(KEYCODE(B))){

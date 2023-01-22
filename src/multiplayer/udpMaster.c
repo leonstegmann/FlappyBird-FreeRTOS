@@ -38,14 +38,15 @@ void masterRecv(size_t recv_size, char *buffer, void *args){
 void initUDPConnectionMaster(){
     if(master_UDP_handle == NULL){
         master_UDP_handle = aIOOpenUDPSocket(NULL, MISO_Port, UDP_BUFFER_SIZE, masterRecv, NULL );
-        printf("Opened Master Connection");
+        printf("Opened Master Connection\n");
     }
     if(master_UDP_handle == NULL){  
         PRINT_ERROR("FAILED TO OPEN SLave UDP Socket");
         exit(EXIT_FAILURE);
     }
     if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
-        ip_and_port.port = MOSI_Port;
+        ip_and_port.port_in = MISO_Port;
+        ip_and_port.port_out = MOSI_Port;
         xSemaphoreGive(ip_and_port.lock);
     }
 }

@@ -11,8 +11,9 @@
 
 typedef struct ip_port {
     SemaphoreHandle_t lock;
-    unsigned char IP[4];
-    unsigned int port;
+    unsigned char IP4[4];
+    unsigned int port_in;
+    unsigned int port_out;
 } ip_port_t; 
 
 extern ip_port_t ip_and_port;
