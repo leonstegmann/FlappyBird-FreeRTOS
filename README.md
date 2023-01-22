@@ -1,6 +1,6 @@
 ![Algorithm schema](./resources/images/FlappyBird.png) 
 
-# on FreeRTOS
+# on FreeRTOS-Emulator
 
 As final project of the Course ESPL it is to create the well known game Flappy Bird using the FreeRTOS Emulator.
 
