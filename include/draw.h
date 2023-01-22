@@ -33,6 +33,10 @@
 #define LOGO_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150}
 #define HIGHSCORE_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}
 
+#define ARROW_OFFSET 50
+#define ARROW_HEIGHT 10
+#define ARROW_WIDTH 10
+
 /**
  * @brief Draws the uppeer and lower pipe allocated around the Gap center.
  * @param pipe Pipe Object 

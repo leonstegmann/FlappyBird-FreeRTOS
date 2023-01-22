@@ -28,6 +28,7 @@
 #define GOLDCOIN_FILENAME "goldCoin.png"
 #define SILVERCOIN_FILENAME "silverCoin.png"
 #define BRONZECOIN_FILENAME "bronzeCoin.png"
+#define MULTIPLAYER_FILENAME "Multiplayer.png"
 
 /* Definitions for drawButton */
 #define BOX_COLOUR Teal
@@ -44,6 +45,7 @@ image_handle_t highScore = NULL;
 image_handle_t goldCoin = NULL;
 image_handle_t silverCoin = NULL;
 image_handle_t bronzeCoin = NULL;
+image_handle_t multiplayerImage = NULL;
 spritesheet_handle_t floorSpritesheet = NULL;
 spritesheet_handle_t yellowBirdSpritesheet = NULL;
 spritesheet_handle_t redBirdSpritesheet = NULL;
@@ -65,6 +67,17 @@ void drawPause(){
         image_width = tumDrawGetLoadedImageWidth(pauseImage);    
     tumDrawLoadedImage(pauseImage,SCREEN_CENTER.x - image_width/2, 0.5 * SCREEN_CENTER.y - image_height/2);
 
+}
+
+void drawMultiplayerLogo(coord_t pos){
+    static int image_height;
+    static int image_width;
+
+    if (multiplayerImage == NULL)
+        multiplayerImage = tumDrawLoadScaledImage( MULTIPLAYER_FILENAME,1.2);
+    if ((image_height = tumDrawGetLoadedImageHeight(multiplayerImage)) != -1)
+        image_width = tumDrawGetLoadedImageWidth(multiplayerImage);    
+    tumDrawLoadedImage(multiplayerImage, pos.x - image_width/2, pos.y - image_height/2);
 }
 
 void drawPipe(pipes_t* pipe){
