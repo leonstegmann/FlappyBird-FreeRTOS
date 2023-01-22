@@ -36,7 +36,9 @@
 
 TaskHandle_t BufferSwap = NULL;
 
-SemaphoreHandle_t DrawSignal;
+SemaphoreHandle_t DrawSignal = NULL;
+
+QueueHandle_t ColourQueue = NULL;
 
 int main(int argc, char *argv[])
 {
@@ -63,6 +65,12 @@ int main(int argc, char *argv[])
     if (!DrawSignal) {
         printf("Failed to create draw signal\n");
         goto err_draw_signal;
+    }
+
+    ColourQueue = xQueueCreate(1, sizeof(short));
+    if (!ColourQueue) {
+        printf("Could not open colour queue");
+        goto err_collourQueueDelete;
     }
 
     // Load Font
@@ -115,6 +123,8 @@ int main(int argc, char *argv[])
     err_bufferSwapTask:
         buttonsExit();
     err_buttonsInit:
+        vQueueDelete(ColourQueue);
+    err_collourQueueDelete:
         tumSoundExit();
     err_tumSoundInit:
 	    vSemaphoreDelete(DrawSignal);

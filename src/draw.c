@@ -48,10 +48,14 @@ image_handle_t bronzeCoin = NULL;
 image_handle_t multiplayerImage = NULL;
 spritesheet_handle_t floorSpritesheet = NULL;
 spritesheet_handle_t yellowBirdSpritesheet = NULL;
+spritesheet_handle_t redBirdSpritesheet = NULL;
+spritesheet_handle_t blueBirdSpritesheet = NULL;
 
 /* Animation Handle */
 sequence_handle_t forwardSequence = NULL;
-sequence_handle_t flappingBird = NULL;
+sequence_handle_t yellowFlappingBird = NULL;
+sequence_handle_t redFlappingBird = NULL;
+sequence_handle_t blueFlappingBird = NULL;
 
 void drawPause(){
     static int image_height;
@@ -370,19 +374,50 @@ void drawInitAnnimations(void)
     // Set sequence handle with time in ms between the frames
     forwardSequence = tumDrawAnimationSequenceInstantiate(floorAnimation, "FORWARDS",
                                             40);
-    /* Init bird animations */
+
+    /* Init yellow bird animations */
     char *yellowbird_spritesheet_path = tumUtilFindResourcePath("yellowbird_spritesheet.png");
     
     image_handle_t yellowBirdSpritesheetImage = tumDrawLoadImage(yellowbird_spritesheet_path);
 
     yellowBirdSpritesheet = tumDrawLoadSpritesheet(yellowBirdSpritesheetImage, 4, 1);
 
-    animation_handle_t birdAnimation = tumDrawAnimationCreate(yellowBirdSpritesheet);
+    animation_handle_t yellowBirdAnimation = tumDrawAnimationCreate(yellowBirdSpritesheet);
 
-    tumDrawAnimationAddSequence(birdAnimation, "FLAPPING", 0, 0,
+    tumDrawAnimationAddSequence(yellowBirdAnimation, "FLAPPING", 0, 0,
                                 SPRITE_SEQUENCE_HORIZONTAL_POS, 4);
 
-    flappingBird = tumDrawAnimationSequenceInstantiate(birdAnimation, "FLAPPING",
+    yellowFlappingBird = tumDrawAnimationSequenceInstantiate(yellowBirdAnimation, "FLAPPING",
+                                           120);
+                                        
+    /* Init red bird animations */
+    char *redbird_spritesheet_path = tumUtilFindResourcePath("redbird_spritesheet.png");
+    
+    image_handle_t redBirdSpritesheetImage = tumDrawLoadImage(redbird_spritesheet_path);
+
+    redBirdSpritesheet = tumDrawLoadSpritesheet(redBirdSpritesheetImage, 4, 1);
+
+    animation_handle_t redBirdAnimation = tumDrawAnimationCreate(redBirdSpritesheet);
+
+    tumDrawAnimationAddSequence(redBirdAnimation, "FLAPPING", 0, 0,
+                                SPRITE_SEQUENCE_HORIZONTAL_POS, 4);
+
+    redFlappingBird = tumDrawAnimationSequenceInstantiate(redBirdAnimation, "FLAPPING",
+                                           120);
+                                        
+    /* Init blue bird animations */
+    char *bluebird_spritesheet_path = tumUtilFindResourcePath("bluebird_spritesheet.png");
+    
+    image_handle_t blueBirdSpritesheetImage = tumDrawLoadImage(bluebird_spritesheet_path);
+
+    blueBirdSpritesheet = tumDrawLoadSpritesheet(blueBirdSpritesheetImage, 4, 1);
+
+    animation_handle_t blueBirdAnimation = tumDrawAnimationCreate(blueBirdSpritesheet);
+
+    tumDrawAnimationAddSequence(blueBirdAnimation, "FLAPPING", 0, 0,
+                                SPRITE_SEQUENCE_HORIZONTAL_POS, 4);
+
+    blueFlappingBird = tumDrawAnimationSequenceInstantiate(blueBirdAnimation, "FLAPPING",
                                            120);
 }
 
@@ -392,21 +427,6 @@ void drawFloorAnnimations(TickType_t xLastFrameTime)
     tumDrawAnimationDrawFrame(forwardSequence,
         xTaskGetTickCount() - xLastFrameTime,
         0, SCREEN_HEIGHT - FLOOR_HEIGHT);
-}
-
-/* Function to draw bird animation */
-void drawBirdAnnimations(TickType_t xLastFrameTime)
-{
-    tumDrawAnimationDrawFrame(flappingBird,
-        xTaskGetTickCount() - xLastFrameTime,
-        SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
-}
-
-/* Function to draw bird animation */
-void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player){
-    tumDrawAnimationDrawFrame(flappingBird,
-        xTaskGetTickCount() - xLastFrameTime,
-        player->pos.x, player->pos.y);
 }
 
 void drawArrow(char orientation, coord_t point)
@@ -428,5 +448,70 @@ void drawArrow(char orientation, coord_t point)
             };
             tumDrawTriangle(points, Black);
         } break;
+        case LEFT: {
+            coord_t points[3] = {
+                { point.x, point.y },
+                { point.x + ARROW_WIDTH , point.y + ARROW_HEIGHT/2 },
+                { point.x + ARROW_WIDTH , point.y - ARROW_HEIGHT/2 }
+            };
+            tumDrawTriangle(points, Black);
+        } break;
+        case RIGHT: {
+            coord_t points[3] = {
+                { point.x, point.y },
+                { point.x - ARROW_WIDTH , point.y + ARROW_HEIGHT/2 },
+                { point.x - ARROW_WIDTH , point.y - ARROW_HEIGHT/2 }
+            };
+            tumDrawTriangle(points, Black);
+        } break;
     }
+}
+
+/* Function to draw bird animation */
+void drawBirdAnnimations(TickType_t xLastFrameTime, int colour) 
+{   
+    coord_t left_arrow = {BIRD_MENU_POS.x - 35 , BIRD_MENU_POS.y + 24/2 };
+    coord_t right_arrow = {BIRD_MENU_POS.x + 67 , BIRD_MENU_POS.y + 24/2 };
+
+    if (colour == YELLOW) {
+        tumDrawAnimationDrawFrame(yellowFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            BIRD_MENU_POS.x, BIRD_MENU_POS.y - 10*sin(xLastFrameTime/(80*3.14)));
+    }
+    else if (colour == RED) {
+        tumDrawAnimationDrawFrame(redFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            BIRD_MENU_POS.x, BIRD_MENU_POS.y - 10*sin(xLastFrameTime/(80*3.14)));
+    }
+    else if (colour == BLUE) {
+        tumDrawAnimationDrawFrame(blueFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            BIRD_MENU_POS.x, BIRD_MENU_POS.y - 10*sin(xLastFrameTime/(80*3.14)));
+    }
+
+    drawArrow(LEFT, left_arrow);
+    drawArrow(RIGHT, right_arrow);
+
+}
+
+/* Function to draw bird animation */
+void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int colour) 
+{
+    
+    if (colour == YELLOW) {
+        tumDrawAnimationDrawFrame(yellowFlappingBird,
+        xTaskGetTickCount() - xLastFrameTime,
+        player->pos.x, player->pos.y);;
+    }
+    else if (colour == RED) {
+        tumDrawAnimationDrawFrame(redFlappingBird,
+        xTaskGetTickCount() - xLastFrameTime,
+        player->pos.x, player->pos.y);
+    }
+    else if (colour == BLUE) {
+        tumDrawAnimationDrawFrame(blueFlappingBird,
+        xTaskGetTickCount() - xLastFrameTime,
+        player->pos.x, player->pos.y);
+    }
+
 }

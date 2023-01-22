@@ -17,6 +17,11 @@
 #define IP4_HOST_ADDR "192.168.0.68" // Leons VM : "192.168.0.68"
 #define IP4_SLAVE_ADDR "192.168.0.120" // Leons Manjaro: "192.168.0.120"
 
+/* Bird colours */
+#define YELLOW 1
+#define RED 2
+#define BLUE 3
+
 /* char Defines for the arrow key Buttons*/
 #define NONE 'N'
 #define LEFT 'L'
