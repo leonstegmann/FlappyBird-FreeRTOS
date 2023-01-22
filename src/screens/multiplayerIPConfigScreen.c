@@ -198,7 +198,7 @@ void vIPScreen(void *pvParameters)
             drawMultiplayerLogo(LOGO_POSITION);
             drawButton(LOWER_LEFT_BUTTON_POSITION, "Back", xLastFrameTime);
             drawButton(MIDDLE_BUTTON_POSITION, "Host", xLastFrameTime); // Master
-            drawButton(LOWER_RIGHT_BUTTON_POSITION,"Guest", xLastFrameTime); // Slave
+            drawButton(RIGHT_BUTTON_POSITION,"Guest", xLastFrameTime); // Slave
             tumDrawText( host_or_guest, MIDDLE_BUTTON_POSITION.x - 30, MIDDLE_BUTTON_POSITION.y - 50, Orange);
             drawFPS();
             if(connected){
