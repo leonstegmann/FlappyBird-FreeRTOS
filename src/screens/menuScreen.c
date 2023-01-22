@@ -14,15 +14,40 @@
 #include "draw.h"
 #include "states.h" //for set_stages()
 #include "stateMachine.h"
-
-#define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
-#define mainGENERIC_STACK_SIZE ((unsigned short)2560)
+#include "defines.h"
 
 TaskHandle_t MenuScreen = NULL;
+
+short changeBirdColour(short colour) {
+
+    switch (vCheckArrowInput()){
+
+        case 'R':
+            if(colour == BLUE) {
+                colour = YELLOW;
+            } else {
+                colour++;
+            }
+            return colour;
+
+        case 'L':
+            if(colour == YELLOW) {
+                colour = BLUE;
+            } else {
+                colour--;
+            }
+            return colour;
+
+        default:
+            return colour;
+    }
+}
 
 void vMenuScreen() {
     // Time of the last drawn frame
     TickType_t xLastFrameTime = xTaskGetTickCount();
+    
+    short colour = 1;
 
     drawInitAnnimations();
 
@@ -35,7 +60,7 @@ void vMenuScreen() {
                 drawButton(RIGHT_BUTTON_POSITION, "Score", xLastFrameTime);
                 drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
-                drawBirdAnnimations(xLastFrameTime);
+                drawBirdAnnimations(xLastFrameTime, colour);
 
                 // Time after everything is drawn
                 xLastFrameTime = xTaskGetTickCount();
@@ -44,14 +69,16 @@ void vMenuScreen() {
                 drawFPS();
             }
         }
-        xGetButtonInput();                
+        xGetButtonInput(); 
+        colour = changeBirdColour(colour);   
+        xQueueOverwrite(ColourQueue, &colour);           
         if(checkButton(KEYCODE(P))){            
             states_set_state(1);                 
         }
         if(checkButton(KEYCODE(S))){
             states_set_state(3);                       
         }
-
+        
     }
 }
 
@@ -77,5 +104,6 @@ void enterMenuTask(void){
 }
 
 void exitMenuTask(){
+    
     vTaskSuspend(MenuScreen);
 }
