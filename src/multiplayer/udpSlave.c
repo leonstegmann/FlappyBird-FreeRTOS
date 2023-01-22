@@ -30,6 +30,8 @@
 
 static aIO_handle_t slave_UDP_handle = NULL;
 
+char ip_str[20] = " ";
+
 void slaveSend(char* ip_addr, int send_val){
 
     /* Sending via UDP from Slave to Master*/
@@ -53,7 +55,7 @@ void slaveRecv(size_t recv_size, char *buffer, void *args){
 
 void initUDPConnectionSlave(){
     
-    char ip_str[20] = " ";
+    
     /* Opening UDP connection */
     if(slave_UDP_handle == NULL){
         if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
