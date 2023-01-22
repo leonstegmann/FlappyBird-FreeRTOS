@@ -13,4 +13,9 @@
 #define LOWER_PIPE_FILENAME "bottomPipe.png"
 #define UPPER_PIPE_FILENAME "topPipe.png"
 
+/* Bird colours */
+#define YELLOW 1
+#define RED 2
+#define BLUE 3
+
 #endif //__DEFINES_H__
