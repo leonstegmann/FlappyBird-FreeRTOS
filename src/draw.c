@@ -416,49 +416,6 @@ void drawFloorAnnimations(TickType_t xLastFrameTime)
         0, SCREEN_HEIGHT - FLOOR_HEIGHT);
 }
 
-/* Function to draw bird animation */
-void drawBirdAnnimations(TickType_t xLastFrameTime, int colour) 
-{   
-    if (colour == YELLOW) {
-        tumDrawAnimationDrawFrame(yellowFlappingBird,
-            xTaskGetTickCount() - xLastFrameTime,
-            SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
-    }
-    else if (colour == RED) {
-        tumDrawAnimationDrawFrame(redFlappingBird,
-            xTaskGetTickCount() - xLastFrameTime,
-            SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
-    }
-    else if (colour == BLUE) {
-        tumDrawAnimationDrawFrame(blueFlappingBird,
-            xTaskGetTickCount() - xLastFrameTime,
-            SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
-    }
-
-}
-
-/* Function to draw bird animation */
-void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int colour) 
-{
-    
-    if (colour == YELLOW) {
-        tumDrawAnimationDrawFrame(yellowFlappingBird,
-        xTaskGetTickCount() - xLastFrameTime,
-        player->pos.x, player->pos.y);;
-    }
-    else if (colour == RED) {
-        tumDrawAnimationDrawFrame(redFlappingBird,
-        xTaskGetTickCount() - xLastFrameTime,
-        player->pos.x, player->pos.y);
-    }
-    else if (colour == BLUE) {
-        tumDrawAnimationDrawFrame(blueFlappingBird,
-        xTaskGetTickCount() - xLastFrameTime,
-        player->pos.x, player->pos.y);
-    }
-
-}
-
 #define ARROW_OFFSET 50
 #define ARROW_HEIGHT 10
 #define ARROW_WIDTH 10
@@ -483,4 +440,51 @@ void drawArrow(char orientation, coord_t point)
             tumDrawTriangle(points, Black);
         } break;
     }
+}
+
+/* Function to draw bird animation */
+void drawBirdAnnimations(TickType_t xLastFrameTime, int colour) 
+{   
+    if (colour == YELLOW) {
+        tumDrawAnimationDrawFrame(yellowFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            BIRD_MENU_POS.x, BIRD_MENU_POS.y - 10*sin(xLastFrameTime/(80*3.14)));
+    }
+    else if (colour == RED) {
+        tumDrawAnimationDrawFrame(redFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
+    }
+    else if (colour == BLUE) {
+        tumDrawAnimationDrawFrame(blueFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
+    }
+
+    drawArrow(UP, )
+
+}
+
+/* Function to draw bird animation */
+void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int colour) 
+{
+    
+    if (colour == YELLOW) {
+        tumDrawAnimationDrawFrame(yellowFlappingBird,
+        xTaskGetTickCount() - xLastFrameTime,
+        player->pos.x, player->pos.y);;
+    }
+    else if (colour == RED) {
+        tumDrawAnimationDrawFrame(redFlappingBird,
+        xTaskGetTickCount() - xLastFrameTime,
+        player->pos.x, player->pos.y);
+    }
+    else if (colour == BLUE) {
+        tumDrawAnimationDrawFrame(blueFlappingBird,
+        xTaskGetTickCount() - xLastFrameTime,
+        player->pos.x, player->pos.y);
+    }
+
+
+
 }

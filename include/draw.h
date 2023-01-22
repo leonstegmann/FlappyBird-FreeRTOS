@@ -28,6 +28,8 @@
 #define LOWER_RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.75, SCREEN_HEIGHT/2 + 150}
 #define LOWER_MIDDLE_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH/2, SCREEN_HEIGHT/2 + 150}
 
+#define BIRD_MENU_POS (coord_t) {SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300}B
+
 #define LOGO_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150}
 #define HIGHSCORE_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}
 
@@ -100,7 +102,7 @@ void drawScore(unsigned short count);
  * @param orientation UP, DOWN, RIGHT or LEFT
  * @param point coordinat of the position   
  */
-void drawArrow(char orientation, coord_t point)
+void drawArrow(char orientation, coord_t point);
 
 /**
  * @brief Draws Pause Text
