@@ -100,7 +100,7 @@ void drawScore(unsigned short count);
  * @param orientation UP, DOWN, RIGHT or LEFT
  * @param point coordinat of the position   
  */
-void drawArrow(char orientation, coord_t point)
+void drawArrow(char orientation, coord_t point);
 
 /**
  * @brief Draws Pause Text
