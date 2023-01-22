@@ -24,7 +24,7 @@
 TaskHandle_t PlayScreen = NULL;
 
 void setScoreCheat(bird_t* player){    
-    printf("in CHEAT Score Mode");
+    printf("in CHEAT Score Mode\n");
     short newScore = player->score;
     bool finished = false;
     do{ 
