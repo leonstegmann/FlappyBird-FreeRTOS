@@ -195,6 +195,7 @@ void vIPScreen(void *pvParameters)
 
             /* DRAW */
             drawBackround();
+            drawFloorAnnimations(xLastFrameTime);
             drawMultiplayerLogo(LOGO_POSITION);
             drawButton(LOWER_LEFT_BUTTON_POSITION, "Back", xLastFrameTime);
             drawButton(MIDDLE_BUTTON_POSITION, "Host", xLastFrameTime); // Master
