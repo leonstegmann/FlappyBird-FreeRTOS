@@ -18,4 +18,11 @@
 #define RED 2
 #define BLUE 3
 
+/* char Defines for the arrow key Buttons*/
+#define NONE 'N'
+#define LEFT 'L'
+#define RIGHT 'R'
+#define UP 'U'
+#define DOWN 'D'
+
 #endif //__DEFINES_H__
