@@ -409,10 +409,6 @@ void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player){
         player->pos.x, player->pos.y);
 }
 
-#define ARROW_OFFSET 50
-#define ARROW_HEIGHT 10
-#define ARROW_WIDTH 10
-
 void drawArrow(char orientation, coord_t point)
 {
     switch (orientation) {

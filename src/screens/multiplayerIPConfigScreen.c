@@ -69,31 +69,31 @@ void drawArrows(unsigned int selected_octet){
                     coord_t up = { FIRST_OCTET, OCTET_Y - ARROW_OFFSET };
                     drawArrow(UP, up);
                     coord_t down = { FIRST_OCTET, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
+                    drawArrow(DOWN, down);
                 } break;
                 case 1: {
                     coord_t up = { SECOND_OCTET, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
+                    drawArrow(UP, up);
                     coord_t down = { SECOND_OCTET, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
+                    drawArrow(DOWN, down);
                 } break;
                 case 2: {
                     coord_t up = { THIRD_OCTET, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
+                    drawArrow(UP, up);
                     coord_t down = { THIRD_OCTET, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
+                    drawArrow(DOWN, down);
                 } break;
                 case 3: {
                     coord_t up = { FOURTH_OCTET, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
+                    drawArrow(UP, up);
                     coord_t down = { FOURTH_OCTET, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
+                    drawArrow(DOWN, down);
                 } break;
                 case 4: {
                     coord_t up = { PORT_X, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
+                    drawArrow(UP, up);
                     coord_t down = { PORT_X, OCTET_Y + ARROW_OFFSET };
-                    vDrawArrow(DOWN, down);
+                    drawArrow(DOWN, down);
                 } break;
                 default:
                     break;
