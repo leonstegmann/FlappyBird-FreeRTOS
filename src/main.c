@@ -69,6 +69,7 @@ int main(int argc, char *argv[])
     ColourQueue = xQueueCreate(1, sizeof(short));
     if (!ColourQueue) {
         printf("Could not open colour queue");
+        goto err_collourQueueDelete;
     }
 
     // Load Font
@@ -118,6 +119,8 @@ int main(int argc, char *argv[])
     err_bufferSwapTask:
         buttonsExit();
     err_buttonsInit:
+        vQueueDelete(ColourQueue);
+    err_collourQueueDelete:
         tumSoundExit();
     err_tumSoundInit:
 	    vSemaphoreDelete(DrawSignal);
