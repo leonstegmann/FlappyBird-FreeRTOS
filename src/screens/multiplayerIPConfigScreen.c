@@ -40,7 +40,7 @@ ip_port_t ip_and_port =  { .lock = NULL, .IP4 = { 192, 168, 0, 120}, .port_in = 
 
 void vDrawIP(unsigned char IP[4], unsigned int port)
 {
-    char buff[5];
+    char buff[10];
     sprintf(buff, "%u", IP[0]);
     tumDrawText(buff, FIRST_OCTET, OCTET_Y, Black);
     tumDrawText(".", FIRST_OCTET + 20, OCTET_Y, Black);

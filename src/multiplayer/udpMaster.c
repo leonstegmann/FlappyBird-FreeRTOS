@@ -71,7 +71,7 @@ void initUDPConnectionMaster(){
 
 void vMasterTask(void *pvParameters){
 
-    char ip_str[12] = " "; // saves the ip adress locally to safe resources ad value is use permanently
+    char ip_str[20] = " "; // saves the ip adress locally to safe resources ad value is use permanently
 
     /* for Receiving on Master */
     initUDPConnectionMaster(); 

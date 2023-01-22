@@ -53,7 +53,7 @@ void slaveRecv(size_t recv_size, char *buffer, void *args){
 
 void initUDPConnectionSlave(){
     
-    char ip_str[12] = " ";
+    char ip_str[20] = " ";
     /* Opening UDP connection */
     if(slave_UDP_handle == NULL){
         if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
