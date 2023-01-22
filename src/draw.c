@@ -390,7 +390,7 @@ void drawInitAnnimations(void)
     yellowFlappingBird = tumDrawAnimationSequenceInstantiate(yellowBirdAnimation, "FLAPPING",
                                            120);
                                         
-    /* Init yellow bird animations */
+    /* Init red bird animations */
     char *redbird_spritesheet_path = tumUtilFindResourcePath("redbird_spritesheet.png");
     
     image_handle_t redBirdSpritesheetImage = tumDrawLoadImage(redbird_spritesheet_path);
@@ -405,7 +405,7 @@ void drawInitAnnimations(void)
     redFlappingBird = tumDrawAnimationSequenceInstantiate(redBirdAnimation, "FLAPPING",
                                            120);
                                         
-    /* Init yellow bird animations */
+    /* Init blue bird animations */
     char *bluebird_spritesheet_path = tumUtilFindResourcePath("bluebird_spritesheet.png");
     
     image_handle_t blueBirdSpritesheetImage = tumDrawLoadImage(bluebird_spritesheet_path);
@@ -428,10 +428,6 @@ void drawFloorAnnimations(TickType_t xLastFrameTime)
         xTaskGetTickCount() - xLastFrameTime,
         0, SCREEN_HEIGHT - FLOOR_HEIGHT);
 }
-
-#define ARROW_OFFSET 50
-#define ARROW_HEIGHT 10
-#define ARROW_WIDTH 10
 
 void drawArrow(char orientation, coord_t point)
 {
