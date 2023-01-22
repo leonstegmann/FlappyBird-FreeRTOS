@@ -13,4 +13,11 @@
 #define LOWER_PIPE_FILENAME "bottomPipe.png"
 #define UPPER_PIPE_FILENAME "topPipe.png"
 
+/* char Defines for the arrow key Buttons*/
+#define NONE 'N'
+#define LEFT 'L'
+#define RIGHT 'R'
+#define UP 'U'
+#define DOWN 'D'
+
 #endif //__DEFINES_H__
