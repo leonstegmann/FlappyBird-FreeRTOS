@@ -23,6 +23,53 @@
 
 TaskHandle_t PlayScreen = NULL;
 
+void setScoreCheat(bird_t* player){    
+    printf("in CHEAT Score Mode\n");
+    short newScore = player->score;
+    bool finished = false;
+    do{ 
+        if(DrawSignal)
+            if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
+                tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
+                tumDrawClear(Grey); // Clear screen
+                drawPause();
+                drawScore(newScore);                
+            }
+        xGetButtonInput();
+        if(checkButton(KEYCODE(S)))
+            finished = true;
+        switch (vCheckArrowInput()){
+            case 'U':
+                newScore++;
+                break;
+            case 'D':
+                newScore--;
+                break;
+            default:
+                break;
+        }
+        vTaskDelay(10);   
+    } while(finished == false);
+    player->score = newScore;
+}
+
+void godMode(bird_t* player){
+    player->godMode = !player->godMode; // turn GodMode on/ off
+    if(player->godMode == false) 
+        printf("Back to Normal MODE\n");
+    else 
+        printf("GOD MODE ACTIVATED!\n");
+}
+
+void pauseGame(){
+    bool pause = true;  
+    do {
+        xGetButtonInput();
+        vTaskDelay((TickType_t) 10);
+        if (checkButton(KEYCODE(P)))
+            pause = false;
+    } while(pause);
+}
 
 void vPlayScreen(){
 
@@ -70,7 +117,7 @@ void vPlayScreen(){
                     states_set_state(2);
 
                 } 
-                else if(checkButton(KEYCODE(U))){
+                else if(checkButton(KEYCODE(P))){
                         drawPause();
                         pauseGame();
                 }
@@ -101,53 +148,6 @@ void vPlayScreen(){
             }
         }    
     }
-}
-
-void setScoreCheat(bird_t* player){    
-    printf("in CHEAT Score Mode");
-    short newScore = player->score;
-    bool finished = false;
-    do{ 
-        if(DrawSignal)
-            if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
-                tumEventFetchEvents(FETCH_EVENT_NONBLOCK);
-                tumDrawClear(Grey); // Clear screen
-                drawPause();
-                drawScore(newScore);                
-            }
-        xGetButtonInput();
-        if(checkButton(KEYCODE(S)))
-            finished = true;
-        switch (vCheckArrowInput()){
-            case 'U':
-                newScore++;
-                break;
-            case 'D':
-                newScore--;
-                break;
-            default:
-                break;
-        }
-        vTaskDelay(10);   
-    } while(finished == false);
-    player->score = newScore;
-}
-
-void godMode(bird_t* player){
-    player->godMode = !player->godMode; // turn GodMode on/ off
-    if(player->godMode == false) 
-        printf("Back to Normal MODE\n");
-    else 
-        printf("GOD MODE ACTIVATED!\n");
-}
-
-void pauseGame(){
-    bool pause = true;  
-    do {
-        vTaskDelay((TickType_t) 10);
-        if (checkButton(KEYCODE(U)))
-            pause = false;
-    } while(pause);
 }
 
 int createPlayTask(){

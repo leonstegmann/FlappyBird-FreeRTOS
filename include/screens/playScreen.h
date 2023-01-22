@@ -1,9 +1,6 @@
 #ifndef __PLAYSCREEN_H__
 #define __PLAYSCREEN_H__
 
-#include "FreeRTOS.h" // must appear in source files before other includes
-#include "objects.h" // for bird_t
-
 /**
  * @brief Creates the FreeRTOS Task.
  * @return Returns 0 on Succes, 1 on Error.
@@ -16,12 +13,5 @@ void enterPlayTask();
 void exitPlayTask();
 
 void pauseGame();
-
-/**
- * @brief Enables the GodMode for this player.
- */
-void godMode(bird_t* player);
-
-void setScoreCheat(bird_t* player);
 
 #endif // __PLAYSCREEN_H__

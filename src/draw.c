@@ -409,3 +409,28 @@ void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player){
         player->pos.x, player->pos.y);
 }
 
+#define ARROW_OFFSET 50
+#define ARROW_HEIGHT 10
+#define ARROW_WIDTH 10
+
+void drawArrow(char orientation, coord_t point)
+{
+    switch (orientation) {
+        case UP: {
+            coord_t points[3] = {
+                { point.x, point.y },
+                { point.x - ARROW_WIDTH / 2, point.y + ARROW_HEIGHT },
+                { point.x + ARROW_WIDTH / 2, point.y + ARROW_HEIGHT }
+            };
+            tumDrawTriangle(points, Black);
+        } break;
+        case DOWN: {
+            coord_t points[3] = {
+                { point.x, point.y },
+                { point.x - ARROW_WIDTH / 2, point.y - ARROW_HEIGHT },
+                { point.x + ARROW_WIDTH / 2, point.y - ARROW_HEIGHT }
+            };
+            tumDrawTriangle(points, Black);
+        } break;
+    }
+}
