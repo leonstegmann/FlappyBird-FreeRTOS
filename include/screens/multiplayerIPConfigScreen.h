@@ -1,12 +1,6 @@
 #ifndef __IPConfig_H_
 #define __IPConfig_H_
 
-#define NONE 'N'
-#define LEFT 'L'
-#define RIGHT 'R'
-#define UP 'U'
-#define DOWN 'D'
-
 typedef struct ip_port {
     SemaphoreHandle_t lock;
     unsigned char IP4[4];

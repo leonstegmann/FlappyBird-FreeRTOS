@@ -63,37 +63,11 @@ void vDrawIP(unsigned char IP[4], unsigned int port)
     tumDrawText(buff, SCREEN_WIDTH / 2 + 30, OCTET_Y - 20, Black);
 }
 
-#define ARROW_OFFSET 50
-#define ARROW_HEIGHT 10
-#define ARROW_WIDTH 10
-
-void vDrawArrow(char orientation, coord_t point)
-{
-    switch (orientation) {
-        case UP: {
-            coord_t points[3] = {
-                { point.x, point.y },
-                { point.x - ARROW_WIDTH / 2, point.y + ARROW_HEIGHT },
-                { point.x + ARROW_WIDTH / 2, point.y + ARROW_HEIGHT }
-            };
-            tumDrawTriangle(points, Black);
-        } break;
-        case DOWN: {
-            coord_t points[3] = {
-                { point.x, point.y },
-                { point.x - ARROW_WIDTH / 2, point.y - ARROW_HEIGHT },
-                { point.x + ARROW_WIDTH / 2, point.y - ARROW_HEIGHT }
-            };
-            tumDrawTriangle(points, Black);
-        } break;
-    }
-}
-
 void drawArrows(unsigned int selected_octet){
     switch (selected_octet) {
                 case 0: {
                     coord_t up = { FIRST_OCTET, OCTET_Y - ARROW_OFFSET };
-                    vDrawArrow(UP, up);
+                    drawArrow(UP, up);
                     coord_t down = { FIRST_OCTET, OCTET_Y + ARROW_OFFSET };
                     vDrawArrow(DOWN, down);
                 } break;
