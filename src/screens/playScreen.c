@@ -81,7 +81,11 @@ void vPlayScreen(){
     TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
     bird_t* player1 = createNewPlayer();
-     
+
+    short bird_colour;
+
+    xQueueReceive(ColourQueue, &bird_colour, 0);
+
     /* create Pipes (here decided for having a maxium amount of 2 pipes on the screen)*/
     pipes_t* pipe1 = newPipe();
     pipes_t* pipe2 = newPipe();
@@ -92,6 +96,9 @@ void vPlayScreen(){
 
     while(1){
         xGetButtonInput();
+
+        xQueueReceive(ColourQueue, &bird_colour, 0);
+
         if(DrawSignal) {
 
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
@@ -101,7 +108,7 @@ void vPlayScreen(){
                 drawPipe(pipe1);
                 drawPipe(pipe2);
                 drawFloorAnnimations(xLastFrameTime);
-                drawBirdAnnimationsInGame(xLastFrameTime, player1);
+                drawBirdAnnimationsInGame(xLastFrameTime, player1, bird_colour);
 
                 if(checkScore(player1, pipe1, pipe2)) {
                     tumSoundPlayUserSample("point.wav");

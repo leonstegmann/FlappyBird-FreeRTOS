@@ -13,6 +13,11 @@
 #define LOWER_PIPE_FILENAME "bottomPipe.png"
 #define UPPER_PIPE_FILENAME "topPipe.png"
 
+/* Bird colours */
+#define YELLOW 1
+#define RED 2
+#define BLUE 3
+
 /* char Defines for the arrow key Buttons*/
 #define NONE 'N'
 #define LEFT 'L'

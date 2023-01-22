@@ -28,6 +28,8 @@
 #define LOWER_RIGHT_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 + BOX_WIDTH*0.75, SCREEN_HEIGHT/2 + 150}
 #define LOWER_MIDDLE_BUTTON_POSITION (coord_t) {SCREEN_WIDTH/2 - BOX_WIDTH/2, SCREEN_HEIGHT/2 + 150}
 
+#define BIRD_MENU_POS (coord_t) {SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300}
+
 #define LOGO_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 150}
 #define HIGHSCORE_POSITION (coord_t) {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}
 
@@ -89,13 +91,13 @@ void drawFloorAnnimations(TickType_t xLastFrameTime);
  * @brief Draws the the flapping bird while in Menu
  * @param xLastFrameTime time of the last drawn frame   
  */
-void drawBirdAnnimations(TickType_t xLastFrameTime);
+void drawBirdAnnimations(TickType_t xLastFrameTime, int colour);
 
 /**
  * @brief Draws the the flapping bird while in Game
  * @param xLastFrameTime time of the last drawn frame   
  */
-void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player);
+void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int colour);
 
 void drawScore(unsigned short count);
 
