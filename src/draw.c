@@ -439,12 +439,31 @@ void drawArrow(char orientation, coord_t point)
             };
             tumDrawTriangle(points, Black);
         } break;
+        case LEFT: {
+            coord_t points[3] = {
+                { point.x, point.y },
+                { point.x + ARROW_WIDTH , point.y + ARROW_HEIGHT/2 },
+                { point.x + ARROW_WIDTH , point.y - ARROW_HEIGHT/2 }
+            };
+            tumDrawTriangle(points, Black);
+        } break;
+        case RIGHT: {
+            coord_t points[3] = {
+                { point.x, point.y },
+                { point.x - ARROW_WIDTH , point.y + ARROW_HEIGHT/2 },
+                { point.x - ARROW_WIDTH , point.y - ARROW_HEIGHT/2 }
+            };
+            tumDrawTriangle(points, Black);
+        } break;
     }
 }
 
 /* Function to draw bird animation */
 void drawBirdAnnimations(TickType_t xLastFrameTime, int colour) 
 {   
+    coord_t left_arrow = {BIRD_MENU_POS.x - 35 , BIRD_MENU_POS.y + 24/2 };
+    coord_t right_arrow = {BIRD_MENU_POS.x + 67 , BIRD_MENU_POS.y + 24/2 };
+
     if (colour == YELLOW) {
         tumDrawAnimationDrawFrame(yellowFlappingBird,
             xTaskGetTickCount() - xLastFrameTime,
@@ -453,15 +472,16 @@ void drawBirdAnnimations(TickType_t xLastFrameTime, int colour)
     else if (colour == RED) {
         tumDrawAnimationDrawFrame(redFlappingBird,
             xTaskGetTickCount() - xLastFrameTime,
-            SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
+            BIRD_MENU_POS.x, BIRD_MENU_POS.y - 10*sin(xLastFrameTime/(80*3.14)));
     }
     else if (colour == BLUE) {
         tumDrawAnimationDrawFrame(blueFlappingBird,
             xTaskGetTickCount() - xLastFrameTime,
-            SCREEN_WIDTH/2 - 34/2, SCREEN_HEIGHT - 300 - 10*sin(xLastFrameTime/(80*3.14)));
+            BIRD_MENU_POS.x, BIRD_MENU_POS.y - 10*sin(xLastFrameTime/(80*3.14)));
     }
 
-    drawArrow(UP, )
+    drawArrow(LEFT, left_arrow);
+    drawArrow(RIGHT, right_arrow);
 
 }
 
@@ -484,7 +504,5 @@ void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int co
         xTaskGetTickCount() - xLastFrameTime,
         player->pos.x, player->pos.y);
     }
-
-
 
 }
