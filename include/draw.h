@@ -96,6 +96,13 @@ void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player);
 void drawScore(unsigned short count);
 
 /**
+ * @brief Draws an arrow
+ * @param orientation UP, DOWN, RIGHT or LEFT
+ * @param point coordinat of the position   
+ */
+void drawArrow(char orientation, coord_t point)
+
+/**
  * @brief Draws Pause Text
  */
 void drawPause();
