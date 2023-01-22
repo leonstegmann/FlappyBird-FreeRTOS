@@ -37,17 +37,17 @@ void masterRecv(size_t recv_size, char *buffer, void *args){
 
 void initUDPConnectionMaster(){
     if(master_UDP_handle == NULL){
-        master_UDP_handle = aIOOpenUDPSocket(NULL, MISO_Port, UDP_BUFFER_SIZE, masterRecv, NULL );
-        printf("Opened Master Connection\n");
+        if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
+            ip_and_port.port_in = MISO_Port;
+            ip_and_port.port_out = MOSI_Port;
+            master_UDP_handle = aIOOpenUDPSocket(NULL, ip_and_port.port_in, UDP_BUFFER_SIZE, masterRecv, NULL );
+            printf("Opened Master Connection\n");
+            xSemaphoreGive(ip_and_port.lock);
+        }
     }
     if(master_UDP_handle == NULL){  
         PRINT_ERROR("FAILED TO OPEN SLave UDP Socket");
         exit(EXIT_FAILURE);
-    }
-    if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
-        ip_and_port.port_in = MISO_Port;
-        ip_and_port.port_out = MOSI_Port;
-        xSemaphoreGive(ip_and_port.lock);
     }
 }
 
@@ -62,7 +62,7 @@ void masterSend(){
     int send_val = rand()%10;
 
     /* Sending via UDP from Master to Slave*/
-    if(aIOSocketPut(UDP, IP4_SLAVE_ADDR, MOSI_Port, (char *) &send_val, sizeof(send_val))){
+    if(aIOSocketPut(UDP, IP4_SLAVE_ADDR, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
         PRINT_ERROR("FAILED TO SEND from MASTER");
     }
     else {
@@ -77,24 +77,39 @@ void vMasterTask(void *pvParameters){
     /* for Receiving on Master */
     initUDPConnectionMaster(); 
 
-    while (1) {
-        masterSend();
-        vTaskDelay(500);
+    if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
+        while (1) {
+            masterSend();
+            vTaskDelay(500);
+        }
     }
-    
 }
 
 
 void createMasterTask(){
-    if (xTaskCreate(vMasterTask, "MasterTask", mainGENERIC_STACK_SIZE * 2,
-                    NULL, mainGENERIC_PRIORITY + 7, &MasterTask) != pdPASS) {
-        PRINT_ERROR("Failed to create FreeRTOS Task");
-        exit(EXIT_FAILURE);
-    }
+    if(MasterTask == NULL)
+        if (xTaskCreate(vMasterTask, "MasterTask", mainGENERIC_STACK_SIZE * 2,
+                        NULL, mainGENERIC_PRIORITY + 7, &MasterTask) != pdPASS) {
+            PRINT_ERROR("Failed to create FreeRTOS Task");
+            exit(EXIT_FAILURE);
+        }
+}
+
+void enterMasterTask(){
+    initUDPConnectionMaster();
+    vTaskResume(MasterTask);
+}
+
+
+void exitMasterTask(){
+    closeUDPConnectionMaster();
+    vTaskSuspend(MasterTask);
 }
 
 void deleteMasterTask(){
     if( MasterTask != NULL)
         vTaskDelete(MasterTask);
+    closeUDPConnectionMaster();
+    xSemaphoreGive(ip_and_port.lock);
 }
 

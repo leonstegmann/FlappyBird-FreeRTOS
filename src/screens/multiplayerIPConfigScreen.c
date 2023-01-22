@@ -130,6 +130,8 @@ void vIPScreen(void *pvParameters)
     char host_or_guest[20];
     sprintf( host_or_guest, " " );
 
+    ip_port_t tmp_ip_and_port = ip_and_port;
+
     bool connected = false;
 
     TickType_t xLastFrameTime = xTaskGetTickCount();
@@ -182,7 +184,7 @@ void vIPScreen(void *pvParameters)
             }
             prev_button_press = xTaskGetTickCount();
         }
-
+        tmp_ip_and_port = ip_and_port; //saving last set ip and port
         if(DrawSignal)
             if(xSemaphoreTake(DrawSignal, portMAX_DELAY) == pdTRUE) {
 
@@ -205,11 +207,14 @@ void vIPScreen(void *pvParameters)
             if (xSemaphoreTake(ip_and_port.lock, 0) == pdTRUE) {
                 vDrawIP(ip_and_port.IP4, ip_and_port.port_in);
                 xSemaphoreGive(ip_and_port.lock);
+                /* DRAW ARROWS*/
+                drawArrows(selected_octet);
+            }
+            else {
+                vDrawIP(tmp_ip_and_port.IP4,tmp_ip_and_port.port_in);
             }
         } //END drawSignal
             
-        /* DRAW ARROWS*/
-        drawArrows(selected_octet);
 
         /* Check Buttons*/
         xGetButtonInput();
@@ -222,7 +227,7 @@ void vIPScreen(void *pvParameters)
         if(checkButton(KEYCODE(G))){
             printf("Guest\n");
             sprintf(host_or_guest,"YOU ARE GUEST NOW");
-            closeUDPConnectionMaster();
+            deleteMasterTask();
             initUDPConnectionSlave();
         }
         if (checkButton(KEYCODE(B))){
