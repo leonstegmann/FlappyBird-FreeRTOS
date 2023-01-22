@@ -25,7 +25,10 @@
 
 static TaskHandle_t IPScreen = NULL;
 
-ip_port_t ip_and_port =  { .lock = NULL, .IP4 = { 10, 181, 72, 199 }, .port_in = 12345 };
+/* Default for Eduroam */
+//ip_port_t ip_and_port =  { .lock = NULL, .IP4 = { 10, 181, 72, 199 }, .port_in = 12345, };
+/* Default for Leon Home */
+ip_port_t ip_and_port =  { .lock = NULL, .IP4 = { 192, 168, 0, 120}, .port_in = 12345, };
 
 
 #define OCTET_Y SCREEN_HEIGHT * 4/10
@@ -56,7 +59,7 @@ void vDrawIP(unsigned char IP[4], unsigned int port)
 
     sprintf(buff, "ip");
     tumDrawText(buff, SCREEN_WIDTH / 2 - 50, OCTET_Y - 20, Black);
-    sprintf(buff, "port");
+    sprintf(buff, "port-out");
     tumDrawText(buff, SCREEN_WIDTH / 2 + 30, OCTET_Y - 20, Black);
 }
 
@@ -205,13 +208,13 @@ void vIPScreen(void *pvParameters)
 
             /* DRAW IP*/
             if (xSemaphoreTake(ip_and_port.lock, 0) == pdTRUE) {
-                vDrawIP(ip_and_port.IP4, ip_and_port.port_in);
+                vDrawIP(ip_and_port.IP4, ip_and_port.port_out);
                 xSemaphoreGive(ip_and_port.lock);
                 /* DRAW ARROWS*/
                 drawArrows(selected_octet);
             }
             else {
-                vDrawIP(tmp_ip_and_port.IP4,tmp_ip_and_port.port_in);
+                vDrawIP(tmp_ip_and_port.IP4,tmp_ip_and_port.port_out);
             }
         } //END drawSignal
             

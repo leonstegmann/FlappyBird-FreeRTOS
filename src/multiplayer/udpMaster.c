@@ -33,25 +33,23 @@ static aIO_handle_t master_UDP_handle = NULL;
 /* Master Task running and Sending Data*/
 static TaskHandle_t MasterTask = NULL;
 
-void masterRecv(size_t recv_size, char *buffer, void *args){
-
-    int recv_val = *((int*) buffer);
-
-    printf(" Master Received %ld (bytes): %d\n", recv_size, recv_val);
-
-}
-
-void masterSend(){
-
-    int send_val = rand()%10;
+void masterSend(char* ip_addr, int send_val){
 
     /* Sending via UDP from Master to Slave*/
-    if(aIOSocketPut(UDP, IP4_SLAVE_ADDR, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
+    if(aIOSocketPut(UDP, (char *)  ip_addr, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
         PRINT_ERROR("FAILED TO SEND from MASTER");
     }
     else {
         printf("Master SEDNING: (random number) %d\n", send_val); 
     }
+
+}
+
+void masterRecv(size_t recv_size, char *buffer, void *args){
+
+    int recv_val = *((int*) buffer);
+
+    printf(" Master Received %ld (bytes): %d\n", recv_size, recv_val);
 
 }
 
@@ -61,7 +59,7 @@ void initUDPConnectionMaster(){
             ip_and_port.port_in = MISO_Port;
             ip_and_port.port_out = MOSI_Port;
             master_UDP_handle = aIOOpenUDPSocket(NULL, ip_and_port.port_in, UDP_BUFFER_SIZE, masterRecv, NULL );
-            printf("Opened Master Connection\n");
+            printf("Opened Master Connection on Localhost\n");
             xSemaphoreGive(ip_and_port.lock);
         }
     }
@@ -73,12 +71,16 @@ void initUDPConnectionMaster(){
 
 void vMasterTask(void *pvParameters){
 
+    char ip_str[12] = " "; // saves the ip adress locally to safe resources ad value is use permanently
+
     /* for Receiving on Master */
     initUDPConnectionMaster(); 
 
     if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
+        sprintf(ip_str,"%u.%u.%u.%u", ip_and_port.IP4[0],ip_and_port.IP4[1],ip_and_port.IP4[2],ip_and_port.IP4[3]);
+        printf("Opened Master Connection to %s\n",ip_str);
         while (1) {
-            masterSend();
+            masterSend(ip_str, rand()%10);
             vTaskDelay(1000);
         }
     }

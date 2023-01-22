@@ -18,6 +18,7 @@
 #include"draw.h" // for Positioning
 #include "defines.h"
 #include "buttons.h" // for vCheckArrowInput
+#include "udpSlave.h"
 
 #include "AsyncIO.h"
 
@@ -29,19 +30,10 @@
 
 static aIO_handle_t slave_UDP_handle = NULL;
 
-void slaveRecv(size_t recv_size, char *buffer, void *args){
+void slaveSend(char* ip_addr, int send_val){
 
-    int recv_val = *((int*) buffer);
-
-    printf(" Slave Received %ld (bytes): %d\n", recv_size, recv_val);
-
-    slaveSend(recv_val);
-
-}
-
-void slaveSend(int send_val){
     /* Sending via UDP from Slave to Master*/
-    if(aIOSocketPut(UDP, IP4_HOST_ADDR, MISO_Port, (char *) &send_val, sizeof(send_val))){
+    if(aIOSocketPut(UDP, ip_addr, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
         PRINT_ERROR("FAILED TO SEND from SLAVE");
     }
     else {
@@ -50,15 +42,27 @@ void slaveSend(int send_val){
 
 }
 
+void slaveRecv(size_t recv_size, char *buffer, void *args){
+    char* ip_str = (char*) args ;
+    int recv_val = *((int*) buffer);
+
+    printf(" Slave Received %ld (bytes): %d\n", recv_size, recv_val);
+    slaveSend( (char*) ip_str, recv_val);
+
+}
+
 void initUDPConnectionSlave(){
+    
+    char ip_str[12] = " ";
     /* Opening UDP connection */
     if(slave_UDP_handle == NULL){
         if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
             ip_and_port.port_in = MOSI_Port;
             ip_and_port.port_out = MISO_Port; 
-            slave_UDP_handle = aIOOpenUDPSocket(NULL, MOSI_Port, UDP_BUFFER_SIZE, slaveRecv, NULL );
-            printf("Opened Slave Connection\n");
-            xSemaphoreGive(ip_and_port.lock);
+            sprintf(ip_str,"%u.%u.%u.%u", ip_and_port.IP4[0],ip_and_port.IP4[1],ip_and_port.IP4[2],ip_and_port.IP4[3]);
+            printf("Opened Slave Connection on Localhost\n");
+            slave_UDP_handle = aIOOpenUDPSocket(NULL, ip_and_port.port_in, UDP_BUFFER_SIZE, slaveRecv, (void*) &ip_str);
+            printf("Opened Slave Connection to %s\n", ip_str);
         }
     }
     if(slave_UDP_handle == NULL){
@@ -73,4 +77,5 @@ void closeUDPConnectionSlave(){
         printf("Closed Slave Connection\n");
     }
     slave_UDP_handle = NULL;
+    xSemaphoreGive(ip_and_port.lock);
 }

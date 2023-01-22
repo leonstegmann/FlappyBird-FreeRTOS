@@ -7,8 +7,6 @@
 #define UP 'U'
 #define DOWN 'D'
 
-#define IPv4_addr "192.168.0.68" // my Ip Adress
-
 typedef struct ip_port {
     SemaphoreHandle_t lock;
     unsigned char IP4[4];
