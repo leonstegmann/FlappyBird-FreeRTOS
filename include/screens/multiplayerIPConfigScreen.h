@@ -26,8 +26,6 @@ int createIPConfigTask();
 
 /* Enter and Exit functions for the State Machine */
 void deleteIPConfigTask();
-void enterIPConfigTask();
-void exitIPConfigTask();
 
 
 #endif // __IPConfig_H_

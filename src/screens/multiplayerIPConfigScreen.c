@@ -231,6 +231,8 @@ void vIPScreen(void *pvParameters)
             initUDPConnectionSlave();
         }
         if (checkButton(KEYCODE(B))){
+            deleteMasterTask();
+            closeUDPConnectionSlave();
             states_set_state(0);
         }
 
@@ -241,34 +243,32 @@ void vIPScreen(void *pvParameters)
 
 int createIPConfigTask(void) {
 
+    printf("Creating IP config\n");
+    
     ip_and_port.lock = xSemaphoreCreateMutex();
     if (!ip_and_port.lock) {
         PRINT_ERROR("Failed to create ip and port lock");
         return 1;
     }
 
-    if(!xTaskCreate(vIPScreen, "vIPScreen",  mainGENERIC_STACK_SIZE *2, NULL,
+    if(!xTaskCreate(vIPScreen, "MultiplayerScreen",  mainGENERIC_STACK_SIZE *2, NULL,
 			        mainGENERIC_PRIORITY + 6, &IPScreen)) {
                         return 1;
     }
-    vTaskSuspend(IPScreen); 
+
+    printf("Entering IP config\n");
+
+    tumFUtilPrintTaskStateList();
+
     return 0;
 }
 
-void enterIPConfigTask(void){
-    printf("Enter IP config\n");
-    vTaskResume(IPScreen);
-    tumFUtilPrintTaskStateList();
-}
-
-void exitIPConfigTask(void)
-{
-    vTaskSuspend(IPScreen);
-}
-
 void deleteIPConfigTask(){
-    if (IPScreen)
+    if (IPScreen){
         vTaskDelete(IPScreen);
+        IPScreen = NULL;
+    }
     if(ip_and_port.lock)
         vSemaphoreDelete(ip_and_port.lock);
+    
 }

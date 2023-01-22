@@ -8,11 +8,6 @@
 void createMasterTask();
 
 /**
- * @brief Suspends the FreeRTOS Task
- */
-void exitMasterTask();
-
-/**
  * @brief deletes the FreeRTOS Task
  */
 void deleteMasterTask();

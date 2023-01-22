@@ -42,7 +42,7 @@ int initStateMachine(){
     states_add( (void*) createPlayTask, enterPlayTask, NULL, exitPlayTask, 1, "Play_Task");
     states_add( (void*) createGameOverTask, enterGameOverTask, NULL, exitGameOverTask, 2, "GameOver_Task");
     states_add( (void*) createScoreScreenTask, enterScoreScreenTask, NULL, exitScoreScreenTask, 3, "Score_Task");
-    states_add( (void*) createIPConfigTask, enterIPConfigTask, NULL, exitIPConfigTask, 4, "IPConfigTask");
+    states_add( NULL, (void*) createIPConfigTask, NULL, deleteIPConfigTask, 4, "IPConfigTask");
     
     stateMachine.lock = xSemaphoreCreateMutex();
     

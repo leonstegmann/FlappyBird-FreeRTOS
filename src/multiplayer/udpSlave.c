@@ -48,17 +48,17 @@ void slaveSend(int send_val){
 void initUDPConnectionSlave(){
     /* Opening UDP connection */
     if(slave_UDP_handle == NULL){
-        slave_UDP_handle = aIOOpenUDPSocket(NULL, MOSI_Port, UDP_BUFFER_SIZE, slaveRecv, NULL );
-        printf("Opened Slave Connection\n");
+        if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
+            ip_and_port.port_in = MOSI_Port;
+            ip_and_port.port_out = MISO_Port; 
+            slave_UDP_handle = aIOOpenUDPSocket(NULL, MOSI_Port, UDP_BUFFER_SIZE, slaveRecv, NULL );
+            printf("Opened Slave Connection\n");
+            xSemaphoreGive(ip_and_port.lock);
+        }
     }
     if(slave_UDP_handle == NULL){
         PRINT_ERROR("FAILED TO OPEN SLave UDP Socket");
         exit(EXIT_FAILURE);
-    }
-    if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
-        ip_and_port.port_in = MOSI_Port;
-        ip_and_port.port_out = MISO_Port; 
-        xSemaphoreGive(ip_and_port.lock);
     }
 }
 
@@ -67,4 +67,5 @@ void closeUDPConnectionSlave(){
         aIOCloseConn(slave_UDP_handle);
         printf("Closed Slave Connection\n");
     }
+    slave_UDP_handle = NULL;
 }

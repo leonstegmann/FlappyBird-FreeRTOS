@@ -51,12 +51,6 @@ void initUDPConnectionMaster(){
     }
 }
 
-void closeUDPConnectionMaster(){
-    if(master_UDP_handle != NULL){
-        aIOCloseConn(master_UDP_handle);
-        printf("Closed Master Connection\n");
-    }
-}
 void masterSend(){
 
     int send_val = rand()%10;
@@ -95,21 +89,14 @@ void createMasterTask(){
         }
 }
 
-void enterMasterTask(){
-    initUDPConnectionMaster();
-    vTaskResume(MasterTask);
-}
-
-
-void exitMasterTask(){
-    closeUDPConnectionMaster();
-    vTaskSuspend(MasterTask);
-}
-
 void deleteMasterTask(){
     if( MasterTask != NULL)
         vTaskDelete(MasterTask);
-    closeUDPConnectionMaster();
+    if(master_UDP_handle != NULL)
+        aIOCloseConn(master_UDP_handle);
+    printf("Closed Master Connection and Deleted Master Task\n");
+    MasterTask = NULL;
+    master_UDP_handle = NULL;
     xSemaphoreGive(ip_and_port.lock);
 }
 
