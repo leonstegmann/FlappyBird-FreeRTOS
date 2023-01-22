@@ -35,7 +35,7 @@ int initStateMachine(){
 
     /* Create State Machine Task*/
     xTaskCreate(vStateMachineTask, "StateMachine", mainGENERIC_STACK_SIZE/10, NULL,
-                    configMAX_PRIORITIES-5, &StateMachineTask);
+                    configMAX_PRIORITIES-1, &StateMachineTask);
  
     /*  Adding States to the State Machine*/
     states_add( (void*) createMenuTask, enterMenuTask, NULL, exitMenuTask, 0, "Menu_Task");
