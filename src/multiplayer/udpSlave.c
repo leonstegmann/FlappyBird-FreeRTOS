@@ -57,20 +57,25 @@ void slaveSend(char* ip_addr, tx_packageS_t* send_val){
 
 }
 void unpackRxPackageSlave(char* buffer){
-    tx_packageM_t tmp_package = *((tx_packageM_t*) buffer);
-    printf("%d\n", tmp_package.bird_pos_Y);
+
+    tx_packageM_t* tmp_package = (tx_packageM_t*) buffer;
+    
+    printf("Unpacking Data\n");
+    printf("Bird 1 pos %u\n", tmp_package->bird_pos_Y);
+    printf("Pipe 1 pos %u , %u\n", tmp_package->pipe_pos[0].x, tmp_package->pipe_pos[0].y);
+    
     if(xSemaphoreTake(player2->lock,portMAX_DELAY)==pdTRUE){
-        player2->pos.y = tmp_package.bird_pos_Y;
+        player2->pos.y = tmp_package->bird_pos_Y;
         xSemaphoreGive(player2->lock);
     }   
     if(xSemaphoreTake(pipe1->lock, portMAX_DELAY)==pdTRUE){
-        pipe2->positionX = tmp_package.pipe_pos[0].x;
-        pipe2->gap_center = tmp_package.pipe_pos[0].y;
+        pipe2->positionX = tmp_package->pipe_pos[0].x;
+        pipe2->gap_center = tmp_package->pipe_pos[0].y;
         xSemaphoreGive(pipe1->lock);
     }
     if(xSemaphoreTake(pipe2->lock, portMAX_DELAY)==pdTRUE){
-        pipe2->positionX = tmp_package.pipe_pos[1].x;
-        pipe2->gap_center = tmp_package.pipe_pos[1].y;
+        pipe2->positionX = tmp_package->pipe_pos[1].x;
+        pipe2->gap_center = tmp_package->pipe_pos[1].y;
         xSemaphoreGive(pipe2->lock);
     }
      
@@ -78,7 +83,6 @@ void unpackRxPackageSlave(char* buffer){
 
 void slaveRecv(size_t recv_size, char *buffer, void *args){
     char* ip_str = (char*) args ;
-//    int recv_val = *((int*) buffer);
 
     printf(" Slave Received %ld (bytes)\n", recv_size);
     unpackRxPackageSlave(buffer);

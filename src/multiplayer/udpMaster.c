@@ -43,20 +43,38 @@ void masterSend(char* ip_addr, tx_packageM_t* send_data){
     long int send_size = sizeof(send_data);
 
     /* Sending via UDP from Master to Slave*/
-    if(aIOSocketPut(UDP, (char *)  ip_addr, ip_and_port.port_out, (char *) &send_data, send_size)){
+    if(aIOSocketPut(UDP, (char *)  ip_addr, ip_and_port.port_out, (char *) send_data, send_size)){
         PRINT_ERROR("FAILED TO SEND from MASTER");
     }
     else {
+        printf("Bird pos Y : %u\n" , send_data->bird_pos_Y);
+        char* tmp = (char*) send_data;
+        tx_packageM_t* tmp2 = (tx_packageM_t*) tmp;
+        printf("%u\n",  tmp2->bird_pos_Y);
+
         printf("Master SEDNING %ld (bytes)\n", send_size); 
     }
 
 }
 
+void unpackRxPackageMaster(char* buffer){
+
+    tx_packageS_t* tmp_package = (tx_packageS_t*) buffer;
+    
+    printf("Unpacking Data\n");
+    printf("Bird 2 pos %u\n", tmp_package->bird_pos_Y);
+    
+    if(xSemaphoreTake(player2->lock,portMAX_DELAY)==pdTRUE){
+        player2->pos.y = tmp_package->bird_pos_Y;
+        xSemaphoreGive(player2->lock);
+    }     
+}
+
 void masterRecv(size_t recv_size, char *buffer, void *args){
 
-    int recv_val = *((int*) buffer);
+    printf(" Master Received %ld (bytes)\n", recv_size);
 
-    printf(" Master Received %ld (bytes): %d\n", recv_size, recv_val);
+    unpackRxPackageMaster(buffer);
 
 }
 
