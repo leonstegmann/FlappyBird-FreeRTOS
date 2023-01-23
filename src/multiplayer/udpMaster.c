@@ -1,5 +1,6 @@
 /* Standard library includes */
 #include "stdio.h" // for sprintf()
+#include "stdlib.h" // for malloc
 
 /* FreeRTOS includes  */
 #include "FreeRTOS.h"
@@ -18,6 +19,9 @@
 #include"draw.h" // for Positioning
 #include "defines.h"
 #include "buttons.h" // for vCheckArrowInput
+#include "objects.h" // for players and pipes
+#include "udpSlave.h"
+#include "udpMaster.h"
 
 #include "AsyncIO.h"
 
@@ -33,14 +37,17 @@ static aIO_handle_t master_UDP_handle = NULL;
 /* Master Task running and Sending Data*/
 static TaskHandle_t MasterTask = NULL;
 
-void masterSend(char* ip_addr, int send_val){
+
+void masterSend(char* ip_addr, tx_packageM_t* send_data){
+
+    long int send_size = sizeof(send_data);
 
     /* Sending via UDP from Master to Slave*/
-    if(aIOSocketPut(UDP, (char *)  ip_addr, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
+    if(aIOSocketPut(UDP, (char *)  ip_addr, ip_and_port.port_out, (char *) &send_data, send_size)){
         PRINT_ERROR("FAILED TO SEND from MASTER");
     }
     else {
-        printf("Master SEDNING: (random number) %d\n", send_val); 
+        printf("Master SEDNING %ld (bytes)\n", send_size); 
     }
 
 }
@@ -69,6 +76,27 @@ void initUDPConnectionMaster(){
     }
 }
 
+tx_packageM_t packTxPackageMaster(){
+    
+    tx_packageM_t tmp_package;
+
+    if(xSemaphoreTake(player1->lock,portMAX_DELAY)==pdTRUE){
+        tmp_package.bird_pos_Y = player1->pos.y;
+        xSemaphoreGive(player1->lock);
+    }   
+    if(xSemaphoreTake(pipe1->lock, portMAX_DELAY)){
+        tmp_package.pipe_pos[0].x = pipe2->positionX;
+        tmp_package.pipe_pos[0].y = pipe2->gap_center;
+        xSemaphoreGive(pipe1->lock);
+    }
+    if(xSemaphoreTake(pipe2->lock, portMAX_DELAY)){
+        tmp_package.pipe_pos[1].x = pipe2->positionX;
+        tmp_package.pipe_pos[1].y = pipe2->gap_center;
+        xSemaphoreGive(pipe2->lock);
+    }
+    return tmp_package;
+}
+
 void vMasterTask(void *pvParameters){
 
     char ip_str[20] = " "; // saves the ip adress locally to safe resources ad value is use permanently
@@ -79,8 +107,10 @@ void vMasterTask(void *pvParameters){
     if (xSemaphoreTake(ip_and_port.lock, portMAX_DELAY) == pdTRUE) {
         sprintf(ip_str,"%u.%u.%u.%u", ip_and_port.IP4[0],ip_and_port.IP4[1],ip_and_port.IP4[2],ip_and_port.IP4[3]);
         printf("Opened Master Connection to %s\n",ip_str);
+
         while (1) {
-            masterSend(ip_str, rand()%10);
+            tx_packageM_t tmp_data = packTxPackageMaster();
+            masterSend(ip_str, &tmp_data);
             vTaskDelay(1000);
         }
     }

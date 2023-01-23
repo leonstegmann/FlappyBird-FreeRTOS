@@ -19,6 +19,8 @@
 #include "defines.h"
 #include "buttons.h" // for vCheckArrowInput
 #include "udpSlave.h"
+#include "udpMaster.h"
+#include "objects.h"
 
 #include "AsyncIO.h"
 
@@ -32,24 +34,56 @@ static aIO_handle_t slave_UDP_handle = NULL;
 
 char ip_str[20] = " ";
 
-void slaveSend(char* ip_addr, int send_val){
+tx_packageS_t packTxPackageSlave(){
+    
+    tx_packageS_t tmp_package;
+
+    if(xSemaphoreTake(player1->lock,portMAX_DELAY)==pdTRUE){
+        tmp_package.bird_pos_Y = player1->pos.y;
+        xSemaphoreGive(player1->lock);
+    }  
+    return tmp_package;
+}
+
+void slaveSend(char* ip_addr, tx_packageS_t* send_val){
 
     /* Sending via UDP from Slave to Master*/
     if(aIOSocketPut(UDP, ip_addr, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
         PRINT_ERROR("FAILED TO SEND from SLAVE");
     }
     else {
-        printf("Slave SEDNING: %d\n", send_val); 
+        printf("Slave SEDNING %ld (bytes)\n", sizeof(send_val)); 
     }
 
+}
+void unpackRxPackageSlave(char* buffer){
+    tx_packageM_t tmp_package = *((tx_packageM_t*) buffer);
+    printf("%d\n", tmp_package.bird_pos_Y);
+    if(xSemaphoreTake(player1->lock,portMAX_DELAY)==pdTRUE){
+        player2->pos.y = tmp_package.bird_pos_Y;
+        xSemaphoreGive(player1->lock);
+    }   
+    if(xSemaphoreTake(pipe1->lock, portMAX_DELAY)){
+        pipe2->positionX = tmp_package.pipe_pos[0].x;
+        pipe2->gap_center = tmp_package.pipe_pos[0].y;
+        xSemaphoreGive(pipe1->lock);
+    }
+    if(xSemaphoreTake(pipe2->lock, portMAX_DELAY)){
+        pipe2->positionX = tmp_package.pipe_pos[1].x;
+        pipe2->gap_center = tmp_package.pipe_pos[1].y;
+        xSemaphoreGive(pipe2->lock);
+    }
+     
 }
 
 void slaveRecv(size_t recv_size, char *buffer, void *args){
     char* ip_str = (char*) args ;
-    int recv_val = *((int*) buffer);
+//    int recv_val = *((int*) buffer);
 
-    printf(" Slave Received %ld (bytes): %d\n", recv_size, recv_val);
-    slaveSend( (char*) ip_str, recv_val);
+    printf(" Slave Received %ld (bytes)\n", recv_size);
+    unpackRxPackageSlave(buffer);
+    tx_packageS_t tmp_package = packTxPackageSlave();
+    slaveSend( (char*) ip_str, &tmp_package);
 
 }
 
