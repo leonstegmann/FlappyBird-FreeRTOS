@@ -104,6 +104,8 @@ void drawArrows(unsigned int selected_octet){
 
 void vIPScreen(void *pvParameters)
 {
+    player2 = createNewPlayer();
+
     char host_or_guest[20];
     sprintf( host_or_guest, " " );
 

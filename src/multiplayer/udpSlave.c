@@ -59,16 +59,16 @@ void slaveSend(char* ip_addr, tx_packageS_t* send_val){
 void unpackRxPackageSlave(char* buffer){
     tx_packageM_t tmp_package = *((tx_packageM_t*) buffer);
     printf("%d\n", tmp_package.bird_pos_Y);
-    if(xSemaphoreTake(player1->lock,portMAX_DELAY)==pdTRUE){
+    if(xSemaphoreTake(player2->lock,portMAX_DELAY)==pdTRUE){
         player2->pos.y = tmp_package.bird_pos_Y;
-        xSemaphoreGive(player1->lock);
+        xSemaphoreGive(player2->lock);
     }   
-    if(xSemaphoreTake(pipe1->lock, portMAX_DELAY)){
+    if(xSemaphoreTake(pipe1->lock, portMAX_DELAY)==pdTRUE){
         pipe2->positionX = tmp_package.pipe_pos[0].x;
         pipe2->gap_center = tmp_package.pipe_pos[0].y;
         xSemaphoreGive(pipe1->lock);
     }
-    if(xSemaphoreTake(pipe2->lock, portMAX_DELAY)){
+    if(xSemaphoreTake(pipe2->lock, portMAX_DELAY)==pdTRUE){
         pipe2->positionX = tmp_package.pipe_pos[1].x;
         pipe2->gap_center = tmp_package.pipe_pos[1].y;
         xSemaphoreGive(pipe2->lock);

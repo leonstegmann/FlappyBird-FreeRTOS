@@ -84,12 +84,12 @@ tx_packageM_t packTxPackageMaster(){
         tmp_package.bird_pos_Y = player1->pos.y;
         xSemaphoreGive(player1->lock);
     }   
-    if(xSemaphoreTake(pipe1->lock, portMAX_DELAY)){
+    if(xSemaphoreTake(pipe1->lock, portMAX_DELAY)==pdTRUE){
         tmp_package.pipe_pos[0].x = pipe2->positionX;
         tmp_package.pipe_pos[0].y = pipe2->gap_center;
         xSemaphoreGive(pipe1->lock);
     }
-    if(xSemaphoreTake(pipe2->lock, portMAX_DELAY)){
+    if(xSemaphoreTake(pipe2->lock, portMAX_DELAY)==pdTRUE){
         tmp_package.pipe_pos[1].x = pipe2->positionX;
         tmp_package.pipe_pos[1].y = pipe2->gap_center;
         xSemaphoreGive(pipe2->lock);
