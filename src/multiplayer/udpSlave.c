@@ -41,14 +41,16 @@ tx_packageS_t* packTxPackageSlave(){
     if(xSemaphoreTake(player1->lock,portMAX_DELAY)==pdTRUE){
         tmp_package->bird_pos_Y = player1->pos.y;
         xSemaphoreGive(player1->lock);
-    }  
+    }
+    printf("Bird 2 pos %u\n", tmp_package->bird_pos_Y);
+  
     return tmp_package;
 }
 
 void slaveSend(char* ip_addr, tx_packageS_t* send_val){
 
     /* Sending via UDP from Slave to Master*/
-    if(aIOSocketPut(UDP, ip_addr, ip_and_port.port_out, (char *) &send_val, sizeof(send_val))){
+    if(aIOSocketPut(UDP, ip_addr, ip_and_port.port_out, (char *) send_val, sizeof(send_val))){
         PRINT_ERROR("FAILED TO SEND from SLAVE");
     }
     else {
