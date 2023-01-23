@@ -34,12 +34,12 @@ static aIO_handle_t slave_UDP_handle = NULL;
 
 char ip_str[20] = " ";
 
-tx_packageS_t packTxPackageSlave(){
+tx_packageS_t* packTxPackageSlave(){
     
-    tx_packageS_t tmp_package;
+    tx_packageS_t* tmp_package = malloc(sizeof(tx_packageS_t));
 
     if(xSemaphoreTake(player1->lock,portMAX_DELAY)==pdTRUE){
-        tmp_package.bird_pos_Y = player1->pos.y;
+        tmp_package->bird_pos_Y = player1->pos.y;
         xSemaphoreGive(player1->lock);
     }  
     return tmp_package;
@@ -86,8 +86,8 @@ void slaveRecv(size_t recv_size, char *buffer, void *args){
 
     printf(" Slave Received %ld (bytes)\n", recv_size);
     unpackRxPackageSlave(buffer);
-    tx_packageS_t tmp_package = packTxPackageSlave();
-    slaveSend( (char*) ip_str, &tmp_package);
+    tx_packageS_t* tmp_package = packTxPackageSlave();
+    slaveSend( (char*) ip_str, tmp_package);
 
 }
 

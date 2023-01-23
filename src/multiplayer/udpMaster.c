@@ -47,10 +47,7 @@ void masterSend(char* ip_addr, tx_packageM_t* send_data){
         PRINT_ERROR("FAILED TO SEND from MASTER");
     }
     else {
-        printf("Bird pos Y : %u\n" , send_data->bird_pos_Y);
-        char* tmp = (char*) send_data;
-        tx_packageM_t* tmp2 = (tx_packageM_t*) tmp;
-        printf("%u\n",  tmp2->bird_pos_Y);
+        printf("Bird 1 pos Y : %u\n" , send_data->bird_pos_Y);
 
         printf("Master SEDNING %ld (bytes)\n", send_size); 
     }
