@@ -1,42 +1,31 @@
 /* Standard library includes */
 #include "stdio.h" // for sprintf()
-#include "stdlib.h" // for malloc
+#include "stdlib.h" // for malloc()
 
 /* FreeRTOS includes  */
 #include "FreeRTOS.h"
-#include"task.h" // for Task_handle
-#include "semphr.h"
+#include"task.h" // for Task handles
+#include "semphr.h" // for Semaphore Handles
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
 
 /* TUM_Library includes  */
-#include "TUM_Draw.h"
-#include "TUM_Event.h" // for FETCH_EVENT_NONBLOCK
-#include "TUM_Print.h" // for PRINT_ERROR
-#include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
+#include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList()
+#include "TUM_Print.h" // for PRINT_ERROR()
+#include "AsyncIO.h" // UDP Connection includes
 
 /* Project includes  */
-#include "multiplayerIPConfigScreen.h"
+#include "multiplayerIPConfigScreen.h" // for IP and Port
 #include"draw.h" // for Positioning
-#include "defines.h"
-#include "buttons.h" // for vCheckArrowInput
+#include "defines.h" // for Global Defines
 #include "objects.h" // for players and pipes
-#include "udpSlave.h"
-#include "udpMaster.h"
-
-#include "AsyncIO.h"
-
-/* using Serial Peripheral Interface (SPI)*/
-#define MISO_Port 1234 // Master in Slave out
-#define MOSI_Port 4321 // Master out Slave in
-
-#define UDP_BUFFER_SIZE 2000
+#include "udpSlave.h" // for package Slave Struct
+#include "udpMaster.h" // for package Master Struct
 
 /* Master UDP Socket for Receiving Data */
 static aIO_handle_t master_UDP_handle = NULL;
 
 /* Master Task running and Sending Data*/
 static TaskHandle_t MasterTask = NULL;
-
 
 void masterSend(char* ip_addr, tx_packageM_t* send_data){
 
@@ -71,6 +60,7 @@ void masterRecv(size_t recv_size, char *buffer, void *args){
 
     printf(" Master Received %ld (bytes)\n", recv_size);
 
+    /* Unpack received Data */ 
     unpackRxPackageMaster(buffer);
 
 }
@@ -124,9 +114,14 @@ void vMasterTask(void *pvParameters){
         printf("Opened Master Connection to %s\n",ip_str);
 
         while (1) {
+
+            /* Pack Data for Sending*/
             tx_packageM_t tmp_data = packTxPackageMaster();
+
+            /* Sending Data */
             masterSend(ip_str, &tmp_data);
-            vTaskDelay(1000);
+
+            vTaskDelay(10);
         }
     }
 }
@@ -138,6 +133,7 @@ void createMasterTask(){
             PRINT_ERROR("Failed to create FreeRTOS Task");
             exit(EXIT_FAILURE);
         }
+    tumFUtilPrintTaskStateList();
 }
 
 void deleteMasterTask(){

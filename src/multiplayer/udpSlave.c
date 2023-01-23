@@ -3,35 +3,26 @@
 
 /* FreeRTOS includes  */
 #include "FreeRTOS.h"
-#include"task.h" // for Task_handle
-#include "semphr.h"
+#include"task.h" // for Task handles
+#include "semphr.h" // for Semaphore Handles
 #include <SDL2/SDL_scancode.h>  // Defines keyboard scancodes
 
 /* TUM_Library includes  */
-#include "TUM_Draw.h"
-#include "TUM_Event.h" // for FETCH_EVENT_NONBLOCK
 #include "TUM_Print.h" // for PRINT_ERROR
-#include "TUM_FreeRTOS_Utils.h" //for tumFUtilPrintTaskStateList
+#include "AsyncIO.h" // UDP Connection includes
 
 /* Project includes  */
-#include "multiplayerIPConfigScreen.h"
+#include "multiplayerIPConfigScreen.h" // for IP and Port
 #include"draw.h" // for Positioning
-#include "defines.h"
-#include "buttons.h" // for vCheckArrowInput
-#include "udpSlave.h"
-#include "udpMaster.h"
-#include "objects.h"
+#include "defines.h" // for Global Defines
+#include "objects.h" // for players and pipes
+#include "udpSlave.h" // for package Slave Struct
+#include "udpMaster.h" // for package Master Struct
 
-#include "AsyncIO.h"
-
-/* using Serial Peripheral Interface (SPI)*/
-#define MISO_Port 1234 // Master in Slave out
-#define MOSI_Port 4321 // Master out Slave in
-
-#define UDP_BUFFER_SIZE 2000
-
+/* Slave UDP Socket for Receiving Data */
 static aIO_handle_t slave_UDP_handle = NULL;
 
+/* IP4 stored as string for Sending */
 char ip_str[20] = " ";
 
 tx_packageS_t* packTxPackageSlave(){
@@ -58,6 +49,7 @@ void slaveSend(char* ip_addr, tx_packageS_t* send_val){
     }
 
 }
+
 void unpackRxPackageSlave(char* buffer){
 
     tx_packageM_t* tmp_package = (tx_packageM_t*) buffer;
@@ -84,11 +76,19 @@ void unpackRxPackageSlave(char* buffer){
 }
 
 void slaveRecv(size_t recv_size, char *buffer, void *args){
+ 
+    printf(" Slave Received %ld (bytes)\n", recv_size);
+    
+    /* IP4 stored as string for Sending */
     char* ip_str = (char*) args ;
 
-    printf(" Slave Received %ld (bytes)\n", recv_size);
+    /* Unpack received Data */ 
     unpackRxPackageSlave(buffer);
+
+    /* Pack Data for Sending*/
     tx_packageS_t* tmp_package = packTxPackageSlave();
+
+    /* Sending Data */
     slaveSend( (char*) ip_str, tmp_package);
 
 }
