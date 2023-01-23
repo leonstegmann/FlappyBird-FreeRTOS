@@ -14,6 +14,21 @@
 
 highscore_t highscore = {0};
 
+/* Variable defined here */
+bird_t* player1;
+bird_t* player2;
+pipes_t* pipe1;
+pipes_t* pipe2;
+
+void createObjects(){
+    player1 = createNewPlayer();
+     
+    /* create Pipes (here decided for having a maxium amount of 2 pipes on the screen)*/
+    pipe1 = newPipe();
+    pipe2 = newPipe();
+    pipe2->positionX += SCREEN_WIDTH/2; // to ensure the Offset bewteen the 2 pipes 
+}
+
 bird_t* createNewPlayer(){
 
     bird_t* ret = malloc(sizeof(bird_t));
@@ -143,7 +158,7 @@ pipes_t* newPipe(){
     ret->upperPipeImage = tumDrawLoadScaledImage(UPPER_PIPE_FILENAME, 0.2);
     ret->image_height = tumDrawGetLoadedImageHeight(ret->lowerPipeImage);
     ret->image_width = tumDrawGetLoadedImageWidth(ret->lowerPipeImage);
-    ret->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
+    ret->gap_center = randomGenerator( GAP_LOWEST, GAP_HIGHEST);
     ret->positionX = SCREEN_WIDTH*2;
     ret->velocityX = PIPE_VELOCITY;
     ret->lock = xSemaphoreCreateMutex(); // Locking mechanism
@@ -155,13 +170,13 @@ pipes_t* newPipe(){
 void resetPipes(pipes_t* pipe1, pipes_t* pipe2) {
 
     xSemaphoreTake(pipe1->lock, portMAX_DELAY);
-    pipe1->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
+    pipe1->gap_center = randomGenerator( GAP_LOWEST, GAP_HIGHEST);;
     pipe1->positionX = SCREEN_WIDTH*2;
     pipe1->velocityX = PIPE_VELOCITY;
     xSemaphoreGive(pipe1->lock);
 
     xSemaphoreTake(pipe2->lock, portMAX_DELAY);
-    pipe2->gap_center = (SCREEN_HEIGHT-FLOOR_HEIGHT)/2;
+    pipe2->gap_center = randomGenerator( GAP_LOWEST, GAP_HIGHEST);;
     pipe2->positionX = SCREEN_WIDTH*2.5;
     pipe2->velocityX = PIPE_VELOCITY;
     xSemaphoreGive(pipe2->lock);

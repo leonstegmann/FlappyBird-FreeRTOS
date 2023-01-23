@@ -32,6 +32,23 @@ typedef struct Bird {
     SemaphoreHandle_t lock;
 } bird_t;
 
+extern bird_t* player1;
+extern bird_t* player2;
+
+typedef struct Pipes {
+    image_handle_t lowerPipeImage;
+    image_handle_t upperPipeImage; 
+    unsigned short image_height;
+    unsigned short image_width;
+    short positionX; //upper left corner of the image
+    double velocityX;
+    short gap_center; // Y-position of the Gap middle on the screen
+    SemaphoreHandle_t lock;
+} pipes_t;
+
+extern pipes_t* pipe1;
+extern pipes_t* pipe2;
+
 typedef struct Highscore {
     unsigned short score[2]; // stores highest and current score
     SemaphoreHandle_t lock;
@@ -61,22 +78,13 @@ bird_t* createNewPlayer();
  */
 void resetPlayer(bird_t* player);
 
-typedef struct Pipes {
-    image_handle_t lowerPipeImage;
-    image_handle_t upperPipeImage; 
-    unsigned short image_height;
-    unsigned short image_width;
-    short positionX; //upper left corner of the image
-    double velocityX;
-    short gap_center; // Y-position of the Gap middle on the screen
-    SemaphoreHandle_t lock;
-} pipes_t;
-
 /**
  * @brief create a pipe object returning the corresponding pointer. 
  * @return pointer to the created Pipe Object.
  */
 pipes_t* newPipe();
+
+void createObjects();
 
 /**
  * @brief updates the Pipes position. 

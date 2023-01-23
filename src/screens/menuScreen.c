@@ -23,7 +23,7 @@ TaskHandle_t MenuScreen = NULL;
 void vMenuScreen() {
     // Time of the last drawn frame
     TickType_t xLastFrameTime = xTaskGetTickCount();
-
+    
     drawInitAnnimations();
 
     while(1) {

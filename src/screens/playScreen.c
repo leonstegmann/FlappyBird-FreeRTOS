@@ -80,13 +80,6 @@ void vPlayScreen(){
 
     TickType_t xLastFrameTime = xTaskGetTickCount(); //  Time of the last drawn frame
 
-    bird_t* player1 = createNewPlayer();
-     
-    /* create Pipes (here decided for having a maxium amount of 2 pipes on the screen)*/
-    pipes_t* pipe1 = newPipe();
-    pipes_t* pipe2 = newPipe();
-    pipe2->positionX += SCREEN_WIDTH/2; // to ensure the Offset bewteen the 2 pipes 
-
     drawInitAnnimations();
     initHighscore();
 
@@ -150,7 +143,11 @@ void vPlayScreen(){
     }
 }
 
+
 int createPlayTask(){
+
+    createObjects();
+
     if(!xTaskCreate(vPlayScreen, "PlayScreen",  mainGENERIC_STACK_SIZE*2 , NULL, mainGENERIC_PRIORITY + 6, &PlayScreen)) {
         return 1;
     }
