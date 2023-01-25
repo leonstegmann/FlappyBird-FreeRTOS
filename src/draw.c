@@ -32,6 +32,9 @@
 #define BRONZECOIN_FILENAME "bronzeCoin.png"
 #define PLATINUMCOIN_FILENAME "platinumCoin.png"
 #define MULTIPLAYER_FILENAME "Multiplayer.png"
+#define YELLOW_BIRD_DOWN_FILENAME "yellowbird_down.png"
+#define RED_BIRD_DOWN_FILENAME "redbird_down.png"
+#define BLUE_BIRD_DOWN_FILENAME "bluebird_down.png"
 
 /* Definitions for drawButton */
 #define BOX_COLOUR Teal
@@ -50,6 +53,9 @@ image_handle_t silverCoin = NULL;
 image_handle_t bronzeCoin = NULL;
 image_handle_t platinumCoin = NULL;
 image_handle_t multiplayerImage = NULL;
+image_handle_t yellowBirdDown = NULL;
+image_handle_t redBirdDown = NULL;
+image_handle_t blueBirdDown = NULL;
 spritesheet_handle_t floorSpritesheet = NULL;
 spritesheet_handle_t yellowBirdSpritesheet = NULL;
 spritesheet_handle_t redBirdSpritesheet = NULL;
@@ -509,21 +515,54 @@ void drawBirdAnnimations(TickType_t xLastFrameTime, int colour)
 
 void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int colour) 
 {
-    
-    if (colour == YELLOW) {
-        tumDrawAnimationDrawFrame(yellowFlappingBird,
-        xTaskGetTickCount() - xLastFrameTime,
-        player->pos.x, player->pos.y);;
+    static int image_height;
+    static int image_width;
+
+    if (yellowBirdDown == NULL) {
+        yellowBirdDown = tumDrawLoadScaledImage(YELLOW_BIRD_DOWN_FILENAME, 1);
     }
-    else if (colour == RED) {
-        tumDrawAnimationDrawFrame(redFlappingBird,
-        xTaskGetTickCount() - xLastFrameTime,
-        player->pos.x, player->pos.y);
+
+    if (redBirdDown == NULL) {
+        redBirdDown = tumDrawLoadScaledImage(RED_BIRD_DOWN_FILENAME, 1);
     }
-    else if (colour == BLUE) {
-        tumDrawAnimationDrawFrame(blueFlappingBird,
-        xTaskGetTickCount() - xLastFrameTime,
-        player->pos.x, player->pos.y);
+
+    if (blueBirdDown == NULL) {
+        blueBirdDown = tumDrawLoadScaledImage(BLUE_BIRD_DOWN_FILENAME, 1);
     }
+
+    if(player->velocityY >= player->max_velocity - 10) {
+        if(colour == YELLOW) {
+            image_height = tumDrawGetLoadedImageHeight(yellowBirdDown);
+            image_width = tumDrawGetLoadedImageWidth(yellowBirdDown);
+            tumDrawLoadedImage(yellowBirdDown, player->pos.x, player->pos.y);
+        }
+        else if(colour == RED) {
+            image_height = tumDrawGetLoadedImageHeight(redBirdDown);
+            image_width = tumDrawGetLoadedImageWidth(redBirdDown);
+            tumDrawLoadedImage(redBirdDown, player->pos.x, player->pos.y);
+        }
+        else if(colour == BLUE) {
+            image_height = tumDrawGetLoadedImageHeight(blueBirdDown);
+            image_width = tumDrawGetLoadedImageWidth(blueBirdDown);
+            tumDrawLoadedImage(blueBirdDown, player->pos.x, player->pos.y);
+        }
+    } else {
+        if (colour == YELLOW) {
+            tumDrawAnimationDrawFrame(yellowFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            player->pos.x, player->pos.y);;
+        }
+        else if (colour == RED) {
+            tumDrawAnimationDrawFrame(redFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            player->pos.x, player->pos.y);
+        }
+        else if (colour == BLUE) {
+            tumDrawAnimationDrawFrame(blueFlappingBird,
+            xTaskGetTickCount() - xLastFrameTime,
+            player->pos.x, player->pos.y);
+        }
+    }
+
 
 }
