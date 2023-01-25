@@ -7,8 +7,12 @@
  */
 int createMenuTask();
 
-/* Enter and Exit functions for the State Machine */
+/**
+ * @brief Deletes the FreeRTOS Task.
+ */
 void deleteMenuTask();
+
+/* Enter and Exit functions for the State Machine */
 void enterMenuTask();
 void exitMenuTask();
 

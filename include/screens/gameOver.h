@@ -7,8 +7,12 @@
  */
 int createGameOverTask();
 
-/* Enter and Exit functions for the State Machine */
+/**
+ * @brief Deletes the FreeRTOS Task.
+ */
 void deleteGameOverTask();
+
+/* Enter and Exit functions for the State Machine */
 void enterGameOverTask();
 void exitGameOverTask();
 

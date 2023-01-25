@@ -72,7 +72,7 @@ void pauseGame(){
 }
 
 void vPlayScreen(){
-
+    /* Load audio files */
     tumSoundLoadUserSample("../resources/waveforms/wing.wav");
     tumSoundLoadUserSample("../resources/waveforms/hit.wav");
     tumSoundLoadUserSample("../resources/waveforms/point.wav");
@@ -110,13 +110,13 @@ void vPlayScreen(){
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimationsInGame(xLastFrameTime, player1, bird_colour);
 
-                if(checkScore(player1, pipe1, pipe2)) {
+                if(checkScore(player1, pipe1, pipe2)) { // Check if player1 passed a pipe
                     tumSoundPlayUserSample("point.wav");
                 }
 
                 drawScore(player1->score);
                 
-                if(!player1->godMode && checkCollision(player1, pipe1, pipe2)) {
+                if(!player1->godMode && checkCollision(player1, pipe1, pipe2)) { // Player1 dead?
                     tumSoundPlayUserSample("hit.wav");
                     resetPlayer(player1);
                     resetPipes(pipe1, pipe2);
@@ -124,18 +124,18 @@ void vPlayScreen(){
                     states_set_state(2);
 
                 } 
-                else if(checkButton(KEYCODE(P))){
+                else if(checkButton(KEYCODE(P))){ // Pause
                         drawPause();
                         pauseGame();
                 }
-                else if (checkButton(KEYCODE(G))){
+                else if (checkButton(KEYCODE(G))){ // Godmode
                     godMode(player1);
                 }
-                else if (checkButton(KEYCODE(S))){
+                else if (checkButton(KEYCODE(S))){ // Set score
                     setScoreCheat(player1);
                 }
                 else {
-                    if(checkButton(KEYCODE(SPACE))){
+                    if(checkButton(KEYCODE(SPACE))){ // Space to jump
                         if(player1->velocityY >= -player1->max_velocity) {
                             xSemaphoreTake(player1->lock, portMAX_DELAY);
                             player1->velocityY -= UPWARDS_PUSH;

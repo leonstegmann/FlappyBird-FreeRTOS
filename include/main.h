@@ -1,12 +1,7 @@
-/**
- * @file main.h
- * @author Valentin Heubach
- * @brief provides resources from main.c
- */
-
 #ifndef MAIN_H
 #define MAIN_H
 
+/* FreeRTOS includes  */
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "queue.h"

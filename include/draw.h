@@ -70,7 +70,12 @@ int drawLogo(coord_t pos);
  */
 void drawGameOver();
 
+/**
+ * @brief Prints the Highscore on the Screen
+ * @param pos Position on the screen  
+ */
 int drawHighscore(coord_t pos);
+
 /**
  * @brief Prints the numper of FPS on the screen  
  */
@@ -98,7 +103,11 @@ void drawBirdAnnimations(TickType_t xLastFrameTime, int colour);
  * @param xLastFrameTime time of the last drawn frame   
  */
 void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int colour);
-
+ 
+/**
+ * @brief Draws the the score of the player
+ * @param count score of the player   
+ */
 void drawScore(unsigned short count);
 
 /**

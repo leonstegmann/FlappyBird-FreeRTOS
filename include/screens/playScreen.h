@@ -7,11 +7,13 @@
  */
 int createPlayTask();
 
-/* Enter and Exit functions for the State Machine */
+/**
+ * @brief Deletes the FreeRTOS Task.
+ */
 void deletePlayTask();
+
+/* Enter and Exit functions for the State Machine */
 void enterPlayTask();
 void exitPlayTask();
-
-void pauseGame();
 
 #endif // __PLAYSCREEN_H__

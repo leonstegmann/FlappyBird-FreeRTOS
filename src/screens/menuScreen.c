@@ -12,7 +12,7 @@
 #include "main.h"
 #include "buttons.h"
 #include "draw.h"
-#include "states.h" //for set_stages()
+#include "states.h" //for set_states()
 #include "stateMachine.h"
 #include "defines.h"
 
@@ -21,7 +21,6 @@ TaskHandle_t MenuScreen = NULL;
 short changeBirdColour(short colour) {
 
     switch (vCheckArrowInput()){
-
         case 'R':
             if(colour == BLUE) {
                 colour = YELLOW;
@@ -44,7 +43,7 @@ short changeBirdColour(short colour) {
 }
 
 void vMenuScreen() {
-    // Time of the last drawn frame
+
     TickType_t xLastFrameTime = xTaskGetTickCount();
     
     short colour = 1;
@@ -69,13 +68,16 @@ void vMenuScreen() {
                 drawFPS();
             }
         }
-        xGetButtonInput(); 
+
+        xGetButtonInput();
+        // Check which bird colour is chosen and send it to queue 
         colour = changeBirdColour(colour);   
         xQueueOverwrite(ColourQueue, &colour);           
-        if(checkButton(KEYCODE(P))){            
+        
+        if(checkButton(KEYCODE(P))){ // Play           
             states_set_state(1);                 
         }
-        if(checkButton(KEYCODE(S))){
+        if(checkButton(KEYCODE(S))){ // Score
             states_set_state(3);                       
         }
         
@@ -88,7 +90,6 @@ int createMenuTask(void) {
 			        mainGENERIC_PRIORITY + 6, &MenuScreen)) {
                         return 1;
     }
-    //vTaskSuspend(MenuScreen); 
     return 0;
 }
 

@@ -16,7 +16,6 @@ typedef struct stateMachine {
 
 extern StateMachine_t stateMachine;
 
-
 /**
  * @brief This function has to be modified if new stages are added.
  * It uses: 
