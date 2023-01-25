@@ -8,7 +8,7 @@
 
 /**
  * @brief FreeRTOS Task for buffer swap
- * @param pvParameters void pointer input for any designated variable type
+ * @param pvParameters void pointer input for any designated variable type  
  */
 void vSwapBuffers(void *pvParameters);
 
