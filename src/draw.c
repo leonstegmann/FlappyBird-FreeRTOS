@@ -30,6 +30,7 @@
 #define GOLDCOIN_FILENAME "goldCoin.png"
 #define SILVERCOIN_FILENAME "silverCoin.png"
 #define BRONZECOIN_FILENAME "bronzeCoin.png"
+#define PLATINUMCOIN_FILENAME "platinumCoin.png"
 #define MULTIPLAYER_FILENAME "Multiplayer.png"
 
 /* Definitions for drawButton */
@@ -47,6 +48,7 @@ image_handle_t highScore = NULL;
 image_handle_t goldCoin = NULL;
 image_handle_t silverCoin = NULL;
 image_handle_t bronzeCoin = NULL;
+image_handle_t platinumCoin = NULL;
 image_handle_t multiplayerImage = NULL;
 spritesheet_handle_t floorSpritesheet = NULL;
 spritesheet_handle_t yellowBirdSpritesheet = NULL;
@@ -234,6 +236,10 @@ int drawHighscore(coord_t pos) {
         highScore = tumDrawLoadScaledImage(HIGHSCORE_FILENAME, 1.25);
     }
 
+    if (platinumCoin == NULL) {
+        platinumCoin = tumDrawLoadScaledImage(PLATINUMCOIN_FILENAME, 1.25);
+    }
+
     if (goldCoin == NULL) {
         goldCoin = tumDrawLoadScaledImage(GOLDCOIN_FILENAME, 1.25);
     }
@@ -276,20 +282,25 @@ int drawHighscore(coord_t pos) {
     // Reset Font
     tumFontSelectFontFromHandle(cur_font);
     tumFontPutFontHandle(cur_font);
-
-    if(highscore.score[0] >= 15) {
+    
+    if(highscore.score[0] >= 40) {
+        image_height = tumDrawGetLoadedImageHeight(platinumCoin);
+        image_width = tumDrawGetLoadedImageWidth(platinumCoin);
+        tumDrawLoadedImage(platinumCoin, pos.x - image_width*2 , pos.y - image_height/2 + 7);
+        return 1;
+    } else if(highscore.score[0] >= 30) {
         image_height = tumDrawGetLoadedImageHeight(goldCoin);
         image_width = tumDrawGetLoadedImageWidth(goldCoin);
         tumDrawLoadedImage(goldCoin, pos.x - image_width*2 , pos.y - image_height/2 + 7);
         return 1;
         
-    } else if(highscore.score[0] >= 10) {
+    } else if(highscore.score[0] >= 20) {
         image_height = tumDrawGetLoadedImageHeight(silverCoin);
         image_width = tumDrawGetLoadedImageWidth(silverCoin);
         tumDrawLoadedImage(silverCoin, pos.x - image_width*2 , pos.y - image_height/2 + 7);
         return 1;
 
-    } else if(highscore.score[0] >= 5) {
+    } else if(highscore.score[0] >= 10) {
         image_height = tumDrawGetLoadedImageHeight(bronzeCoin);
         image_width = tumDrawGetLoadedImageWidth(bronzeCoin);
         tumDrawLoadedImage(bronzeCoin, pos.x - image_width*2 , pos.y - image_height/2 + 7);
