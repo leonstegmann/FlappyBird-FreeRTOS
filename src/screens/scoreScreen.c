@@ -32,7 +32,6 @@ void vScoreScreen() {
             drawButton(LEFT_BUTTON_POSITION, "Play", xLastFrameTime);
             drawFloorAnnimations(xLastFrameTime);
 
-
             // Time after everything is drawn
             xLastFrameTime = xTaskGetTickCount();
 
@@ -40,10 +39,10 @@ void vScoreScreen() {
             drawFPS();
 
             xGetButtonInput();                
-            if(checkButton(KEYCODE(P))){
+            if(checkButton(KEYCODE(P))){ // Play
                 states_set_state(1);
             }
-            else if(checkButton(KEYCODE(M))){
+            else if(checkButton(KEYCODE(M))){ // Menu
                 states_set_state(0);
             }
         }

@@ -7,8 +7,12 @@
  */
 int createScoreScreenTask();
 
-/* Enter and Exit functions for the State Machine */
+/**
+ * @brief Deletes the FreeRTOS Task.
+ */
 void deleteScoreScreenTask();
+
+/* Enter and Exit functions for the State Machine */
 void enterScoreScreenTask();
 void exitScoreScreenTask();
 

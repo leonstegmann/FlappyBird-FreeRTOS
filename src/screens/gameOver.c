@@ -33,18 +33,16 @@ void vGameOverScreen() {
             drawButton(RIGHT_BUTTON_POSITION, "Menu", xLastFrameTime);
 
             xGetButtonInput();                
-            if(checkButton(KEYCODE(R))){
+            if(checkButton(KEYCODE(R))){ // Retry
                 states_set_state(1);
             }
-            else if(checkButton(KEYCODE(M))){
+            else if(checkButton(KEYCODE(M))){ // Menu
                 states_set_state(0);
             }
 
             // Time after everything is drawn
             xLastFrameTime = xTaskGetTickCount();
-        }
-
-        
+        }       
     }
 }
 

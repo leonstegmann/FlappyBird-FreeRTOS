@@ -51,7 +51,6 @@ void buttonsExit(void) {
     vSemaphoreDelete(buttons.lock);
 }
 
-
 void setDisplayedButtonName(char id, int keyvalue){
     buttons.id[keyvalue]= id;
 }
@@ -81,7 +80,6 @@ int checkButton(int keyvalue){
     buttons.prevState[keyvalue] = buttons.currentState[keyvalue];
     return ret;
 }
-
 
 char vCheckArrowInput() {
     char ret = 'N';

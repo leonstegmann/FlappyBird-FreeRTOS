@@ -5,11 +5,13 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+/* TUM_Library includes  */
 #include "TUM_Draw.h" 
 #include "TUM_Font.h"
 #include "TUM_Utils.h"
 #include "TUM_Event.h"
 
+/* Project includes  */
 #include "draw.h"
 #include "objects.h" //Bird struct
 #include "defines.h"
@@ -152,16 +154,18 @@ int drawButton(coord_t pos, char *str, TickType_t lastFrameTime) {
     static int text_width;
     font_handle_t cur_font = tumFontGetCurFontHandle();
 
-    // Draw outlines
+    /* Draw outlines */
     tumDrawFilledBox(pos.x , pos.y, BOX_WIDTH, BOX_HEIGHT + 3, BOX_OUTLINE_COLOUR);
     
-    // Draw Box with Frame
+    /* Draw Box with Frame */
     tumDrawFilledBox(pos.x + 2, pos.y + 2, BOX_WIDTH - 4, BOX_HEIGHT - 4, BOX_FRAME_COLOUR);
 
+    /* If mouse is in the box */
     if(mouse_x >= pos.x && mouse_x <= pos.x + BOX_WIDTH && mouse_y >= pos.y && mouse_y <= pos.y + BOX_HEIGHT) {
 
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, Red);
         
+        /* If button gets clicked */
         if(tumEventGetMouseLeft() && (xSemaphoreTake(stateMachine.lock, portMAX_DELAY) == pdTRUE)) {
             
             if((lastFrameTime - stateMachine.last_change) >= STATE_DEBOUNCE_DELAY) {
@@ -180,17 +184,17 @@ int drawButton(coord_t pos, char *str, TickType_t lastFrameTime) {
         tumDrawFilledBox(pos.x + 4, pos.y + 4, BOX_WIDTH - 8, BOX_HEIGHT - 8, BOX_COLOUR);
     }
 
-    // Select Font
+    /* Select Font */
     tumFontSelectFontFromName(BUTTON_FONT);
 
-    // Draw Text
+    /* Draw Text */
     if (!tumGetTextSize((char *)str, &text_width, NULL)) {
         tumDrawText(str, pos.x + BOX_WIDTH/2 - text_width/2, 
                          pos.y + BOX_HEIGHT/2 - BUTTON_FONT_SIZE/6*3 , BUTTON_TEXT_COLOUR);
         
     }           
 
-    // Reset Font
+    /* Reset Font */
     tumFontSelectFontFromHandle(cur_font);
     tumFontPutFontHandle(cur_font);
 
@@ -421,7 +425,6 @@ void drawInitAnnimations(void)
                                            120);
 }
 
-/* Function to draw floor animation */
 void drawFloorAnnimations(TickType_t xLastFrameTime)
 {
     tumDrawAnimationDrawFrame(forwardSequence,
@@ -467,7 +470,6 @@ void drawArrow(char orientation, coord_t point)
     }
 }
 
-/* Function to draw bird animation */
 void drawBirdAnnimations(TickType_t xLastFrameTime, int colour) 
 {   
     coord_t left_arrow = {BIRD_MENU_POS.x - 35 , BIRD_MENU_POS.y + 24/2 };
@@ -494,7 +496,6 @@ void drawBirdAnnimations(TickType_t xLastFrameTime, int colour)
 
 }
 
-/* Function to draw bird animation */
 void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int colour) 
 {
     

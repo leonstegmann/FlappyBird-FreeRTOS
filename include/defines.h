@@ -3,7 +3,7 @@
 
 #include "TUM_Draw.h" //for coord_t
 
-/*Screen middle*/
+/* Screen middle */
 #define  SCREEN_CENTER (coord_t) {SCREEN_WIDTH/2 , SCREEN_HEIGHT/2} 
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
@@ -18,7 +18,7 @@
 #define RED 2
 #define BLUE 3
 
-/* char Defines for the arrow key Buttons*/
+/* Char Defines for the arrow key Buttons*/
 #define NONE 'N'
 #define LEFT 'L'
 #define RIGHT 'R'
