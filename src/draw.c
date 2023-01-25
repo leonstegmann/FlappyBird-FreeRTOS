@@ -515,37 +515,27 @@ void drawBirdAnnimations(TickType_t xLastFrameTime, int colour)
 
 void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int colour) 
 {
-    static int image_height;
-    static int image_width;
-
     if (yellowBirdDown == NULL) {
         yellowBirdDown = tumDrawLoadScaledImage(YELLOW_BIRD_DOWN_FILENAME, 1);
     }
-
     if (redBirdDown == NULL) {
         redBirdDown = tumDrawLoadScaledImage(RED_BIRD_DOWN_FILENAME, 1);
     }
-
     if (blueBirdDown == NULL) {
         blueBirdDown = tumDrawLoadScaledImage(BLUE_BIRD_DOWN_FILENAME, 1);
     }
 
     if(player->velocityY >= player->max_velocity - 10) {
         if(colour == YELLOW) {
-            image_height = tumDrawGetLoadedImageHeight(yellowBirdDown);
-            image_width = tumDrawGetLoadedImageWidth(yellowBirdDown);
             tumDrawLoadedImage(yellowBirdDown, player->pos.x, player->pos.y);
         }
-        else if(colour == RED) {
-            image_height = tumDrawGetLoadedImageHeight(redBirdDown);
-            image_width = tumDrawGetLoadedImageWidth(redBirdDown);
+        else if(colour == RED) {           
             tumDrawLoadedImage(redBirdDown, player->pos.x, player->pos.y);
         }
         else if(colour == BLUE) {
-            image_height = tumDrawGetLoadedImageHeight(blueBirdDown);
-            image_width = tumDrawGetLoadedImageWidth(blueBirdDown);
             tumDrawLoadedImage(blueBirdDown, player->pos.x, player->pos.y);
         }
+
     } else {
         if (colour == YELLOW) {
             tumDrawAnimationDrawFrame(yellowFlappingBird,
@@ -563,6 +553,4 @@ void drawBirdAnnimationsInGame(TickType_t xLastFrameTime, bird_t* player, int co
             player->pos.x, player->pos.y);
         }
     }
-
-
 }
