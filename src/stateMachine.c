@@ -17,6 +17,7 @@
 #include "scoreScreen.h"
 #include "defines.h"
 #include "main.h"
+#include "objects.h"
 
 StateMachine_t stateMachine = {0};
 
@@ -74,6 +75,14 @@ void handleStateInput(char *input, int lastFrameTime) {
         else if (!strcmp(input, "Menu")) {
             printf("%s button pressed\n", input);
             states_set_state(0); 
+        }
+
+        else if (!strcmp(input, "Reset")) {
+            printf("%s button pressed\n", input);
+            xSemaphoreTake(highscore.lock, 0);
+            highscore.score[0] = 0;
+            highscore.score[1] = 0;
+            xSemaphoreGive(highscore.lock); 
         }
 
         xSemaphoreTake(stateMachine.lock, portMAX_DELAY);

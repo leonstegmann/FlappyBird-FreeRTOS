@@ -49,6 +49,7 @@ void vMenuScreen() {
     short colour = 1;
 
     drawInitAnnimations();
+    initHighscore();
 
     while(1) {
         if(DrawSignal) {
@@ -57,6 +58,7 @@ void vMenuScreen() {
                 drawBackround();
                 drawButton(LEFT_BUTTON_POSITION, "Play", xLastFrameTime);
                 drawButton(RIGHT_BUTTON_POSITION, "Score", xLastFrameTime);
+                drawButton(MIDDLE_BUTTON_POSITION, "Reset", xLastFrameTime);
                 drawLogo(LOGO_POSITION);
                 drawFloorAnnimations(xLastFrameTime);
                 drawBirdAnnimations(xLastFrameTime, colour);
@@ -79,6 +81,12 @@ void vMenuScreen() {
         }
         if(checkButton(KEYCODE(S))){ // Score
             states_set_state(3);                       
+        }
+        if(checkButton(KEYCODE(R))){ // Reset
+            xSemaphoreTake(highscore.lock, 0);
+            highscore.score[0] = 0;
+            highscore.score[1] = 0;
+            xSemaphoreGive(highscore.lock);                   
         }
         
     }

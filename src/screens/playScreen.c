@@ -92,7 +92,6 @@ void vPlayScreen(){
     pipe2->positionX += SCREEN_WIDTH/2; // to ensure the Offset bewteen the 2 pipes 
 
     drawInitAnnimations();
-    initHighscore();
 
     while(1){
         xGetButtonInput();
